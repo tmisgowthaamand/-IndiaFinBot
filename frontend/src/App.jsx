@@ -610,8 +610,8 @@ Your Core Capabilities & Guidelines:
         setTimeout(() => {
           showNotification(t("notifPainting"));
           const seed = Math.floor(Math.random() * 1000000);
-          const promptSuffix = `cinematic, high quality, professional business photography, ${locationContext}`;
-          const fallbackPrompt = encodeURIComponent(`${imagePrompt}, ${promptSuffix}`);
+          const promptSuffix = `high quality, professional business photography, ${locationContext}`;
+          const fallbackPrompt = encodeURIComponent(`${imagePrompt}. ${promptSuffix}`);
           const fallbackUrl = `https://image.pollinations.ai/prompt/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&nologo=true`;
           
           setMessages(prev => {
@@ -1248,12 +1248,39 @@ Your Core Capabilities & Guidelines:
                           th: ({ node, ...props }) => <th style={{ padding: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,180,216,0.1)", color: "#00B4D8", textAlign: "left" }} {...props} />,
                           td: ({ node, ...props }) => <td style={{ padding: "10px 12px", border: "1px solid rgba(255,255,255,0.1)" }} {...props} />,
                           img: ({ node, ...props }) => {
-                            let safeSrc = props.src || "";
-                            if (!safeSrc.startsWith("http")) {
-                              const visualPrompt = `${safeSrc} in ${locationContext} business style, cinematic, high quality, professional photography`;
-                              safeSrc = `https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
-                            } 
-                            return <img style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)" }} {...props} src={safeSrc} />;
+                            const [src, setSrc] = useState(props.src || "");
+                            const [errorCount, setErrorCount] = useState(0);
+
+                            useEffect(() => {
+                              if (!src.startsWith("http")) {
+                                const visualPrompt = `${src} in ${locationContext} business style, professional photography`;
+                                setSrc(`https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`);
+                              }
+                            }, [props.src]);
+
+                            const handleError = () => {
+                              if (errorCount < 3) {
+                                // Try again with a different seed if it fails
+                                const newSeed = Math.floor(Math.random() * 10000000);
+                                const newSrc = src.includes("seed=") 
+                                  ? src.replace(/seed=\d+/, `seed=${newSeed}`)
+                                  : `${src}&seed=${newSeed}`;
+                                setSrc(newSrc);
+                                setErrorCount(prev => prev + 1);
+                              }
+                            };
+
+                            return (
+                              <div style={{ position: "relative", width: "100%", minHeight: src ? 200 : 0 }}>
+                                <img 
+                                  style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)", display: "block" }} 
+                                  {...props} 
+                                  src={src} 
+                                  onError={handleError}
+                                />
+                                {errorCount >= 3 && <div style={{ color: "#FF6B35", fontSize: "12px", marginTop: 10 }}>⚠️ Image service busy. Try refreshing the chat.</div>}
+                              </div>
+                            );
                           },
                           code: ({ node, inline, className, children, ...props }) => {
                             const match = /language-(\w+)/.exec(className || "");

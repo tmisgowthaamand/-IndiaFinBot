@@ -92,7 +92,7 @@ app.post('/api/generate-image', async (req, res) => {
 
         // Stream the response to get tokens based on OpenRouter SDK structure
         const stream = await openrouter.chat.send({
-            model: "google/gemini-pro-1.5",
+            model: "google/gemini-2.0-flash-001",
             messages: [
                 {
                     role: "system",
