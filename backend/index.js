@@ -33,16 +33,42 @@ app.post('/api/chat', async (req, res) => {
             return res.status(500).json({ error: { message: "GEMINI_API_KEY is not configured on the backend server." } });
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                systemInstruction: systemInstruction,
-                contents: contents,
-            })
-        });
+        const models = ["gemini-1.5-flash", "gemini-2.0-flash", "gemini-2.5-flash", "gemini-1.5-pro"];
+        let data = null;
+        let lastError = null;
 
-        const data = await response.json();
+        for (const model of models) {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        systemInstruction: systemInstruction,
+                        contents: contents,
+                    })
+                });
+
+                const result = await response.json();
+
+                // If the model hits a high demand limit or quota error, skip and try the next one
+                if (result.error) {
+                    lastError = result;
+                    console.log(`[Failover] ${model} failed: ${result.error.message}`);
+                    continue; 
+                }
+
+                data = result;
+                break; // A model succeeded! Stop looping.
+
+            } catch (err) {
+                console.log(`[Failover] ${model} fetch error: ${err.message}`);
+                lastError = { error: { message: err.message } };
+            }
+        }
+
+        if (!data) {
+            return res.status(500).json(lastError || { error: { message: "All AI models are currently overwhelmed. Please wait a moment." } });
+        }
         
         // Pass the identical JSON response back to the frontend
         res.json(data);
