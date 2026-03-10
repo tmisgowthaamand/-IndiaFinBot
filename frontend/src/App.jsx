@@ -775,7 +775,7 @@ Your Core Capabilities & Guidelines:
           </div>
 
           <button
-            onClick={() => sendMessage(`Provide a full structural breakdown: How to grow an enterprise against 1-to-5 year Profit/Loss probability models in ${locationContext}. Detail specific Government taxes, schemes, Bank Loan models, and Fund Investment pipelines relevant to my exact capital bounds (Investment: ${investment || 'undecided'}). Categorize my roadmap alongside Top-Tier, Mid-Cap, and Small-Scale company operations.`)}
+            onClick={() => sendMessage(`I am based in ${locationContext}.\nMy Available Investment: ${investment ? '₹' + investment : 'Not specified'}\nMy Business Interests/Vertical: ${interests || 'Not specified'}\nMy Founder Skills/Background: ${skills || 'Not specified'}\n\nPlease provide a full end-to-end structural breakdown and market blueprint for a startup matching this specific profile. Detail specific Government taxes, local state-specific schemes, Bank Loan models, and Fund Investment pipelines relevant to my capital bounds. Include exact 1-to-5 year Profit/Loss probability models and categorize my roadmap alongside Top-Tier, Mid-Cap, and Small-Scale company operations in my region.`)}
             style={{ padding: "15px", marginTop: "10px", borderRadius: "12px", background: "linear-gradient(135deg, #FF6B35, #FFB703)", color: "#111", border: "none", cursor: "pointer", fontWeight: 800, fontSize: "15px", boxShadow: "0 8px 25px rgba(255,107,53,0.4)", transition: "transform 0.2s" }}
             onMouseOver={e => e.currentTarget.style.transform = "translateY(-2px)"} onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}>
             {t("runAnalysisBtn")}
