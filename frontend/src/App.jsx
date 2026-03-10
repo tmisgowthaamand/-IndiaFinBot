@@ -24,6 +24,10 @@ const INDIA_STATES = {
   "West Bengal": { dists: ["Kolkata", "Asansol", "Siliguri", "Durgapur", "Howrah"], coords: { lat: 22.9868, lng: 87.8550 } },
 };
 
+const BUSINESS_VERTICALS = ["Retail", "IT Services", "Manufacturing", "Agriculture", "Healthcare", "Education", "FinTech", "E-commerce", "Hospitality", "CleanTech", "Logistics", "Real Estate", "Professional Services", "Energy"];
+const FOUNDER_SKILLS = ["Operations", "Marketing", "Finance", "Sales", "Technical", "HR", "Legal", "Management", "Product Design", "Strategy", "Data Analysis", "Project Management"];
+const INVESTMENT_RANGES = ["₹50,000 - ₹2 Lakhs", "₹2 Lakhs - ₹5 Lakhs", "₹5 Lakhs - ₹10 Lakhs", "₹10 Lakhs - ₹25 Lakhs", "₹25 Lakhs - ₹50 Lakhs", "₹50 Lakhs - ₹1 Crore", "₹1 Crore - ₹5 Crores", "Above ₹5 Crores"];
+
 const SECTOR_LEADERS = [
   { name: "Ratan Tata", company: "Tata Group", quote: "Ups and downs in life are very important to keep us going.", role: "Industrialist", image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" },
   { name: "Narayana Murthy", company: "Infosys", quote: "In God we trust, everybody else must bring data.", role: "IT Pioneer", image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=400" },
@@ -869,22 +873,31 @@ Your Core Capabilities & Guidelines:
 
           <div>
             <label style={labelStyle}>{t("investmentLabel")}</label>
-            <input type="text" placeholder={t("investmentPlaceholder")} value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+            <select value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("investmentPlaceholder")}</option>
+              {INVESTMENT_RANGES.map((r, i) => <option key={i} value={r} style={{ background: "#060913", color: "#fff" }}>{r}</option>)}
+            </select>
           </div>
 
           <div>
             <label style={labelStyle}>{t("interestsLabel")}</label>
-            <input type="text" placeholder={t("interestsPlaceholder")} value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+            <select value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("interestsPlaceholder")}</option>
+              {BUSINESS_VERTICALS.map((v, i) => <option key={i} value={v} style={{ background: "#060913", color: "#fff" }}>{v}</option>)}
+            </select>
           </div>
 
           <div>
             <label style={labelStyle}>{t("skillsLabel")}</label>
-            <input type="text" placeholder={t("skillsPlaceholder")} value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+            <select value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("skillsPlaceholder")}</option>
+              {FOUNDER_SKILLS.map((s, i) => <option key={i} value={s} style={{ background: "#060913", color: "#fff" }}>{s}</option>)}
+            </select>
           </div>
 
           <button
             onClick={() => {
-              const fullMsg = `${t("prefixLocation")} ${locationContext}.\n${t("prefixInvestment")} ${investment ? '₹' + investment : 'Not specified'}\n${t("prefixInterests")} ${interests || 'Not specified'}\n${t("prefixSkills")} ${skills || 'Not specified'}\n\n${t("msgRunAnalysis")}`;
+              const fullMsg = `${t("prefixLocation")} ${locationContext}.\n${t("prefixInvestment")} ${investment || 'Not specified'}\n${t("prefixInterests")} ${interests || 'Not specified'}\n${t("prefixSkills")} ${skills || 'Not specified'}\n\n${t("msgRunAnalysis")}`;
               sendMessage(fullMsg);
             }}
             style={{ padding: "15px", marginTop: "10px", borderRadius: "12px", background: "linear-gradient(135deg, #FF6B35, #FFB703)", color: "#111", border: "none", cursor: "pointer", fontWeight: 800, fontSize: "15px", boxShadow: "0 8px 25px rgba(255,107,53,0.4)", transition: "transform 0.2s" }}
