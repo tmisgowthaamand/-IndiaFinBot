@@ -874,14 +874,14 @@ Your Core Capabilities & Guidelines:
         
         <button 
           onClick={() => setSidebarVisible(!sidebarVisible)} 
-          style={{ position: "absolute", left: sidebarVisible ? "350px" : "12px", top: "12px", zIndex: 100, background: "rgba(0,180,216,0.3)", border: "1px solid #00B4D8", color: "#00B4D8", width: "36px", height: "36px", borderRadius: "10px", cursor: "pointer", backdropFilter: "blur(12px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", boxShadow: "0 4px 12px rgba(0,0,0,0.4)" }}
+          style={{ position: "absolute", left: sidebarVisible ? "358px" : "10px", top: "10px", zIndex: 100, background: "rgba(0,180,216,0.35)", border: "1px solid #00B4D8", color: "#00B4D8", width: "42px", height: "42px", borderRadius: "12px", cursor: "pointer", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", boxShadow: "0 5px 15px rgba(0,0,0,0.5)" }}
           title={sidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
         >
           {sidebarVisible ? "«" : "»"}
         </button>
 
         {/* Universal Left Sidebar: Profile Details */}
-        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", display: "flex", flexDirection: "column", padding: sidebarVisible ? "30px 25px" : "0", overflowY: "auto" }}>
+        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", display: "flex", flexDirection: "column", padding: sidebarVisible ? "35px 25px" : "0", overflowY: "auto" }}>
           {sidebarVisible && (
             <>
               <h3 style={{ color: "#FFF", margin: "0 0 20px 0", fontSize: "18px", display: "flex", alignItems: "center", gap: 10, fontWeight: 700, whiteSpace: "nowrap" }}><span style={{ background: "#FF6B35", padding: "6px", borderRadius: "8px", fontSize: "16px" }}>🚀</span> {t("startupConfig")}</h3>

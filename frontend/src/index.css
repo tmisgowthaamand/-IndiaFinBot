@@ -13,7 +13,7 @@ html, body, #root {
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow: hidden; /* Prevent double scrollbars */
+  overflow: hidden; /* THE CRITICAL FIX: Disable global scrolling */
 }
 
 body {
@@ -25,15 +25,15 @@ body {
 
 /* Base Responsive Main Container */
 .main-container {
-  height: calc(100vh - 80px); /* Fill remaining viewport */
+  height: calc(100vh - 75px); /* Header is ~75px-80px */
   width: 100%;
   display: flex;
   position: relative;
   z-index: 10;
-  padding: 15px;
-  gap: 15px;
+  padding: 20px;
+  gap: 20px;
   transition: all 0.4s ease;
-  overflow: hidden;
+  overflow: hidden; /* Ensure content-area handles its own scroll */
 }
 
 .sidebar {
