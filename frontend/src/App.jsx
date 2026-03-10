@@ -414,7 +414,12 @@ function QuickToolsGrid({ theme, sendMessage }) {
   );
 }
 
-function GlobalFooter() {
+function GlobalFooter({ setActiveTab }) {
+  const navigateTo = (tab) => {
+    setActiveTab(tab);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
 
   return (
@@ -422,11 +427,11 @@ function GlobalFooter() {
       <div style={{ display: "flex", alignItems: "center", gap: "20px", color: "#94a3b8", fontSize: "14px", flexWrap: "wrap", justifyContent: "center" }}>
         <span style={{ fontWeight: 800, color: "#9BF6FF" }}>IndiaFinBot Pro</span>
         <span className="hide-mobile">|</span>
-        <a href="#" style={{ color: "#94a3b8", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Privacy Policy</a>
+        <button onClick={() => navigateTo('privacy')} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", transition: "color 0.2s", padding: 0 }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Privacy Policy</button>
         <span className="hide-mobile">|</span>
-        <a href="#" style={{ color: "#94a3b8", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Terms of Service</a>
+        <button onClick={() => navigateTo('terms')} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", transition: "color 0.2s", padding: 0 }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Terms of Service</button>
         <span className="hide-mobile">|</span>
-        <a href="#" style={{ color: "#94a3b8", textDecoration: "none", transition: "color 0.2s" }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Help Center</a>
+        <button onClick={() => navigateTo('help')} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", transition: "color 0.2s", padding: 0 }} onMouseOver={e=>e.currentTarget.style.color="#FFF"} onMouseOut={e=>e.currentTarget.style.color="#94a3b8"}>Help Center</button>
       </div>
       <p style={{ margin: 0, color: "#475569", fontSize: "12px", textAlign: "center" }}>© 2025-2026 IndiaFinBot AI Solutions. Intelligent Enterprise Infrastructure. All rights reserved.</p>
       
@@ -1122,6 +1127,66 @@ Your Core Capabilities & Guidelines:
           </div>
         )}
 
+        {activeTab === "privacy" && (
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(16,185,129,0.1)", color: "#10B981", border: "1px solid #10B981", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#10B981"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(16,185,129,0.1)"; e.currentTarget.style.color="#10B981"}}>← Back to Home</button>
+            <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Privacy Policy</h1>
+            <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
+              <p>Your privacy is important to us. This Privacy Policy outlines how your data is collected, used, and protected when you use IndiaFinBot.</p>
+              <h3 style={{ color: "#9BF6FF", marginTop: "10px", marginBottom: "5px" }}>1. Information We Collect</h3>
+              <ul style={{ paddingLeft: "20px" }}>
+                <li><strong>Profile Data:</strong> Business interests, investment capabilities, and founder skills you explicitly configure.</li>
+                <li><strong>Location Data:</strong> State and District inputs used to tailor highly specific MSME policies and language translation.</li>
+                <li><strong>Document Processing:</strong> Uploaded financial statements (PDF, CSV, Image) are securely processed via Gemini AI and never stored permanently.</li>
+              </ul>
+              <h3 style={{ color: "#9BF6FF", marginTop: "10px", marginBottom: "5px" }}>2. Data Security & Encryption</h3>
+              <p>All chat queries and uploaded files are routed over encrypted HTTPS. Sensitive PII data is stripped out locally before AI deep-scanning where applicable.</p>
+              <h3 style={{ color: "#9BF6FF", marginTop: "10px", marginBottom: "5px" }}>3. Third-Party Interfaces</h3>
+              <p>Our application interacts directly with OpenRouter and Pollinations.ai APIs for language processing and image generation. Data sent out is purely contextual to generate relevant financial blueprints.</p>
+              <p style={{ marginTop: "20px", fontStyle: "italic", fontSize: "14px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "15px" }}>Last updated: March 2026</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "terms" && (
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(0,180,216,0.1)", color: "#00B4D8", border: "1px solid #00B4D8", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#00B4D8"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(0,180,216,0.1)"; e.currentTarget.style.color="#00B4D8"}}>← Back to Home</button>
+            <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Terms of Service</h1>
+            <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
+              <p>By using IndiaFinBot Pro, you agree to these Terms of Service. Please read them carefully.</p>
+              <h3 style={{ color: "#FFB703", marginTop: "10px", marginBottom: "5px" }}>1. Disclaimer of Liability</h3>
+              <p>IndiaFinBot is an AI-powered analytical tool, not a certified human Chartered Accountant (CA). All generated roadmaps, P&L models, structural breakdowns, and projections are for educational and advisory purposes only.</p>
+              <h3 style={{ color: "#FFB703", marginTop: "10px", marginBottom: "5px" }}>2. User Responsibilities</h3>
+              <p>You assume all responsibility for any action taken upon your business following advice simulated by the engine. Users are heavily advised to verify numbers with official CA partners and physical Gov guidelines (GSTIN, MSME portals).</p>
+              <h3 style={{ color: "#FFB703", marginTop: "10px", marginBottom: "5px" }}>3. API Rate Limits</h3>
+              <p>Pro users benefit from high limits but are still bound by fair-use policies against the core Gemini infrastructure. Abuse of image/text generations may result in temporary API throttling.</p>
+              <p style={{ marginTop: "20px", fontStyle: "italic", fontSize: "14px", borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: "15px" }}>Last updated: March 2026</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "help" && (
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(255,107,53,0.1)", color: "#FF6B35", border: "1px solid #FF6B35", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#FF6B35"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,107,53,0.1)"; e.currentTarget.style.color="#FF6B35"}}>← Back to Home</button>
+            <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Help Center & FAQ</h1>
+            <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
+              <p>Need support? You can find answers to our most common questions below.</p>
+              <div style={{ background: "rgba(0,0,0,0.4)", padding: "25px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
+                <h4 style={{ margin: 0, color: "#9BF6FF", fontSize: "18px" }}>How do I generate accurate charts?</h4>
+                <p style={{ margin: 0 }}>Ask the AI Bot directly to "Show me a 5 year Profit/Loss projection block" or "Plot my expenses". The bot will natively render Recharts block data dynamically.</p>
+              </div>
+              <div style={{ background: "rgba(0,0,0,0.4)", padding: "25px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
+                <h4 style={{ margin: 0, color: "#9BF6FF", fontSize: "18px" }}>Why are images rendering weirdly?</h4>
+                <p style={{ margin: 0 }}>Our image engine runs on Pollinations Free Tier. Try explicitly detailing your image prompt: e.g., "Create a beautiful 3D isometric representation of an IT hub in Chennai".</p>
+              </div>
+              <div style={{ background: "rgba(0,0,0,0.4)", padding: "25px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", flexDirection: "column", gap: "10px" }}>
+                <h4 style={{ margin: 0, color: "#9BF6FF", fontSize: "18px" }}>Does the AI Support local languages?</h4>
+                <p style={{ margin: 0 }}>Yes! Use the top navigation bar to flip the dashboard's internal language engine. The AI respects this and will output data natively in Tamil, Hindi, Kannada, Malayalam, or Telugu.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {activeTab === "chat" && (
           <div className="content-area glass-panel" style={{ display: "flex", flexDirection: "column", borderRadius: "20px", overflow: "hidden", position: "relative" }}>
             <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
@@ -1235,7 +1300,7 @@ Your Core Capabilities & Guidelines:
         )}
 
       </div>
-      <GlobalFooter />
+      <GlobalFooter setActiveTab={setActiveTab} />
     </div>
   );
 }
