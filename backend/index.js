@@ -88,35 +88,30 @@ app.post('/api/generate-image', async (req, res) => {
             return res.status(500).json({ error: { message: "OPENROUTER_API_KEY is not configured. Please add your key to the .env file!" } });
         }
 
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-            method: "POST",
-            headers: { 
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`,
-                "HTTP-Referer": process.env.FRONTEND_URL || "http://localhost:5173",
-                "X-Title": "IndiaFinBot"
-            },
-            body: JSON.stringify({
-                model: "openai/dall-e-3",
-                messages: [
-                    {
-                        role: "user",
-                        content: prompt
-                    }
-                ]
-            })
+        const openrouter = new OpenRouter({ apiKey });
+
+        // Stream the response to get tokens based on OpenRouter SDK structure
+        const stream = await openrouter.chat.send({
+            model: "openai/dall-e-3",
+            messages: [
+                {
+                    role: "user",
+                    content: prompt
+                }
+            ],
+            stream: true
         });
 
-        const data = await response.json();
-        
-        if (data.error) {
-            return res.status(500).json({ error: { message: data.error.message } });
+        let responseText = "";
+        for await (const chunk of stream) {
+            const content = chunk.choices[0]?.delta?.content;
+            if (content) {
+                responseText += content;
+            }
         }
-
-        const replyContent = data.choices[0]?.message?.content || "";
         
         // OpenRouter's DALL-E 3 usually returns markdown with the image URL, e.g., ![image](https://...)
-        const urlMatch = replyContent.match(/https?:\/\/[^\s\)]+/);
+        const urlMatch = responseText.match(/https?:\/\/[^\s\)]+/);
         
         if (!urlMatch) {
             return res.status(500).json({ error: { message: `Image Generation Failed: Invalid response received from OpenRouter.` } });
