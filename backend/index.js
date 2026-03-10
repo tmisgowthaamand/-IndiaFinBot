@@ -26,13 +26,13 @@ app.get('/api/health', (req, res) => {
 app.post('/api/chat', async (req, res) => {
     try {
         const { contents, systemInstruction } = req.body;
-        const apiKey = process.env.GEMINI_API_KEY || "AIzaSyB69o_VTc0oYEHK5zaBOaA_N9Xh_Msozp4";
+        const apiKey = process.env.GEMINI_API_KEY;
         
         if (!apiKey) {
             return res.status(500).json({ error: { message: "GEMINI_API_KEY is not configured on the backend server." } });
         }
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro-preview:generateContent?key=${apiKey}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
