@@ -482,9 +482,12 @@ Your Core Capabilities & Guidelines:
       if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
       let reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I had trouble responding.";
       
-      const imageMatch = reply.match(/\[GENERATE_IMAGE:\s*(.*?)\]/);
+      const dMatch = reply.match(/\[GENERATE_IMAGE:\s*(.*?)\]/);
+      const mdMatch = reply.match(/!\[.*?\]\((?!http)(.*?)\)/);
+      const imageMatch = dMatch || mdMatch;
+      
       if (imageMatch) {
-        const imagePrompt = imageMatch[1];
+        const imagePrompt = dMatch ? dMatch[1] : mdMatch[1];
         reply = reply.replace(imageMatch[0], `\n\n🎨 **Generating high-quality image...**\n`);
         setMessages(prev => [...prev, { role: "assistant", content: reply, time: new Date().toLocaleTimeString(), tempImage: true }]);
         
