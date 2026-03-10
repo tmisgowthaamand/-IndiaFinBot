@@ -366,6 +366,54 @@ function LoanCalculator({ theme }) {
   );
 }
 
+function TaxComplianceCalendar({ theme }) {
+  const deadlines = [
+    { title: "GSTR-1 Monthly", date: "11th of Every Month", desc: "Outward supply details for normal taxpayers", type: "GST", color: "#FFB703" },
+    { title: "GSTR-3B Monthly", date: "20th of Every Month", desc: "Summary return & tax payment", type: "GST", color: "#FFB703" },
+    { title: "TDS/TCS Payment", date: "7th of Next Month", desc: "Deductions made in previous month", type: "TAX", color: "#00B4D8" },
+    { title: "Advance Tax (Q4)", date: "15th March 2026", desc: "Last installment for FY 25-26", type: "TAX", color: "#00B4D8" },
+    { title: "ITR Filing (Audit)", date: "31st October", desc: "For businesses requiring tax audit", type: "ITR", color: "#10B981" },
+    { title: "ROC Annual Filing", date: "Within 30 Days of AGM", desc: "AOC-4 and MGT-7 filings for companies", type: "ROC", color: "#FF6B35" }
+  ];
+
+  return (
+    <div className="glass-panel" style={{ borderRadius: "16px", padding: "30px", marginTop: "40px", border: "1px solid rgba(255,183,3,0.3)" }}>
+      <h2 style={{ margin: "0 0 5px 0", color: theme === "light" ? "#0f172a" : "#FFF", fontSize: "24px", display: "flex", alignItems: "center", gap: 8 }}>📅 Tax & Compliance Deadlines ('25-'26)</h2>
+      <p style={{ margin: "0 0 25px 0", color: theme === "light" ? "#475569" : "#94a3b8", fontSize: "15px" }}>Never miss a due date. Stay 100% compliant with our automated tracking logic.</p>
+      
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "20px" }}>
+        {deadlines.map((d, i) => (
+          <div key={i} style={{ background: "rgba(0,0,0,0.4)", borderLeft: `4px solid ${d.color}`, borderRadius: "10px", padding: "20px", display: "flex", flexDirection: "column", transition: "transform 0.2s", cursor: "pointer" }} onMouseOver={e => e.currentTarget.style.transform = "translateY(-3px)"} onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}>
+            <span style={{ fontWeight: 800, color: d.color, fontSize: "12px", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>{d.type} Deadline</span>
+            <h4 style={{ margin: "0 0 10px 0", color: "#FFF", fontSize: "18px" }}>{d.title}</h4>
+            <div style={{ background: "rgba(255,255,255,0.05)", padding: "10px", borderRadius: "8px", fontWeight: 700, color: "#e2e8f0", marginBottom: 10, display: "flex", alignItems: "center", gap: 8 }}>
+              ⏰ {d.date}
+            </div>
+            <p style={{ margin: 0, color: "#94a3b8", fontSize: "13px", lineHeight: 1.5 }}>{d.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function QuickToolsGrid({ theme }) {
+  return (
+    <div style={{ marginTop: "40px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "25px" }}>
+      <div className="glass-panel service-card" style={{ padding: "30px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", textAlign: "left", display: "flex", flexDirection: "column" }}>
+        <h3 style={{ fontSize: "22px", margin: "0 0 10px 0", color: "#10B981" }}>📊 AI Tax Optimizer</h3>
+        <p style={{ color: theme === "light" ? "#475569" : "#94a3b8", fontSize: "14px", margin: "0 0 20px 0", lineHeight: 1.6, flex: 1 }}>Automatically scan your transaction data to find hidden deductions and legal loopholes mapped directly to your state.</p>
+        <button style={{ padding: "14px 20px", background: "rgba(16,185,129,0.1)", border: "1px solid #10B981", borderRadius: "8px", color: "#10B981", fontWeight: 700, cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background = "#10B981"; e.currentTarget.style.color = "#FFF"}} onMouseOut={e => {e.currentTarget.style.background = "rgba(16,185,129,0.1)"; e.currentTarget.style.color = "#10B981"}}>Run Optimization Mode →</button>
+      </div>
+      <div className="glass-panel service-card" style={{ padding: "30px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", textAlign: "left", display: "flex", flexDirection: "column" }}>
+        <h3 style={{ fontSize: "22px", margin: "0 0 10px 0", color: "#00B4D8" }}>🔗 Fast E-Way Bill</h3>
+        <p style={{ color: theme === "light" ? "#475569" : "#94a3b8", fontSize: "14px", margin: "0 0 20px 0", lineHeight: 1.6, flex: 1 }}>Fastest 1-click E-Way bill logistics automation. Linked seamlessly inside your GSTIN compliance pipeline and supply chain.</p>
+        <button style={{ padding: "14px 20px", background: "rgba(0,180,216,0.1)", border: "1px solid #00B4D8", borderRadius: "8px", color: "#00B4D8", fontWeight: 700, cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background = "#00B4D8"; e.currentTarget.style.color = "#FFF"}} onMouseOut={e => {e.currentTarget.style.background = "rgba(0,180,216,0.1)"; e.currentTarget.style.color = "#00B4D8"}}>Gen E-Way Bill Pipeline →</button>
+      </div>
+    </div>
+  );
+}
+
 export default function IndiaFinBot() {
   const [lang, setLang] = useState("en"); // en, hi, ta, te, ml, kn
   const [theme, setTheme] = useState("dark");
@@ -907,6 +955,10 @@ Your Core Capabilities & Guidelines:
                 </div>
 
                 <LoanCalculator theme={theme} />
+
+                <TaxComplianceCalendar theme={theme} />
+
+                <QuickToolsGrid theme={theme} />
               </>
             ) : (
               renderInteractiveDashboard(OVERVIEW_CARDS.find(c => c.id === selectedDetailId))
