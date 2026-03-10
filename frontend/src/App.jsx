@@ -337,18 +337,18 @@ function LoanCalculator({ theme }) {
         <p style={{ margin: 0, color: theme === "light" ? "#475569" : "#94a3b8", fontSize: "15px" }}>Calculate precise MSME & MUDRA loan monthly repayments instantly.</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "25px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Loan Amount (₹)</label>
-          <input type="number" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+          <input type="number" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Interest Rate (p.a %)</label>
-          <input type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+          <input type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Tenure (Years)</label>
-          <input type="number" value={tenureYears} onChange={e => setTenureYears(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
+          <input type="number" value={tenureYears} onChange={e => setTenureYears(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
         </div>
       </div>
 
@@ -610,9 +610,9 @@ Your Core Capabilities & Guidelines:
         setTimeout(() => {
           showNotification(t("notifPainting"));
           const seed = Math.floor(Math.random() * 1000000);
-          const promptSuffix = `high quality, professional business photography, ${locationContext}`;
-          const fallbackPrompt = encodeURIComponent(`${imagePrompt}. ${promptSuffix}`);
-          const fallbackUrl = `https://image.pollinations.ai/prompt/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&nologo=true`;
+          const promptSuffix = `cinematic, high quality, professional business photography, ${locationContext}`;
+          const fallbackPrompt = encodeURIComponent(`${imagePrompt}, ${promptSuffix}`);
+          const fallbackUrl = `https://pollinations.ai/p/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
           
           setMessages(prev => {
             const newMessages = [...prev];
@@ -824,13 +824,13 @@ Your Core Capabilities & Guidelines:
       <StockTicker />
 
       {/* Modern Header */}
-      <div className="glass-panel" style={{ position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid rgba(0, 180, 216, 0.2)", padding: "10px 20px" }}>
-        <div className="nav-header" style={{ maxWidth: "100%", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
+      <div className="glass-panel" style={{ position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid rgba(0, 180, 216, 0.2)", padding: "15px 30px" }}>
+        <div style={{ maxWidth: 1600, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 15 }}>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #FF6B35, #FFB703)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 0 15px rgba(255,107,53,0.3)" }}>🇮🇳</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ width: 50, height: 50, borderRadius: 14, background: "linear-gradient(135deg, #FF6B35, #FFB703)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, boxShadow: "0 0 20px rgba(255,107,53,0.3)" }}>🇮🇳</div>
             <div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "#FFF", letterSpacing: "-0.5px" }}>IndiaFin<span style={{ color: "#00B4D8" }}>Bot</span></div>
+              <div style={{ fontSize: 24, fontWeight: 900, color: "#FFF", letterSpacing: "-0.5px", textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>IndiaFin<span style={{ color: "#00B4D8" }}>Bot</span></div>
             </div>
           </div>
 
@@ -870,46 +870,44 @@ Your Core Capabilities & Guidelines:
         </div>
       </div>
 
-      <div className="main-container">
+      <div className="main-container" style={{ position: "relative", zIndex: 5, flex: 1, maxWidth: 1800, margin: "0 auto", width: "100%", padding: "25px", display: "flex", gap: "25px" }}>
         
         <button 
           onClick={() => setSidebarVisible(!sidebarVisible)} 
-          style={{ position: "absolute", left: sidebarVisible ? "358px" : "10px", top: "10px", zIndex: 100, background: "rgba(0,180,216,0.35)", border: "1px solid #00B4D8", color: "#00B4D8", width: "42px", height: "42px", borderRadius: "12px", cursor: "pointer", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", boxShadow: "0 5px 15px rgba(0,0,0,0.5)" }}
+          style={{ position: "absolute", left: sidebarVisible ? "355px" : "15px", top: "15px", zIndex: 100, background: "rgba(0,180,216,0.2)", border: "1px solid #00B4D8", color: "#00B4D8", width: "40px", height: "40px", borderRadius: "10px", cursor: "pointer", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}
           title={sidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
         >
           {sidebarVisible ? "«" : "»"}
         </button>
 
         {/* Universal Left Sidebar: Profile Details */}
-        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", display: "flex", flexDirection: "column", padding: sidebarVisible ? "35px 25px" : "0", overflowY: "auto" }}>
+        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", padding: sidebarVisible ? "25px" : "0px", display: "flex", flexDirection: "column", overflowY: "auto", width: sidebarVisible ? "360px" : "0px", opacity: sidebarVisible ? 1 : 0, border: sidebarVisible ? "1px solid rgba(255,255,255,0.08)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", flexShrink: 0 }}>
           {sidebarVisible && (
             <>
               <h3 style={{ color: "#FFF", margin: "0 0 20px 0", fontSize: "18px", display: "flex", alignItems: "center", gap: 10, fontWeight: 700, whiteSpace: "nowrap" }}><span style={{ background: "#FF6B35", padding: "6px", borderRadius: "8px", fontSize: "16px" }}>🚀</span> {t("startupConfig")}</h3>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 15 }}>
-            <div>
-              <label style={labelStyle}>{t("investmentLabel")}</label>
-              <select value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle}>
-                <option value="" style={{ background: "#060913", color: "#666" }}>{t("investmentPlaceholder")}</option>
-                {INVESTMENT_RANGES.map((r, i) => <option key={i} value={r} style={{ background: "#060913", color: "#fff" }}>{r}</option>)}
-              </select>
-            </div>
+          <div>
+            <label style={labelStyle}>{t("investmentLabel")}</label>
+            <select value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("investmentPlaceholder")}</option>
+              {INVESTMENT_RANGES.map((r, i) => <option key={i} value={r} style={{ background: "#060913", color: "#fff" }}>{r}</option>)}
+            </select>
+          </div>
 
-            <div>
-              <label style={labelStyle}>{t("interestsLabel")}</label>
-              <select value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle}>
-                <option value="" style={{ background: "#060913", color: "#666" }}>{t("interestsPlaceholder")}</option>
-                {BUSINESS_VERTICALS.map((v, i) => <option key={i} value={v} style={{ background: "#060913", color: "#fff" }}>{v}</option>)}
-              </select>
-            </div>
+          <div>
+            <label style={labelStyle}>{t("interestsLabel")}</label>
+            <select value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("interestsPlaceholder")}</option>
+              {BUSINESS_VERTICALS.map((v, i) => <option key={i} value={v} style={{ background: "#060913", color: "#fff" }}>{v}</option>)}
+            </select>
+          </div>
 
-            <div>
-              <label style={labelStyle}>{t("skillsLabel")}</label>
-              <select value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle}>
-                <option value="" style={{ background: "#060913", color: "#666" }}>{t("skillsPlaceholder")}</option>
-                {FOUNDER_SKILLS.map((s, i) => <option key={i} value={s} style={{ background: "#060913", color: "#fff" }}>{s}</option>)}
-              </select>
-            </div>
+          <div>
+            <label style={labelStyle}>{t("skillsLabel")}</label>
+            <select value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
+              <option value="" style={{ background: "#060913", color: "#666" }}>{t("skillsPlaceholder")}</option>
+              {FOUNDER_SKILLS.map((s, i) => <option key={i} value={s} style={{ background: "#060913", color: "#fff" }}>{s}</option>)}
+            </select>
           </div>
 
           <button
@@ -990,7 +988,7 @@ Your Core Capabilities & Guidelines:
     </div>
 
         {activeTab === "overview" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: selectedDetailId ? "20px" : "40px" }}>
 
             {!selectedDetailId ? (
               <>
@@ -1035,7 +1033,7 @@ Your Core Capabilities & Guidelines:
         )}
 
         {activeTab === "inspire" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
             <h1 style={{ fontSize: "34px", margin: "0 0 30px 0", color: "#FFF", fontWeight: 800 }}>{t("inspireTitle")}</h1>
 
             <h2 style={{ fontSize: "22px", color: "#FFB703", margin: "0 0 20px 0" }}>{t("leadersTitle")}</h2>
@@ -1132,7 +1130,7 @@ Your Core Capabilities & Guidelines:
 
         {/* Dynamic Govt Schemes Tab Component */}
         {activeTab === "schemes" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
             <h1 style={{ fontSize: "34px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800 }}>🏛️ Government Schemes & Pro Research</h1>
             <p style={{ color: "#94a3b8", fontSize: "16px", marginBottom: "40px", maxWidth: "800px", lineHeight: 1.6 }}>Explore end-to-end verified India compensation frameworks, deep research limits, and exact startup subsidy allowances. Match your profile against top-tier MSME programs to unlock direct capital.</p>
 
@@ -1250,34 +1248,30 @@ Your Core Capabilities & Guidelines:
                           th: ({ node, ...props }) => <th style={{ padding: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,180,216,0.1)", color: "#00B4D8", textAlign: "left" }} {...props} />,
                           td: ({ node, ...props }) => <td style={{ padding: "10px 12px", border: "1px solid rgba(255,255,255,0.1)" }} {...props} />,
                           img: ({ node, ...props }) => {
-                            const [src, setSrc] = useState(props.src || "");
                             const [errorCount, setErrorCount] = useState(0);
+                            let safeSrc = props.src || "";
+                            if (!safeSrc.startsWith("http")) {
+                              const visualPrompt = `${safeSrc} in ${locationContext} business style`;
+                              safeSrc = `https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
+                            } else {
+                              safeSrc = safeSrc.replace(/ /g, '%20');
+                            }
 
-                            useEffect(() => {
-                              if (!src.startsWith("http")) {
-                                const visualPrompt = `${src} in ${locationContext} business style, professional photography`;
-                                setSrc(`https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`);
-                              }
-                            }, [props.src]);
-
-                            const handleError = () => {
+                            const handleError = (e) => {
                               if (errorCount < 3) {
-                                // Try again with a different seed if it fails
-                                const newSeed = Math.floor(Math.random() * 10000000);
-                                const newSrc = src.includes("seed=") 
-                                  ? src.replace(/seed=\d+/, `seed=${newSeed}`)
-                                  : `${src}&seed=${newSeed}`;
-                                setSrc(newSrc);
+                                const urlObj = new URL(e.target.src);
+                                urlObj.searchParams.set("seed", Math.floor(Math.random() * 1000000));
+                                e.target.src = urlObj.toString();
                                 setErrorCount(prev => prev + 1);
                               }
                             };
 
                             return (
-                              <div style={{ position: "relative", width: "100%", minHeight: src ? 200 : 0 }}>
+                              <div style={{ position: "relative", width: "100%", minHeight: safeSrc ? 200 : 0 }}>
                                 <img 
                                   style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)", display: "block" }} 
                                   {...props} 
-                                  src={src} 
+                                  src={safeSrc} 
                                   onError={handleError}
                                 />
                                 {errorCount >= 3 && <div style={{ color: "#FF6B35", fontSize: "12px", marginTop: 10 }}>⚠️ Image service busy. Try refreshing the chat.</div>}
