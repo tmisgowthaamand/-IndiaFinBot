@@ -606,20 +606,22 @@ Your Core Capabilities & Guidelines:
         // Directly route to Nano Banana Engine (Pollinations) to prevent limit errors
         setTimeout(() => {
           showNotification(t("notifPainting"));
-          const fallbackPrompt = encodeURIComponent(`${imagePrompt} in ${locationContext} modern professional business style`);
-          const fallbackUrl = `https://image.pollinations.ai/prompt/${fallbackPrompt}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
+          const seed = Math.floor(Math.random() * 1000000);
+          const promptSuffix = `cinematic, high quality, professional business photography, ${locationContext}`;
+          const fallbackPrompt = encodeURIComponent(`${imagePrompt}, ${promptSuffix}`);
+          const fallbackUrl = `https://pollinations.ai/p/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
           
           setMessages(prev => {
             const newMessages = [...prev];
             const lastMsgIdx = newMessages.findLastIndex(m => m.tempImage);
             if (lastMsgIdx !== -1) {
-              const updatedContent = newMessages[lastMsgIdx].content.replace(`\n\n🎨 **Generating high-quality image...**\n`, `\n\n![Generated Image](${fallbackUrl})\n`);
+              const updatedContent = newMessages[lastMsgIdx].content.replace(`\n\n🎨 **Generating high-quality image...**\n`, `\n\n![Vision](${fallbackUrl})\n`);
               newMessages[lastMsgIdx] = { ...newMessages[lastMsgIdx], content: updatedContent };
               delete newMessages[lastMsgIdx].tempImage;
             }
             return newMessages;
           });
-        }, 1500); // Simulate brief loading for UX
+        }, 1500); 
       } else {
         setMessages(prev => [...prev, { role: "assistant", content: reply, time: new Date().toLocaleTimeString() }]);
       }
