@@ -808,6 +808,27 @@ Your Core Capabilities & Guidelines:
             </div>
           </div>
 
+          <div style={{ marginTop: "25px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "25px" }}>
+            <h4 style={{ color: "#9BF6FF", margin: "0 0 15px 0", fontSize: "13px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 700 }}>Live Bank Loans ('25-'26)</h4>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              <p style={{ margin: "0 0 5px 0", color: "#94a3b8", fontSize: "12px", fontWeight: 600 }}>🏦 Govt & Public Banks</p>
+              <a href="https://sbi.co.in/web/business/sme" target="_blank" rel="noreferrer" style={{ color: "#e2e8f0", textDecoration: "none", padding: "12px 14px", background: "rgba(0,0,0,0.4)", borderRadius: "8px", fontSize: "13px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.borderColor = "#00B4D8"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; }}>
+                <div style={{ display: "flex", flexDirection: "column" }}><span style={{ fontWeight: 700, color: "#9BF6FF", marginBottom: 4 }}>State Bank (SBI)</span><span style={{ fontSize: "11px", color: "#94a3b8" }}>MSME/Business: <strong style={{color:"#10B981"}}>8.00% - 9.50%</strong></span></div> <span>↗</span>
+              </a>
+              <a href="https://pnbindia.in/msme-banking.aspx" target="_blank" rel="noreferrer" style={{ color: "#e2e8f0", textDecoration: "none", padding: "12px 14px", background: "rgba(0,0,0,0.4)", borderRadius: "8px", fontSize: "13px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.borderColor = "#00B4D8"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; }}>
+                <div style={{ display: "flex", flexDirection: "column" }}><span style={{ fontWeight: 700, color: "#9BF6FF", marginBottom: 4 }}>Punjab National (PNB)</span><span style={{ fontSize: "11px", color: "#94a3b8" }}>MSME/Business: <strong style={{color:"#10B981"}}>8.40% - 10.20%</strong></span></div> <span>↗</span>
+              </a>
+
+              <p style={{ margin: "10px 0 5px 0", color: "#94a3b8", fontSize: "12px", fontWeight: 600 }}>🏛️ Top Private Banks</p>
+              <a href="https://www.hdfcbank.com/sme/borrow" target="_blank" rel="noreferrer" style={{ color: "#e2e8f0", textDecoration: "none", padding: "12px 14px", background: "rgba(0,0,0,0.4)", borderRadius: "8px", fontSize: "13px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.borderColor = "#00B4D8"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; }}>
+                 <div style={{ display: "flex", flexDirection: "column" }}><span style={{ fontWeight: 700, color: "#FFB703", marginBottom: 4 }}>HDFC Bank</span><span style={{ fontSize: "11px", color: "#94a3b8" }}>Biz Loan: <strong style={{color:"#10B981"}}>10.50% - 14.50%</strong></span></div> <span>↗</span>
+              </a>
+              <a href="https://www.icicibank.com/business-banking" target="_blank" rel="noreferrer" style={{ color: "#e2e8f0", textDecoration: "none", padding: "12px 14px", background: "rgba(0,0,0,0.4)", borderRadius: "8px", fontSize: "13px", border: "1px solid rgba(255,255,255,0.05)", display: "flex", justifyContent: "space-between", alignItems: "center", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.borderColor = "#00B4D8"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,0,0,0.4)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.05)"; }}>
+                 <div style={{ display: "flex", flexDirection: "column" }}><span style={{ fontWeight: 700, color: "#FFB703", marginBottom: 4 }}>ICICI Bank</span><span style={{ fontSize: "11px", color: "#94a3b8" }}>Startup/Biz: <strong style={{color:"#10B981"}}>10.75% - 15.00%</strong></span></div> <span>↗</span>
+              </a>
+            </div>
+          </div>
+
           <div style={{ marginTop: "25px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "25px", paddingBottom: "25px" }}>
             <h4 style={{ color: "#FFB703", margin: "0 0 15px 0", fontSize: "13px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 800 }}>⚡ Active Pro Features</h4>
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
