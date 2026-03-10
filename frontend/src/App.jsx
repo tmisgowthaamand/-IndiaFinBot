@@ -439,7 +439,7 @@ Your Core Capabilities & Guidelines:
 3. State/District Localization: ALWAYS tailor answers drastically based on their specific Indian state. State-specific MSME subsidies, distinct GST state codes, local industrial zones.
 4. Concrete Practical Examples: Provide highly personalized, practical examples mapping strictly to their uploaded requirements and limits. Give them distinct solution formulas.
 5. Bank Statement Analysis: Analyze financial health deeply. Draw growth/loss inferences, cashflow cycles, 1-5 year historical projections.
-6. Roadmap & Graphing Context: If prompted about statistics, generate markdown tables outlining 1 to 5 year Profit & Loss margins.
+6. Roadmap & Graphing Context: If prompted about statistics, 1-5 year P&L projections, or share market trends, YOU MUST output a JSON block with language 'recharts' containing an array of objects. Example: \`\`\`recharts\n[{"name": "Year 1", "Revenue": 1500000, "Profit": 300000}, {"name": "Year 2", "Revenue": 2000000, "Profit": 500000}]\n\`\`\` Keep the keys exactly 'name', 'Revenue', and 'Profit'.
 7. Govt Schemes, Tax, & Loans: Dive aggressively into localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
 8. CA Connections: Provide both Premium High-Fee CAs and Budget-Friendly Compliance CAs.
 9. ChatGPT DALL-E 3 Image Generation: If the user asks you to create or generate an image, YOU MUST respond exactly with this special placeholder tag: [GENERATE_IMAGE: <highly descriptive prompt>]. The prompt MUST strictly integrate their Location (${locationContext}), specific Business Interests, and Context. For example: [GENERATE_IMAGE: A high-end business meeting in Chennai, Tamil Nadu, focusing on tech startup strategy].
@@ -1041,13 +1041,38 @@ Your Core Capabilities & Guidelines:
                           img: ({ node, ...props }) => {
                             let safeSrc = props.src || "";
                             if (!safeSrc.startsWith("http")) {
-                              // If AI outputs just text instead of a URL, actively construct the pollinations URL with location context!
                               const visualPrompt = `${safeSrc} in ${locationContext} business style`;
                               safeSrc = `https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=800&height=400&nologo=true`;
                             } else {
                               safeSrc = safeSrc.replace(/ /g, '%20');
                             }
                             return <img style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)" }} {...props} src={safeSrc} />;
+                          },
+                          code: ({ node, inline, className, children, ...props }) => {
+                            const match = /language-(\w+)/.exec(className || "");
+                            if (!inline && match && match[1] === "recharts") {
+                              try {
+                                const data = JSON.parse(String(children).replace(/\n$/, ""));
+                                return (
+                                  <div style={{ width: "100%", height: 350, background: "rgba(0,0,0,0.3)", borderRadius: 12, padding: "20px 20px 20px 0", marginTop: 25 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                                        <XAxis dataKey="name" stroke="#00B4D8" />
+                                        <YAxis stroke="#00B4D8" />
+                                        <Tooltip contentStyle={{ backgroundColor: "#1e293b", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#fff" }} />
+                                        <Legend wrapperStyle={{ paddingTop: 10 }} />
+                                        <Bar dataKey="Revenue" fill="#00B4D8" radius={[4, 4, 0, 0]} />
+                                        <Bar dataKey="Profit" fill="#FFB703" radius={[4, 4, 0, 0]} />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+                                );
+                              } catch (e) {
+                                return <code className={className} style={{ background: "rgba(0,0,0,0.3)", padding: "10px", borderRadius: 8, display: "block", overflowX: "auto" }} {...props}>{children}</code>;
+                              }
+                            }
+                            return <code className={className} style={{ background: "rgba(0,0,0,0.3)", padding: "2px 6px", borderRadius: 4 }} {...props}>{children}</code>;
                           }
                         }}
                       >{msg.content}</ReactMarkdown>
