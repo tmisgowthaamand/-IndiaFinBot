@@ -51,6 +51,42 @@ app.post('/api/chat', async (req, res) => {
         res.status(500).json({ error: { message: "Failed to generate response dynamically." } });
     }
 });
+// Securely proxy the OpenAI Dall-E 3 call for rendering Pro images
+app.post('/api/generate-image', async (req, res) => {
+    try {
+        const { prompt } = req.body;
+        const apiKey = process.env.OPENAI_API_KEY;
+        
+        if (!apiKey) {
+            return res.status(500).json({ error: { message: "OPENAI_API_KEY is not configured. Please add your key to the .env file!" } });
+        }
+
+        const response = await fetch("https://api.openai.com/v1/images/generations", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "dall-e-3",
+                prompt: prompt,
+                n: 1,
+                size: "1024x1024"
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            return res.status(500).json({ error: { message: data.error.message } });
+        }
+        
+        res.json({ imageUrl: data.data[0].url });
+    } catch (error) {
+        console.error("Image Gen Error:", error);
+        res.status(500).json({ error: { message: "Failed to generate OpenAI image dynamically." } });
+    }
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

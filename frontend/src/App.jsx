@@ -442,7 +442,7 @@ Your Core Capabilities & Guidelines:
 6. Roadmap & Graphing Context: If prompted about statistics, generate markdown tables outlining 1 to 5 year Profit & Loss margins.
 7. Govt Schemes, Tax, & Loans: Dive aggressively into localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
 8. CA Connections: Provide both Premium High-Fee CAs and Budget-Friendly Compliance CAs.
-9. Nano Banana Image Generation: If the user asks you to create or generate an image, YOU MUST respond with a markdown image linked to \`https://image.pollinations.ai/prompt/{URL_ENCODED_PROMPT}?width=800&height=400&nologo=true\` where {URL_ENCODED_PROMPT} is a highly descriptive prompt for the image that strictly integrates their Location (${locationContext}), Business Interests, and Context. Use the Nano Banana Engine to satisfy visual queries!
+9. ChatGPT DALL-E 3 Image Generation: If the user asks you to create or generate an image, YOU MUST respond exactly with this special placeholder tag: [GENERATE_IMAGE: <highly descriptive prompt>]. The prompt MUST strictly integrate their Location (${locationContext}), specific Business Interests, and Context. For example: [GENERATE_IMAGE: A high-end business meeting in Chennai, Tamil Nadu, focusing on tech startup strategy].
 10. Tone: Beautiful markdown, highly structured, encouraging, professional but deeply mapped to their contextual language and Indian market logic.`;
 
   const sendMessage = async (msg, apiContentOverride = null) => {
@@ -480,8 +480,50 @@ Your Core Capabilities & Guidelines:
 
       const data = await res.json();
       if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I had trouble responding.";
-      setMessages(prev => [...prev, { role: "assistant", content: reply, time: new Date().toLocaleTimeString() }]);
+      let reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I had trouble responding.";
+      
+      const imageMatch = reply.match(/\[GENERATE_IMAGE:\s*(.*?)\]/);
+      if (imageMatch) {
+        const imagePrompt = imageMatch[1];
+        reply = reply.replace(imageMatch[0], `\n\n🎨 **Generating high-quality image...**\n`);
+        setMessages(prev => [...prev, { role: "assistant", content: reply, time: new Date().toLocaleTimeString(), tempImage: true }]);
+        
+        try {
+          showNotification("ChatGPT DALL-E 3 is painting your vision...");
+          const imgRes = await fetch(`${API_BASE}/api/generate-image`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ prompt: imagePrompt })
+          });
+          const imgData = await imgRes.json();
+          if (imgData.error) throw new Error(imgData.error.message);
+          
+          setMessages(prev => {
+            const newMessages = [...prev];
+            const lastMsgIdx = newMessages.findLastIndex(m => m.tempImage);
+            if (lastMsgIdx !== -1) {
+              const updatedContent = newMessages[lastMsgIdx].content.replace(`\n\n🎨 **Generating high-quality image...**\n`, `\n\n![User Generated Image](${imgData.imageUrl})\n`);
+              newMessages[lastMsgIdx] = { ...newMessages[lastMsgIdx], content: updatedContent };
+              delete newMessages[lastMsgIdx].tempImage;
+            }
+            return newMessages;
+          });
+        } catch (imgErr) {
+          setMessages(prev => {
+            const newMessages = [...prev];
+            const lastMsgIdx = newMessages.findLastIndex(m => m.tempImage);
+            if (lastMsgIdx !== -1) {
+              const updatedContent = newMessages[lastMsgIdx].content.replace(`\n\n🎨 **Generating high-quality image...**\n`, `\n\n⚠️ **Image Generation Failed:** ${imgErr.message}\n`);
+              newMessages[lastMsgIdx] = { ...newMessages[lastMsgIdx], content: updatedContent };
+              delete newMessages[lastMsgIdx].tempImage;
+            }
+            return newMessages;
+          });
+        }
+      } else {
+        setMessages(prev => [...prev, { role: "assistant", content: reply, time: new Date().toLocaleTimeString() }]);
+      }
+      
       showNotification("End-to-end Analysis Complete!");
     } catch (err) {
       setMessages(prev => [...prev, { role: "assistant", content: `⚠️ Error: ${err.message}`, time: new Date().toLocaleTimeString() }]);
