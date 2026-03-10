@@ -679,14 +679,14 @@ Your Core Capabilities & Guidelines:
             </div>
           </div>
 
-          <div style={{ display: "flex", background: "rgba(0,0,0,0.3)", borderRadius: "12px", padding: "6px", border: "1px solid rgba(255,255,255,0.05)", gap: "4px", overflowX: "auto" }}>
+          <div style={{ display: "flex", background: "rgba(0,0,0,0.3)", borderRadius: "12px", padding: "6px", border: "1px solid rgba(255,255,255,0.05)", gap: "4px", flexWrap: "wrap", justifyContent: "center" }}>
             <button onClick={() => { setActiveTab("overview"); setSelectedDetailId(null); }} className="nav-tab" style={{ background: activeTab === "overview" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "overview" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabOverview")}</button>
             <button onClick={() => setActiveTab("schemes")} className="nav-tab" style={{ background: activeTab === "schemes" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "schemes" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>🏛️ {t("tabSchemes") || "Schemes & Pro"}</button>
             <button onClick={() => setActiveTab("chat")} className="nav-tab" style={{ background: activeTab === "chat" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "chat" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>🤖 {t("tabChat")}</button>
             <button onClick={() => setActiveTab("inspire")} className="nav-tab" style={{ background: activeTab === "inspire" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "inspire" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabInspire")}</button>
           </div>
 
-          <div style={{ display: "flex", gap: 12 }}>
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <button
               onClick={() => setTheme(prev => prev === "light" ? "dark" : "light")}
               style={{ padding: "10px 15px", borderRadius: 10, background: theme === "light" ? "rgba(2,132,199,0.1)" : "rgba(255,255,255,0.1)", color: theme === "light" ? "#0284c7" : "#FFF", border: theme === "light" ? "1px solid rgba(2,132,199,0.2)" : "1px solid rgba(255,255,255,0.2)", cursor: "pointer", outline: "none", fontWeight: 700, backdropFilter: "blur(5px)", display: "flex", alignItems: "center", gap: "6px" }}
@@ -703,11 +703,11 @@ Your Core Capabilities & Guidelines:
               <option value="kn">ಕನ್ನಡ</option>
             </select>
 
-            <select value={selectedState} onChange={(e) => { setSelectedState(e.target.value); setSelectedDistrict(""); }} style={{ padding: "10px 15px", borderRadius: 10, background: "rgba(0,0,0,0.5)", color: "#FFF", border: "1px solid rgba(0,180,216,0.3)", cursor: "pointer", outline: "none", fontWeight: 500, backdropFilter: "blur(5px)" }}>
+            <select value={selectedState} onChange={(e) => { setSelectedState(e.target.value); setSelectedDistrict(""); }} style={{ padding: "10px 15px", borderRadius: 10, background: "rgba(0,0,0,0.5)", color: "#FFF", border: "1px solid rgba(0,180,216,0.3)", cursor: "pointer", outline: "none", fontWeight: 500, backdropFilter: "blur(5px)", maxWidth: "100%" }}>
               <option value="">{t("selectState")}</option>
               {Object.keys(INDIA_STATES).map(state => <option key={state} value={state}>{state}</option>)}
             </select>
-            <select value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} disabled={!selectedState} style={{ padding: "10px 15px", borderRadius: 10, background: "rgba(0,0,0,0.5)", color: "#FFF", border: "1px solid rgba(0,180,216,0.3)", opacity: !selectedState ? 0.4 : 1, cursor: "pointer", outline: "none", fontWeight: 500 }}>
+            <select value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} disabled={!selectedState} style={{ padding: "10px 15px", borderRadius: 10, background: "rgba(0,0,0,0.5)", color: "#FFF", border: "1px solid rgba(0,180,216,0.3)", opacity: !selectedState ? 0.4 : 1, cursor: "pointer", outline: "none", fontWeight: 500, maxWidth: "100%" }}>
               <option value="">{t("selectDistrict")}</option>
               {selectedState && INDIA_STATES[selectedState].dists.map(dist => <option key={dist} value={dist}>{dist}</option>)}
             </select>

@@ -13,8 +13,10 @@
     "@google/genai": "^1.44.0",
     "@openrouter/sdk": "^0.9.11",
     "@react-google-maps/api": "^2.20.8",
+    "leaflet": "^1.9.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-leaflet": "^5.0.0",
     "react-markdown": "^10.1.0",
     "recharts": "^3.8.0",
     "remark-gfm": "^4.0.1"
