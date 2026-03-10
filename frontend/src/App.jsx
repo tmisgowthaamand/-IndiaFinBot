@@ -434,13 +434,16 @@ User's Real-Time Profile context:
 - Account: Premium Gemini 3.1 Pro User (${premiumUserEmail})
 
 Your Core Capabilities & Guidelines:
-1. State/District Localization: ALWAYS tailor answers drastically based on their specific Indian state. State-specific MSME subsidies, distinct GST state codes, local industrial zones.
-2. Bank Statement Analysis: Analyze financial health deeply. Draw growth/loss inferences, cashflow cycles, 1-5 year historical projections.
-3. Roadmap & Graphing Context: If prompted about statistics, generate markdown tables outlining 1 to 5 year Profit & Loss margins.
-4. Govt Schemes, Tax, & Loans: Dive aggressively into localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
-5. CA Connections: Provide both Premium High-Fee CAs and Budget-Friendly Compliance CAs.
-6. Nano Banana Image Generation: If the user asks you to create or generate an image, YOU MUST respond with a markdown image linked to \`https://image.pollinations.ai/prompt/{URL_ENCODED_PROMPT}?width=800&height=400&nologo=true\` where {URL_ENCODED_PROMPT} is a descriptive prompt for the image. Use the Nano Banana Engine to satisfy visual queries!
-7. Tone: Beautiful markdown, highly structured, encouraging, professional but deeply mapped to their contextual language and Indian market logic.`;
+1. End-To-End Statement Analysis: Whenever a user uploads a statement, perform a deeply intelligent, end-to-end audit. DO NOT MISS A SINGLE TRANSACTION. Verify balances meticulously, trace all debit/credit paths natively.
+2. Next-Term Profitability: ALWAYS project and formulate a concrete roadmap on how the user can generate strong profits in the NEXT term based on their prior transaction patterns. Output clear solutions to convert losses into high margin profits.
+3. State/District Localization: ALWAYS tailor answers drastically based on their specific Indian state. State-specific MSME subsidies, distinct GST state codes, local industrial zones.
+4. Concrete Practical Examples: Provide highly personalized, practical examples mapping strictly to their uploaded requirements and limits. Give them distinct solution formulas.
+5. Bank Statement Analysis: Analyze financial health deeply. Draw growth/loss inferences, cashflow cycles, 1-5 year historical projections.
+6. Roadmap & Graphing Context: If prompted about statistics, generate markdown tables outlining 1 to 5 year Profit & Loss margins.
+7. Govt Schemes, Tax, & Loans: Dive aggressively into localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
+8. CA Connections: Provide both Premium High-Fee CAs and Budget-Friendly Compliance CAs.
+9. Nano Banana Image Generation: If the user asks you to create or generate an image, YOU MUST respond with a markdown image linked to \`https://image.pollinations.ai/prompt/{URL_ENCODED_PROMPT}?width=800&height=400&nologo=true\` where {URL_ENCODED_PROMPT} is a descriptive prompt for the image. Use the Nano Banana Engine to satisfy visual queries!
+10. Tone: Beautiful markdown, highly structured, encouraging, professional but deeply mapped to their contextual language and Indian market logic.`;
 
   const sendMessage = async (msg, apiContentOverride = null) => {
     setActiveTab("chat");
@@ -517,12 +520,16 @@ Your Core Capabilities & Guidelines:
 
         setMessages(prev => prev.filter(m => !m.isUploading));
         setLoading(false);
-        await sendMessage(`📎 Uploaded: "${file.name}"`, apiContent);
+        const visualMsg = `📎 Uploaded: "${file.name}"\n\n**Intelligent Analysis Request:**\nPlease strictly analyze this statement end-to-end without leaving any transaction out.\n- **Verify Balances:** Ensure my debits & credits balance correctly and trace the various paths they used.\n- **Profit to Next Term:** Based on this data, how can we profit to the next term?\n- **Solutions:** Give me concrete solutions and personalized examples mapping to my specific requirements to convert any losses into high gross profits.`;
+        
+        await sendMessage(visualMsg, apiContent);
       } else if (isCSV) {
         const text = await file.text();
         setMessages(prev => prev.filter(m => !m.isUploading));
         setLoading(false);
-        await sendMessage(`📎 CSV Uploaded: "${file.name}"`, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\nCRITICAL INSTRUCTIONS FOR ANALYSIS:\n1. Analyze this statement strictly end-to-end for my business in ${locationContext} without leaving any single transaction out.\n2. Trace and explain the paths of my debits and credits.\n3. Calculate and verify my balance correctly.\n4. NEXT TERM PROFITABILITY: Formulate a concrete roadmap on how I can generate strong profits in the NEXT term based on these transaction patterns.\n5. Give me highly personalized, practical examples mapping to my specific requirements to convert losses into high gross profits.\n\nBe highly intelligent, proactive, and provide clear step-by-step solutions.`);
+        const visualMsg = `📎 CSV Uploaded: "${file.name}"\n\n**Intelligent Analysis Request:**\nPlease strictly analyze this statement end-to-end without leaving any transaction out.\n- **Verify Balances:** Ensure my debits & credits balance correctly and trace the various paths they used.\n- **Profit to Next Term:** Based on this data, how can we profit to the next term?\n- **Solutions:** Give me concrete solutions and personalized examples mapping to my specific requirements to convert any losses into high gross profits.`;
+        
+        await sendMessage(visualMsg, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\nCRITICAL INSTRUCTIONS FOR ANALYSIS:\n1. Analyze this statement strictly end-to-end for my business in ${locationContext} without leaving any single transaction out.\n2. Trace and explain the paths of my debits and credits.\n3. Calculate and verify my balance correctly.\n4. NEXT TERM PROFITABILITY: Formulate a concrete roadmap on how I can generate strong profits in the NEXT term based on these transaction patterns.\n5. Give me highly personalized, practical examples mapping to my specific requirements to convert losses into high gross profits.\n\nBe highly intelligent, proactive, and provide clear step-by-step solutions.`);
       } else {
         setMessages(prev => prev.filter(m => !m.isUploading));
         setLoading(false);
