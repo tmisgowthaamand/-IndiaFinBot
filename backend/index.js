@@ -12,23 +12,42 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Basic health check endpoint for Render to verify it's working
+// Root endpoint to prevent "Cannot GET /" on Render
+app.get('/', (req, res) => {
+    res.send('<h1 style="font-family: sans-serif; text-align: center; margin-top: 50px;">IndiaFinBot API is Live 🚀</h1><p style="font-family: sans-serif; text-align: center; color: #555;">The backend server is running perfectly on Render.</p>');
+});
+
+// Basic health check endpoint
 app.get('/api/health', (req, res) => {
     res.json({ status: 'ok', message: 'IndiaFinBot Backend is properly aligned and running!' });
 });
 
-// A future endpoint example for moving the Gemini AI calls Server-Side
+// Securely proxy the Gemini AI call from the frontend
 app.post('/api/chat', async (req, res) => {
     try {
-        const { messages, systemPrompt } = req.body;
+        const { contents, systemInstruction } = req.body;
+        const apiKey = process.env.GEMINI_API_KEY;
         
-        // TODO: In a complete Backend alignment, you would use your Gemini API Key here 
-        // to call Gemini from safely inside the backend, hiding your VITE_ keys from the public React code.
+        if (!apiKey) {
+            return res.status(500).json({ error: { message: "GEMINI_API_KEY is not configured on the backend server." } });
+        }
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-pro:generateContent?key=${apiKey}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                systemInstruction: systemInstruction,
+                contents: contents,
+            })
+        });
+
+        const data = await response.json();
         
-        res.json({ reply: "Connection successful. To complete the backend integration, migrate the fetch() logic from App.jsx here!" });
+        // Pass the identical JSON response back to the frontend
+        res.json(data);
     } catch (error) {
         console.error("Chat Error:", error);
-        res.status(500).json({ error: "Failed to generate response." });
+        res.status(500).json({ error: { message: "Failed to generate response dynamically." } });
     }
 });
 
