@@ -1480,17 +1480,17 @@ Your Core Capabilities & Guidelines:
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "50px" }}>
-              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)" }}>
+              <div onClick={() => { setActiveTab("chat"); sendMessage("Explain how to implement ML algorithms for automated cash-flow forecasting for a startup client."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,180,216,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
                  <div style={{ fontSize: "24px", marginBottom: "10px" }}>🧠</div>
                  <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Predictive Modeling</h4>
                  <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Firms running ML algorithms for automated cash-flow forecasting have captured 60% of all VC-backed startup clients since 2023.</p>
               </div>
-              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)" }}>
+              <div onClick={() => { setActiveTab("chat"); sendMessage("Provide a step-by-step guide to set up direct pipeline linking from corporate bank APIs to GST portals."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
                  <div style={{ fontSize: "24px", marginBottom: "10px" }}>⚡</div>
                  <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Dynamic API Tax Integrations</h4>
                  <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Direct pipeline linking from corporate bank APIs to GST portals bypasses human data entry entirely, pushing firm valuation multiples to 8X.</p>
               </div>
-              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)" }}>
+              <div onClick={() => { setActiveTab("chat"); sendMessage("How can top-tier firms deploy smart contracts for immutable expense tracking?"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,183,3,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(255,183,3,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
                  <div style={{ fontSize: "24px", marginBottom: "10px" }}>🛡️</div>
                  <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Blockchain Auditing Trails</h4>
                  <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Top-tier firms now deploy smart contracts for immutable expense tracking, making conventional sampling-based audits obsolete.</p>
