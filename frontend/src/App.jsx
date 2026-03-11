@@ -995,9 +995,9 @@ Your Core Capabilities & Guidelines:
                 <h1 style={{ fontSize: "38px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800, letterSpacing: "-1px" }}>{t("welcomeTitle")}</h1>
                 <p style={{ fontSize: "18px", color: "#94a3b8", margin: "0 0 40px 0", maxWidth: "800px", lineHeight: 1.6 }}>{t("welcomeDesc")}</p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "30px" }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "30px" }}>
                   {OVERVIEW_CARDS.map((card, i) => (
-                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel" style={{ borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel" style={{ flex: "1 1 calc(50% - 30px)", minWidth: "320px", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.05)" }}>
                       <div style={{ height: "200px", backgroundImage: `url(${card.img})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
                         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #0f172a 0%, transparent 100%)" }}></div>
                       </div>
