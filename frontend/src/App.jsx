@@ -1163,12 +1163,24 @@ Your Core Capabilities & Guidelines:
             </div>
 
             <div style={{ marginTop: "50px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "40px" }}>
-              <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "30px", fontWeight: 800 }}>End-to-End Tools & Regional Insights</h2>
-              <div style={{ marginBottom: "40px" }}>
-                <IndiaMapZone stateCode={selectedState} theme={theme} />
+              <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "30px", fontWeight: 800 }}>Pro Application Timeline & Subsidies</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "20px" }}>
+                <div className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)" }}>
+                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>🔍</div>
+                  <h3 style={{ color: "#00B4D8", margin: "0 0 10px 0", fontSize: "20px" }}>1. Discovery Phase</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Match your business profile using our AI against 50+ central MSME policies.</p>
+                </div>
+                <div className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)" }}>
+                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>📑</div>
+                  <h3 style={{ color: "#10B981", margin: "0 0 10px 0", fontSize: "20px" }}>2. Documentation Vault</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Automatically gather Udyam, GST, and ITR data points into a centralized and encrypted structure.</p>
+                </div>
+                <div className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)" }}>
+                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>💸</div>
+                  <h3 style={{ color: "#FFB703", margin: "0 0 10px 0", fontSize: "20px" }}>3. Capital Allocation</h3>
+                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Disburse and track government matched funds mapped directly to your fiscal expansion roadmap.</p>
+                </div>
               </div>
-              <LoanCalculator theme={theme} />
-              <TaxComplianceCalendar theme={theme} />
             </div>
           </div>
         )}
@@ -1366,13 +1378,25 @@ Your Core Capabilities & Guidelines:
             </div>
             </div>
 
-            <div style={{ padding: "40px 30px" }}>
-              <h2 style={{ fontSize: "28px", color: "#00B4D8", marginBottom: "30px", fontWeight: 800 }}>AI Smart Analytics Tools & Resources</h2>
-              <div style={{ marginBottom: "40px" }}>
-                 <QuickToolsGrid theme={theme} sendMessage={sendMessage} t={t} />
+            <div style={{ padding: "40px 30px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+              <h2 style={{ fontSize: "24px", color: "#FFF", marginBottom: "25px", fontWeight: 800 }}>💡 Suggested Pro Workflows</h2>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
+                <div onClick={() => sendMessage("Generate a 5-year Profit and Loss forecast for a startup firm in India")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(0,180,216,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                    <div style={{ fontSize: "24px", marginBottom: 10 }}>📊</div>
+                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>P&L Forecasting</h4>
+                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"Generate a 5-year Profit and Loss forecast for a startup firm..."</p>
+                </div>
+                <div onClick={() => sendMessage("Create an optimized corporate tax strategy based on the recent 2025 Union Budget.")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(16,185,129,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                    <div style={{ fontSize: "24px", marginBottom: 10 }}>💼</div>
+                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>Tax Optimization</h4>
+                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"Create an optimized corporate tax strategy based on the Budget..."</p>
+                </div>
+                <div onClick={() => sendMessage("[GENERATE_IMAGE:] A modern corporate hub in Bangalore with glass exterior")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(255,107,53,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,107,53,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
+                    <div style={{ fontSize: "24px", marginBottom: 10 }}>🏢</div>
+                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>Render Architecture</h4>
+                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"[GENERATE_IMAGE:] A modern corporate hub in Bangalore..."</p>
+                </div>
               </div>
-              <LoanCalculator theme={theme} />
-              <TaxComplianceCalendar theme={theme} />
             </div>
           </div>
         )}
