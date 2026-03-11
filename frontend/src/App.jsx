@@ -1161,6 +1161,15 @@ Your Core Capabilities & Guidelines:
               <p style={{ color: "#e2e8f0", fontSize: "15px", lineHeight: 1.6, margin: "0 0 20px 0" }}>Our integration dynamically triggers deep AI sweeps across structural documentation to generate high-level breakdowns of executive compensation vs Top-Tier frameworks. Enter your current financial bandwidth inside the profile editor to let the Pro bot analyze your enterprise roadmap against global standards.</p>
               <button onClick={() => { setActiveTab("chat"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ padding: "12px 24px", borderRadius: "8px", background: "#FFB703", color: "#111", border: "none", fontWeight: 800, cursor: "pointer", fontSize: "14px" }}>Request AI Pro Analysis ↗</button>
             </div>
+
+            <div style={{ marginTop: "50px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "40px" }}>
+              <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "30px", fontWeight: 800 }}>End-to-End Tools & Regional Insights</h2>
+              <div style={{ marginBottom: "40px" }}>
+                <IndiaMapZone stateCode={selectedState} theme={theme} />
+              </div>
+              <LoanCalculator theme={theme} />
+              <TaxComplianceCalendar theme={theme} />
+            </div>
           </div>
         )}
 
@@ -1225,8 +1234,9 @@ Your Core Capabilities & Guidelines:
         )}
 
         {activeTab === "chat" && (
-          <div className="content-area glass-panel" style={{ display: "flex", flexDirection: "column", borderRadius: "20px", overflow: "hidden", position: "relative" }}>
-            <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", overflowY: "auto", position: "relative" }}>
+            <div style={{ display: "flex", flexDirection: "column", height: "80vh" }}>
+              <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
               {messages.map((msg, idx) => (
                 <div key={idx} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", width: "100%" }}>
                   {msg.role !== "user" && <div style={{ minWidth: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #FF6B35, #FFB703)", marginRight: 15, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 10px rgba(255,107,53,0.3)", flexShrink: 0 }}>🤖</div>}
@@ -1353,6 +1363,16 @@ Your Core Capabilities & Guidelines:
                   {t("launchBtn")}
                 </button>
               </div>
+            </div>
+            </div>
+
+            <div style={{ padding: "40px 30px" }}>
+              <h2 style={{ fontSize: "28px", color: "#00B4D8", marginBottom: "30px", fontWeight: 800 }}>AI Smart Analytics Tools & Resources</h2>
+              <div style={{ marginBottom: "40px" }}>
+                 <QuickToolsGrid theme={theme} sendMessage={sendMessage} t={t} />
+              </div>
+              <LoanCalculator theme={theme} />
+              <TaxComplianceCalendar theme={theme} />
             </div>
           </div>
         )}
