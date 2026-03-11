@@ -1456,6 +1456,47 @@ Your Core Capabilities & Guidelines:
                </div>
             </div>
 
+            <div className="glass-panel" style={{ padding: "30px", borderRadius: "16px", marginBottom: "50px", border: "1px solid rgba(255,255,255,0.05)" }}>
+               <h2 style={{ fontSize: "24px", color: "#00B4D8", marginBottom: "30px", fontWeight: 700 }}>Service Tier Profitability Matrix (2020 vs 2025)</h2>
+               <div style={{ height: "400px", width: "100%" }}>
+                 <ResponsiveContainer width="100%" height="100%">
+                   <BarChart data={[
+                     { category: "Basic Bookkeeping", "2020 Margin %": 25, "2025 Margin %": 8 },
+                     { category: "Tax Compliance", "2020 Margin %": 35, "2025 Margin %": 15 },
+                     { category: "Virtual CFO", "2020 Margin %": 15, "2025 Margin %": 45 },
+                     { category: "AI Strategic Advisory", "2020 Margin %": 5, "2025 Margin %": 65 },
+                     { category: "Cross-Border Structuring", "2020 Margin %": 40, "2025 Margin %": 55 }
+                   ]} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
+                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+                     <XAxis dataKey="category" stroke="#94a3b8" />
+                     <YAxis stroke="#94a3b8" />
+                     <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#fff" }} />
+                     <Legend />
+                     <Bar dataKey="2020 Margin %" fill="#ef4444" radius={[4, 4, 0, 0]} />
+                     <Bar dataKey="2025 Margin %" fill="#10B981" radius={[4, 4, 0, 0]} />
+                   </BarChart>
+                 </ResponsiveContainer>
+               </div>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "50px" }}>
+              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)" }}>
+                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>🧠</div>
+                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Predictive Modeling</h4>
+                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Firms running ML algorithms for automated cash-flow forecasting have captured 60% of all VC-backed startup clients since 2023.</p>
+              </div>
+              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)" }}>
+                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>⚡</div>
+                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Dynamic API Tax Integrations</h4>
+                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Direct pipeline linking from corporate bank APIs to GST portals bypasses human data entry entirely, pushing firm valuation multiples to 8X.</p>
+              </div>
+              <div className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)" }}>
+                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>🛡️</div>
+                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Blockchain Auditing Trails</h4>
+                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Top-tier firms now deploy smart contracts for immutable expense tracking, making conventional sampling-based audits obsolete.</p>
+              </div>
+            </div>
+
             <div className="glass-panel" style={{ padding: "40px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(0,180,216,0.1), rgba(0,0,0,0.4))", border: "1px solid rgba(0,180,216,0.3)" }}>
               <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>End-to-End Strategic Conclusion</h2>
               <p style={{ color: "#e2e8f0", fontSize: "16px", lineHeight: 1.8, marginBottom: "30px" }}>To survive and scale over the next decade, accounting and CA enterprises must eliminate manual data-entry redundancies. Transitioning workflows entirely to cloud-native stacks integrated with real-time Banking APIs and automated direct-tax compliance is no longer a luxury, it is a structural necessity to maintain market relevance.</p>
