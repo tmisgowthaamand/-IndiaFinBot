@@ -71,24 +71,39 @@ app.post('/api/chat', async (req, res) => {
 
         for (const model of models) {
             try {
+                // For v1 API, prepend system instruction as first user message
+                let apiContents = contents;
+                if (systemInstruction && systemInstruction.parts && systemInstruction.parts[0]) {
+                    const systemText = systemInstruction.parts[0].text;
+                    apiContents = [
+                        {
+                            role: "user",
+                            parts: [{ text: systemText }]
+                        },
+                        {
+                            role: "model",
+                            parts: [{ text: "Understood. I will follow these instructions precisely." }]
+                        },
+                        ...contents
+                    ];
+                }
+                
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${apiKey}`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        systemInstruction: systemInstruction,
-                        contents: contents,
+                        contents: apiContents,
                         generationConfig: {
                             temperature: 0.7,
                             topK: 40,
                             topP: 0.95,
-                            maxOutputTokens: 8192,
-                            responseMimeType: "text/plain"
+                            maxOutputTokens: 8192
                         },
                         safetySettings: [
-                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_NONE" },
-                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_NONE" }
+                            { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_ONLY_HIGH" },
+                            { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_ONLY_HIGH" },
+                            { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
+                            { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
                         ]
                     })
                 });
