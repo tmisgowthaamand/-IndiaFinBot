@@ -248,16 +248,30 @@ const MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyAm0Ux8ho
 const MAP_OPTIONS = { disableDefaultUI: true, zoomControl: true, restriction: { latLngBounds: { north: 37.0902, south: 8.0863, east: 97.3956, west: 68.1862 }, strictBounds: true }, styles: [{ stylers: [{ saturation: -100 }, { lightness: 20 }] }, { elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] }, { elementType: "geometry", stylers: [{ color: "#060913" }] }, { featureType: "water", stylers: [{ color: "#00B4D8" }] }] };
 
 function IndiaMapZone({ stateCode, theme }) {
+  const { isLoaded } = useJsApiLoader({ id: 'google-map-script', googleMapsApiKey: MAPS_API_KEY });
   const [mapType, setMapType] = useState("CA"); // CA, MSME, LOAN, COMP
+  const [activeMarker, setActiveMarker] = useState(null);
 
-  const centerLat = stateCode && INDIA_STATES[stateCode] ? INDIA_STATES[stateCode].coords.lat : 20.5937;
-  const centerLng = stateCode && INDIA_STATES[stateCode] ? INDIA_STATES[stateCode].coords.lng : 78.9629;
-  const zoomLevel = stateCode ? 6 : 4;
+  const center = stateCode && INDIA_STATES[stateCode] ? INDIA_STATES[stateCode].coords : { lat: 20.5937, lng: 78.9629 };
 
-  const mapIframeUrl = `https://maps.google.com/maps?q=${centerLat},${centerLng}&t=&z=${zoomLevel}&ie=UTF8&iwloc=&output=embed`;
+  const generateMocks = (centerLat, centerLng, type) => {
+    return Array.from({ length: 8 }).map((_, i) => {
+      const latOffset = (Math.random() - 0.5) * 2;
+      const lngOffset = (Math.random() - 0.5) * 2;
+      return {
+        id: i, lat: centerLat + latOffset, lng: centerLng + lngOffset,
+        title: type === "CA" ? `Verified Tax Partner ${i + 1}` : type === "MSME" ? `SEZ Govt Tech Park ${i + 1}` : type === "LOAN" ? `Approved MUDRA Bank Branch` : `Local Competitor Business`,
+        desc: type === "CA" ? `Fee: ₹5K/mo | GST Filing` : type === "LOAN" ? `Interest: 8.5% | Fast Approval` : type === "MSME" ? `Subsidized IT & Agri Plot` : `High Density Market`
+      };
+    });
+  };
+
+  const markers = generateMocks(center.lat, center.lng, mapType);
+
+  if (!isLoaded) return <div style={{ height: "400px", display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.4)" }}><TypingDots /></div>;
 
   return (
-    <div className="glass-panel" style={{ borderRadius: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "20px", height: "600px", minHeight: "350px", border: "1px solid rgba(0,180,216,0.3)" }}>
+    <div className="glass-panel" style={{ borderRadius: "16px", padding: "20px", display: "flex", flexDirection: "column", gap: "20px", height: "600px", border: "1px solid rgba(0,180,216,0.3)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
         <div>
           <h2 style={{ margin: "0 0 5px 0", color: theme === "light" ? "#0f172a" : "#FFF", fontSize: "22px", display: "flex", alignItems: "center", gap: 8 }}>📍 Live Market Intel Radar</h2>
@@ -273,23 +287,25 @@ function IndiaMapZone({ stateCode, theme }) {
         </div>
       </div>
 
-      <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", position: "relative", minHeight: "250px" }}>
-        <iframe
-          width="100%"
-          height="100%"
-          frameBorder="0"
-          scrolling="no"
-          marginHeight="0"
-          marginWidth="0"
-          src={mapIframeUrl}
-          style={{ filter: theme === "dark" || !theme ? "invert(90%) hue-rotate(180deg)" : "none", transition: "filter 0.3s", minHeight: "100%" }}
-        />
-        <div style={{ position: "absolute", bottom: "10px", right: "10px", background: "rgba(15,23,42,0.9)", padding: "10px 15px", borderRadius: "8px", border: "1px solid rgba(0,180,216,0.3)", zIndex: 10, backdropFilter: "blur(5px)" }}>
-           <h4 style={{ color: "#9BF6FF", margin: "0 0 5px 0", fontSize: "13px" }}>{mapType === "CA" ? "Top CA Penetration" : mapType === "MSME" ? "Govt Subsidized Zones" : mapType === "LOAN" ? "Active Loan Sanction Nodes" : "High Competition"}</h4>
-           <div style={{ display: "flex", gap: "10px", fontSize: "12px" }}>
-             <span style={{ color: "#e2e8f0" }}>Active: <strong style={{ color: "#10B981" }}>High</strong></span>
-           </div>
-        </div>
+      <div style={{ flex: 1, borderRadius: "12px", overflow: "hidden", position: "relative" }}>
+        <GoogleMap mapContainerStyle={{ width: "100%", height: "100%" }} center={center} zoom={stateCode ? 7 : 5} options={MAP_OPTIONS} onClick={() => setActiveMarker(null)}>
+          <Circle center={center} radius={150000} options={{ strokeColor: "#00B4D8", strokeOpacity: 0.8, strokeWeight: 2, fillColor: "#00B4D8", fillOpacity: 0.1 }} />
+          {markers.map(m => (
+            <Marker key={m.id} position={{ lat: m.lat, lng: m.lng }} onClick={() => setActiveMarker(m)}
+              icon={{ url: mapType === "CA" ? 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png' : mapType === "MSME" ? 'https://maps.google.com/mapfiles/ms/icons/green-dot.png' : mapType === "LOAN" ? 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' : 'https://maps.google.com/mapfiles/ms/icons/red-dot.png' }}
+            >
+              {activeMarker?.id === m.id && (
+                <InfoWindow position={{ lat: m.lat, lng: m.lng }} onCloseClick={() => setActiveMarker(null)}>
+                  <div style={{ padding: "5px 10px", color: "#111" }}>
+                    <h4 style={{ margin: "0 0 5px 0", fontSize: "15px", fontWeight: 800 }}>{m.title}</h4>
+                    <p style={{ margin: "0 0 10px 0", fontSize: "13px" }}>{m.desc}</p>
+                    <button onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${m.lat},${m.lng}`, "_blank")} style={{ padding: "6px 12px", background: "#00B4D8", color: "#FFF", border: "none", borderRadius: "4px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>Get Directions ↗</button>
+                  </div>
+                </InfoWindow>
+              )}
+            </Marker>
+          ))}
+        </GoogleMap>
       </div>
     </div>
   );
@@ -321,18 +337,18 @@ function LoanCalculator({ theme }) {
         <p style={{ margin: 0, color: theme === "light" ? "#475569" : "#94a3b8", fontSize: "15px" }}>Calculate precise MSME & MUDRA loan monthly repayments instantly.</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "25px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Loan Amount (₹)</label>
-          <input type="number" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
+          <input type="number" value={loanAmount} onChange={e => setLoanAmount(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Interest Rate (p.a %)</label>
-          <input type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
+          <input type="number" step="0.1" value={interestRate} onChange={e => setInterestRate(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           <label style={{ color: theme === "light" ? "#0f172a" : "#9BF6FF", fontWeight: 700, fontSize: "14px" }}>Tenure (Years)</label>
-          <input type="number" value={tenureYears} onChange={e => setTenureYears(e.target.value)} style={{ padding: "12px 15px", borderRadius: "8px", background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "16px", outline: "none" }} />
+          <input type="number" value={tenureYears} onChange={e => setTenureYears(e.target.value)} style={{ padding: "14px 18px", borderRadius: "10px", background: "rgba(0,0,0,0.45)", border: "1px solid rgba(255,255,255,0.1)", color: "#FFF", fontSize: "17px", outline: "none", transition: "all 0.2s" }} onFocus={e => e.target.style.borderColor = "#10B981"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"} />
         </div>
       </div>
 
@@ -594,9 +610,9 @@ Your Core Capabilities & Guidelines:
         setTimeout(() => {
           showNotification(t("notifPainting"));
           const seed = Math.floor(Math.random() * 1000000);
-          const promptSuffix = `cinematic, high quality, professional business photography, ${locationContext}`;
-          const fallbackPrompt = encodeURIComponent(`${imagePrompt}, ${promptSuffix}`);
-          const fallbackUrl = `https://pollinations.ai/p/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
+          const promptSuffix = `high quality, professional business photography, ${locationContext}`;
+          const fallbackPrompt = encodeURIComponent(`${imagePrompt}. ${promptSuffix}`);
+          const fallbackUrl = `https://image.pollinations.ai/prompt/${fallbackPrompt}?width=1024&height=1024&seed=${seed}&nologo=true`;
           
           setMessages(prev => {
             const newMessages = [...prev];
@@ -808,22 +824,21 @@ Your Core Capabilities & Guidelines:
       <StockTicker />
 
       {/* Modern Header */}
-      <div className="glass-panel" style={{ position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid rgba(0, 180, 216, 0.2)", padding: "15px 30px" }}>
-        <div style={{ maxWidth: 1600, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 15 }}>
+      <div className="glass-panel" style={{ position: "sticky", top: 0, zIndex: 50, borderBottom: "1px solid rgba(0, 180, 216, 0.2)", padding: "10px 20px" }}>
+        <div className="nav-header" style={{ maxWidth: "100%", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 10 }}>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <div style={{ width: 50, height: 50, borderRadius: 14, background: "linear-gradient(135deg, #FF6B35, #FFB703)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, boxShadow: "0 0 20px rgba(255,107,53,0.3)" }}>🇮🇳</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 42, height: 42, borderRadius: 12, background: "linear-gradient(135deg, #FF6B35, #FFB703)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: "0 0 15px rgba(255,107,53,0.3)" }}>🇮🇳</div>
             <div>
-              <div style={{ fontSize: 24, fontWeight: 900, color: "#FFF", letterSpacing: "-0.5px", textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>IndiaFin<span style={{ color: "#00B4D8" }}>Bot</span></div>
+              <div style={{ fontSize: 22, fontWeight: 900, color: "#FFF", letterSpacing: "-0.5px" }}>IndiaFin<span style={{ color: "#00B4D8" }}>Bot</span></div>
             </div>
           </div>
 
           <div style={{ display: "flex", background: "rgba(0,0,0,0.3)", borderRadius: "12px", padding: "6px", border: "1px solid rgba(255,255,255,0.05)", gap: "4px", flexWrap: "wrap", justifyContent: "center" }}>
-            <button onClick={() => { setActiveTab("overview"); setSelectedDetailId(null); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="nav-tab" style={{ background: activeTab === "overview" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "overview" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabOverview")}</button>
-            <button onClick={() => { setActiveTab("schemes"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="nav-tab" style={{ background: activeTab === "schemes" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "schemes" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>🏛️ {t("tabSchemes") || "Schemes & Pro"}</button>
-            <button onClick={() => { setActiveTab("chat"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="nav-tab" style={{ background: activeTab === "chat" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "chat" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>🤖 {t("tabChat")}</button>
-            <button onClick={() => { setActiveTab("competition"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="nav-tab" style={{ background: activeTab === "competition" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "competition" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>📊 Competition</button>
-            <button onClick={() => { setActiveTab("inspire"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="nav-tab" style={{ background: activeTab === "inspire" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "inspire" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabInspire")}</button>
+            <button onClick={() => { setActiveTab("overview"); setSelectedDetailId(null); }} className="nav-tab" style={{ background: activeTab === "overview" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "overview" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabOverview")}</button>
+            <button onClick={() => setActiveTab("schemes")} className="nav-tab" style={{ background: activeTab === "schemes" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "schemes" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>🏛️ {t("tabSchemes") || "Schemes & Pro"}</button>
+            <button onClick={() => setActiveTab("chat")} className="nav-tab" style={{ background: activeTab === "chat" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "chat" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>🤖 {t("tabChat")}</button>
+            <button onClick={() => setActiveTab("inspire")} className="nav-tab" style={{ background: activeTab === "inspire" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "inspire" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabInspire")}</button>
           </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
@@ -855,44 +870,46 @@ Your Core Capabilities & Guidelines:
         </div>
       </div>
 
-      <div className="main-container" style={{ position: "relative", zIndex: 5, flex: 1, maxWidth: 1800, margin: "0 auto", width: "100%", padding: "25px", display: "flex", gap: "25px" }}>
+      <div className="main-container">
         
         <button 
           onClick={() => setSidebarVisible(!sidebarVisible)} 
-          style={{ position: "absolute", left: sidebarVisible ? "355px" : "15px", top: "15px", zIndex: 100, background: "rgba(0,180,216,0.2)", border: "1px solid #00B4D8", color: "#00B4D8", width: "40px", height: "40px", borderRadius: "10px", cursor: "pointer", backdropFilter: "blur(10px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}
+          style={{ position: "absolute", left: sidebarVisible ? "358px" : "10px", top: "10px", zIndex: 100, background: "rgba(0,180,216,0.35)", border: "1px solid #00B4D8", color: "#00B4D8", width: "42px", height: "42px", borderRadius: "12px", cursor: "pointer", backdropFilter: "blur(15px)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px", fontWeight: "bold", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", boxShadow: "0 5px 15px rgba(0,0,0,0.5)" }}
           title={sidebarVisible ? "Hide Sidebar" : "Show Sidebar"}
         >
           {sidebarVisible ? "«" : "»"}
         </button>
 
         {/* Universal Left Sidebar: Profile Details */}
-        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", padding: sidebarVisible ? "25px" : "0px", display: "flex", flexDirection: "column", overflowY: "auto", width: sidebarVisible ? "360px" : "0px", opacity: sidebarVisible ? 1 : 0, border: sidebarVisible ? "1px solid rgba(255,255,255,0.08)" : "none", transition: "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)", flexShrink: 0 }}>
+        <div className={`sidebar glass-panel custom-scrollbar ${!sidebarVisible ? 'hide-sidebar' : ''}`} style={{ borderRadius: "20px", display: "flex", flexDirection: "column", padding: sidebarVisible ? "35px 25px" : "0", overflowY: "auto" }}>
           {sidebarVisible && (
             <>
               <h3 style={{ color: "#FFF", margin: "0 0 20px 0", fontSize: "18px", display: "flex", alignItems: "center", gap: 10, fontWeight: 700, whiteSpace: "nowrap" }}><span style={{ background: "#FF6B35", padding: "6px", borderRadius: "8px", fontSize: "16px" }}>🚀</span> {t("startupConfig")}</h3>
 
-          <div>
-            <label style={labelStyle}>{t("investmentLabel")}</label>
-            <select value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
-              <option value="" style={{ background: "#060913", color: "#666" }}>{t("investmentPlaceholder")}</option>
-              {INVESTMENT_RANGES.map((r, i) => <option key={i} value={r} style={{ background: "#060913", color: "#fff" }}>{r}</option>)}
-            </select>
-          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 15 }}>
+            <div>
+              <label style={labelStyle}>{t("investmentLabel")}</label>
+              <select value={investment} onChange={e => setInvestment(e.target.value)} style={inputStyle}>
+                <option value="" style={{ background: "#060913", color: "#666" }}>{t("investmentPlaceholder")}</option>
+                {INVESTMENT_RANGES.map((r, i) => <option key={i} value={r} style={{ background: "#060913", color: "#fff" }}>{r}</option>)}
+              </select>
+            </div>
 
-          <div>
-            <label style={labelStyle}>{t("interestsLabel")}</label>
-            <select value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
-              <option value="" style={{ background: "#060913", color: "#666" }}>{t("interestsPlaceholder")}</option>
-              {BUSINESS_VERTICALS.map((v, i) => <option key={i} value={v} style={{ background: "#060913", color: "#fff" }}>{v}</option>)}
-            </select>
-          </div>
+            <div>
+              <label style={labelStyle}>{t("interestsLabel")}</label>
+              <select value={interests} onChange={e => setInterests(e.target.value)} style={inputStyle}>
+                <option value="" style={{ background: "#060913", color: "#666" }}>{t("interestsPlaceholder")}</option>
+                {BUSINESS_VERTICALS.map((v, i) => <option key={i} value={v} style={{ background: "#060913", color: "#fff" }}>{v}</option>)}
+              </select>
+            </div>
 
-          <div>
-            <label style={labelStyle}>{t("skillsLabel")}</label>
-            <select value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle} onFocus={e => e.target.style.borderColor = "#00B4D8"} onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}>
-              <option value="" style={{ background: "#060913", color: "#666" }}>{t("skillsPlaceholder")}</option>
-              {FOUNDER_SKILLS.map((s, i) => <option key={i} value={s} style={{ background: "#060913", color: "#fff" }}>{s}</option>)}
-            </select>
+            <div>
+              <label style={labelStyle}>{t("skillsLabel")}</label>
+              <select value={skills} onChange={e => setSkills(e.target.value)} style={inputStyle}>
+                <option value="" style={{ background: "#060913", color: "#666" }}>{t("skillsPlaceholder")}</option>
+                {FOUNDER_SKILLS.map((s, i) => <option key={i} value={s} style={{ background: "#060913", color: "#fff" }}>{s}</option>)}
+              </select>
+            </div>
           </div>
 
           <button
@@ -973,16 +990,16 @@ Your Core Capabilities & Guidelines:
     </div>
 
         {activeTab === "overview" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: selectedDetailId ? "20px" : "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
 
             {!selectedDetailId ? (
               <>
                 <h1 style={{ fontSize: "38px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800, letterSpacing: "-1px" }}>{t("welcomeTitle")}</h1>
                 <p style={{ fontSize: "18px", color: "#94a3b8", margin: "0 0 40px 0", maxWidth: "800px", lineHeight: 1.6 }}>{t("welcomeDesc")}</p>
 
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "30px" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "30px" }}>
                   {OVERVIEW_CARDS.map((card, i) => (
-                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel" style={{ flex: "1 1 calc(50% - 30px)", minWidth: "320px", borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel" style={{ borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.05)" }}>
                       <div style={{ height: "200px", backgroundImage: `url(${card.img})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
                         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #0f172a 0%, transparent 100%)" }}></div>
                       </div>
@@ -1018,7 +1035,7 @@ Your Core Capabilities & Guidelines:
         )}
 
         {activeTab === "inspire" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
             <h1 style={{ fontSize: "34px", margin: "0 0 30px 0", color: "#FFF", fontWeight: 800 }}>{t("inspireTitle")}</h1>
 
             <h2 style={{ fontSize: "22px", color: "#FFB703", margin: "0 0 20px 0" }}>{t("leadersTitle")}</h2>
@@ -1115,7 +1132,7 @@ Your Core Capabilities & Guidelines:
 
         {/* Dynamic Govt Schemes Tab Component */}
         {activeTab === "schemes" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
             <h1 style={{ fontSize: "34px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800 }}>🏛️ Government Schemes & Pro Research</h1>
             <p style={{ color: "#94a3b8", fontSize: "16px", marginBottom: "40px", maxWidth: "800px", lineHeight: 1.6 }}>Explore end-to-end verified India compensation frameworks, deep research limits, and exact startup subsidy allowances. Match your profile against top-tier MSME programs to unlock direct capital.</p>
 
@@ -1144,35 +1161,14 @@ Your Core Capabilities & Guidelines:
             <div className="glass-panel" style={{ borderRadius: "16px", padding: "30px", borderLeft: "4px solid #FFB703", background: "rgba(255,183,3,0.05)" }}>
               <h2 style={{ margin: "0 0 15px 0", color: "#FFB703", fontSize: "22px" }}>End-to-End Pro Compensation Analysis</h2>
               <p style={{ color: "#e2e8f0", fontSize: "15px", lineHeight: 1.6, margin: "0 0 20px 0" }}>Our integration dynamically triggers deep AI sweeps across structural documentation to generate high-level breakdowns of executive compensation vs Top-Tier frameworks. Enter your current financial bandwidth inside the profile editor to let the Pro bot analyze your enterprise roadmap against global standards.</p>
-              <button onClick={() => { setActiveTab("chat"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ padding: "12px 24px", borderRadius: "8px", background: "#FFB703", color: "#111", border: "none", fontWeight: 800, cursor: "pointer", fontSize: "14px" }}>Request AI Pro Analysis ↗</button>
-            </div>
-
-            <div style={{ marginTop: "50px", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "40px" }}>
-              <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "30px", fontWeight: 800 }}>Pro Application Timeline & Subsidies</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "20px" }}>
-                <div onClick={() => { setActiveTab("chat"); sendMessage("Run a Discovery Phase scan against central MSME policies based on my profile."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,180,216,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>🔍</div>
-                  <h3 style={{ color: "#00B4D8", margin: "0 0 10px 0", fontSize: "20px" }}>1. Discovery Phase</h3>
-                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Match your business profile using our AI against 50+ central MSME policies.</p>
-                </div>
-                <div onClick={() => { setActiveTab("chat"); sendMessage("Open Documentation Vault and tell me which Udyam, GST, and ITR data points are required."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>📑</div>
-                  <h3 style={{ color: "#10B981", margin: "0 0 10px 0", fontSize: "20px" }}>2. Documentation Vault</h3>
-                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Automatically gather Udyam, GST, and ITR data points into a centralized and encrypted structure.</p>
-                </div>
-                <div onClick={() => { setActiveTab("chat"); sendMessage("Show me a Capital Allocation strategy to disburse matched funds for my expansion roadmap."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "25px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,183,3,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(255,183,3,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                  <div style={{ fontSize: "30px", marginBottom: "15px" }}>💸</div>
-                  <h3 style={{ color: "#FFB703", margin: "0 0 10px 0", fontSize: "20px" }}>3. Capital Allocation</h3>
-                  <p style={{ color: "#94a3b8", fontSize: "14px", lineHeight: 1.6, margin: 0 }}>Disburse and track government matched funds mapped directly to your fiscal expansion roadmap.</p>
-                </div>
-              </div>
+              <button onClick={() => { setActiveTab("chat"); }} style={{ padding: "12px 24px", borderRadius: "8px", background: "#FFB703", color: "#111", border: "none", fontWeight: 800, cursor: "pointer", fontSize: "14px" }}>Request AI Pro Analysis ↗</button>
             </div>
           </div>
         )}
 
         {activeTab === "privacy" && (
           <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
-            <button onClick={() => { setActiveTab("overview"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(16,185,129,0.1)", color: "#10B981", border: "1px solid #10B981", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#10B981"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(16,185,129,0.1)"; e.currentTarget.style.color="#10B981"}}>← Back to Home</button>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(16,185,129,0.1)", color: "#10B981", border: "1px solid #10B981", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#10B981"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(16,185,129,0.1)"; e.currentTarget.style.color="#10B981"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Privacy Policy</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
               <p>Your privacy is important to us. This Privacy Policy outlines how your data is collected, used, and protected when you use IndiaFinBot.</p>
@@ -1193,7 +1189,7 @@ Your Core Capabilities & Guidelines:
 
         {activeTab === "terms" && (
           <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
-            <button onClick={() => { setActiveTab("overview"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(0,180,216,0.1)", color: "#00B4D8", border: "1px solid #00B4D8", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#00B4D8"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(0,180,216,0.1)"; e.currentTarget.style.color="#00B4D8"}}>← Back to Home</button>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(0,180,216,0.1)", color: "#00B4D8", border: "1px solid #00B4D8", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#00B4D8"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(0,180,216,0.1)"; e.currentTarget.style.color="#00B4D8"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Terms of Service</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
               <p>By using IndiaFinBot Pro, you agree to these Terms of Service. Please read them carefully.</p>
@@ -1210,7 +1206,7 @@ Your Core Capabilities & Guidelines:
 
         {activeTab === "help" && (
           <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
-            <button onClick={() => { setActiveTab("overview"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(255,107,53,0.1)", color: "#FF6B35", border: "1px solid #FF6B35", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#FF6B35"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,107,53,0.1)"; e.currentTarget.style.color="#FF6B35"}}>← Back to Home</button>
+            <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(255,107,53,0.1)", color: "#FF6B35", border: "1px solid #FF6B35", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#FF6B35"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,107,53,0.1)"; e.currentTarget.style.color="#FF6B35"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Help Center & FAQ</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
               <p>Need support? You can find answers to our most common questions below.</p>
@@ -1231,9 +1227,8 @@ Your Core Capabilities & Guidelines:
         )}
 
         {activeTab === "chat" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", overflowY: "auto", position: "relative" }}>
-            <div style={{ display: "flex", flexDirection: "column", height: "80vh" }}>
-              <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
+          <div className="content-area glass-panel" style={{ display: "flex", flexDirection: "column", borderRadius: "20px", overflow: "hidden", position: "relative" }}>
+            <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
               {messages.map((msg, idx) => (
                 <div key={idx} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", width: "100%" }}>
                   {msg.role !== "user" && <div style={{ minWidth: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #FF6B35, #FFB703)", marginRight: 15, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, boxShadow: "0 4px 10px rgba(255,107,53,0.3)", flexShrink: 0 }}>🤖</div>}
@@ -1255,43 +1250,37 @@ Your Core Capabilities & Guidelines:
                           th: ({ node, ...props }) => <th style={{ padding: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(0,180,216,0.1)", color: "#00B4D8", textAlign: "left" }} {...props} />,
                           td: ({ node, ...props }) => <td style={{ padding: "10px 12px", border: "1px solid rgba(255,255,255,0.1)" }} {...props} />,
                           img: ({ node, ...props }) => {
-                            const [imgSrc, setImgSrc] = useState(() => {
-                              let safeSrc = props.src || "";
-                              if (!safeSrc.startsWith("http")) {
-                                const visualPrompt = `${safeSrc} accounting finance professional business style in ${locationContext}`;
-                                return `https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`;
-                              }
-                              return safeSrc.replace(/ /g, '%20');
-                            });
+                            const [src, setSrc] = useState(props.src || "");
                             const [errorCount, setErrorCount] = useState(0);
+
+                            useEffect(() => {
+                              if (!src.startsWith("http")) {
+                                const visualPrompt = `${src} in ${locationContext} business style, professional photography`;
+                                setSrc(`https://image.pollinations.ai/prompt/${encodeURIComponent(visualPrompt)}?width=1200&height=800&nologo=true&seed=${Math.floor(Math.random() * 1000000)}`);
+                              }
+                            }, [props.src]);
 
                             const handleError = () => {
                               if (errorCount < 3) {
-                                let newSrc;
-                                if (imgSrc.includes('pollinations.ai')) {
-                                  newSrc = `${imgSrc.split('&seed=')[0]}&seed=${Math.floor(Math.random() * 1000000)}`;
-                                } else {
-                                  // For non-pollinations URLs, append a random hash to break browser cache
-                                  newSrc = `${imgSrc.split('?')[0]}?retry=${Math.floor(Math.random() * 10000)}`;
-                                }
-                                setImgSrc(newSrc);
+                                // Try again with a different seed if it fails
+                                const newSeed = Math.floor(Math.random() * 10000000);
+                                const newSrc = src.includes("seed=") 
+                                  ? src.replace(/seed=\d+/, `seed=${newSeed}`)
+                                  : `${src}&seed=${newSeed}`;
+                                setSrc(newSrc);
                                 setErrorCount(prev => prev + 1);
-                              } else if (errorCount === 3) {
-                                // Final fallback: use picsum for guaranteed display
-                                setImgSrc(`https://picsum.photos/seed/${Math.floor(Math.random() * 1000000)}/1200/800`);
-                                setErrorCount(4);
                               }
                             };
 
                             return (
-                              <div style={{ position: "relative", width: "100%", minHeight: 200 }}>
+                              <div style={{ position: "relative", width: "100%", minHeight: src ? 200 : 0 }}>
                                 <img 
-                                  style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)", display: "block", minHeight: "200px", background: "rgba(0,0,0,0.2)" }} 
+                                  style={{ maxWidth: "100%", borderRadius: 12, marginTop: 15, border: "1px solid rgba(255,255,255,0.1)", boxShadow: "0 10px 20px rgba(0,0,0,0.3)", display: "block" }} 
                                   {...props} 
-                                  src={imgSrc} 
+                                  src={src} 
                                   onError={handleError}
                                 />
-                                {errorCount >= 4 && <div style={{ color: "#94a3b8", fontSize: "12px", marginTop: 10, fontStyle: "italic" }}>💡 Placeholder visual displayed due to high network load.</div>}
+                                {errorCount >= 3 && <div style={{ color: "#FF6B35", fontSize: "12px", marginTop: 10 }}>⚠️ Image service busy. Try refreshing the chat.</div>}
                               </div>
                             );
                           },
@@ -1338,7 +1327,7 @@ Your Core Capabilities & Guidelines:
             </div>
 
             <div style={{ padding: "20px 30px", background: "rgba(0,0,0,0.5)", borderTop: "1px solid rgba(0,180,216,0.2)", backdropFilter: "blur(20px)" }}>
-              <div style={{ display: "flex", gap: 15, alignItems: "center", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: 15, alignItems: "center" }}>
                 <input type="file" ref={fileInputRef} onChange={handleFileUpload} accept=".pdf,.csv,.xlsx,.xls,.png,.jpg,.jpeg" style={{ display: "none" }} />
                 <button
                   onClick={() => fileInputRef.current.click()}
@@ -1352,7 +1341,7 @@ Your Core Capabilities & Guidelines:
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && sendMessage(input)}
                   placeholder={isListening ? "🎙️ Listening..." : t("chatPlaceholder")}
-                  style={{ flex: "1 1 200px", padding: "16px 22px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(15,23,42,0.8)", color: "#fff", fontSize: "15px", outline: "none", boxShadow: "inset 0 2px 5px rgba(0,0,0,0.5)", transition: "border 0.3s" }}
+                  style={{ flex: 1, padding: "16px 22px", borderRadius: 12, border: "1px solid rgba(255,255,255,0.1)", background: "rgba(15,23,42,0.8)", color: "#fff", fontSize: "15px", outline: "none", boxShadow: "inset 0 2px 5px rgba(0,0,0,0.5)", transition: "border 0.3s" }}
                   onFocus={e => e.target.style.borderColor = "#FF6B35"}
                   onBlur={e => e.target.style.borderColor = "rgba(255,255,255,0.1)"}
                 />
@@ -1370,121 +1359,6 @@ Your Core Capabilities & Guidelines:
                   {t("launchBtn")}
                 </button>
               </div>
-            </div>
-            </div>
-
-            <div style={{ padding: "40px 30px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-              <h2 style={{ fontSize: "24px", color: "#FFF", marginBottom: "25px", fontWeight: 800 }}>💡 Suggested Pro Workflows</h2>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "20px" }}>
-                <div onClick={() => sendMessage("Generate a 5-year Profit and Loss forecast for a startup firm in India")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(0,180,216,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                    <div style={{ fontSize: "24px", marginBottom: 10 }}>📊</div>
-                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>P&L Forecasting</h4>
-                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"Generate a 5-year Profit and Loss forecast for a startup firm..."</p>
-                </div>
-                <div onClick={() => sendMessage("Create an optimized corporate tax strategy based on the recent 2025 Union Budget.")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(16,185,129,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                    <div style={{ fontSize: "24px", marginBottom: 10 }}>💼</div>
-                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>Tax Optimization</h4>
-                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"Create an optimized corporate tax strategy based on the Budget..."</p>
-                </div>
-                <div onClick={() => sendMessage("[GENERATE_IMAGE:] A modern corporate hub in Bangalore with glass exterior")} className="glass-panel" style={{ padding: "20px", borderRadius: "12px", cursor: "pointer", border: "1px solid rgba(255,107,53,0.3)", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,107,53,0.1)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                    <div style={{ fontSize: "24px", marginBottom: 10 }}>🏢</div>
-                    <h4 style={{ color: "#FFF", margin: "0 0 8px 0", fontSize: "16px" }}>Render Architecture</h4>
-                    <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0 }}>"[GENERATE_IMAGE:] A modern corporate hub in Bangalore..."</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "competition" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px", overflowY: "auto" }}>
-            <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Accounting Services: 5-Year Competition Analysis</h1>
-            <p style={{ color: "#94a3b8", fontSize: "16px", lineHeight: 1.8, marginBottom: "40px" }}>Exhaustive end-to-end research spanning the last 5 years illustrates a massive paradigm shift in the accounting services sector. Traditional manual bookkeeping models are rapidly declining, while scalable cloud-accounting, AI-driven tax advisory, and automated compliance pipelines have seen hyper-growth.</p>
-            
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "25px", marginBottom: "50px" }}>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("How can a traditional bookkeeping firm transition to remote accessibility and cloud integration?"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "30px", borderRadius: "16px", borderLeft: "4px solid #ef4444", background: "rgba(239,68,68,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(239,68,68,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(239,68,68,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <h3 style={{ color: "#ef4444", margin: "0 0 10px 0", fontSize: "22px" }}>📉 Traditional Decline</h3>
-                 <p style={{ color: "#e2e8f0", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>Manual ledger and localized physical bookkeeping firms faced a 35% decline as clients pivot towards remote accessibility and automated GST billing integrations.</p>
-              </div>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("Give me an execution plan to start an AI tax optimization and 5-year predictive P&L advisory service."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "30px", borderRadius: "16px", borderLeft: "4px solid #10B981", background: "rgba(16,185,129,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <h3 style={{ color: "#10B981", margin: "0 0 10px 0", fontSize: "22px" }}>🚀 Cloud-AI Hypergrowth</h3>
-                 <p style={{ color: "#e2e8f0", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>Advisory firms using AI sweeps for tax optimization and predictive 5-year P&L modeling saw a 210% increase in client acquisitions. Competition is now purely technological.</p>
-              </div>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("Compile a strategic guide on offering high-margin VC fund allocation and cross-border tax mitigation services."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "30px", borderRadius: "16px", borderLeft: "4px solid #FFB703", background: "rgba(255,183,3,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,183,3,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(255,183,3,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <h3 style={{ color: "#FFB703", margin: "0 0 10px 0", fontSize: "22px" }}>⚔️ Market Saturation</h3>
-                 <p style={{ color: "#e2e8f0", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>Basic IT return filing is highly saturated resulting in price wars. High-margin services exist exclusively in strategic VC fund allocation and cross-border tax mitigation.</p>
-              </div>
-            </div>
-
-            <div className="glass-panel" style={{ padding: "30px", borderRadius: "16px", marginBottom: "50px", border: "1px solid rgba(255,255,255,0.05)" }}>
-               <h2 style={{ fontSize: "24px", color: "#00B4D8", marginBottom: "30px", fontWeight: 700 }}>5-Year Firm Adaptation & Growth Trajectory</h2>
-               <div style={{ height: "400px", width: "100%" }}>
-                 <ResponsiveContainer width="100%" height="100%">
-                   <LineChart data={[
-                     { year: "2020", traditionalFirms: 850, cloudAiFirms: 120 },
-                     { year: "2021", traditionalFirms: 820, cloudAiFirms: 250 },
-                     { year: "2022", traditionalFirms: 780, cloudAiFirms: 450 },
-                     { year: "2023", traditionalFirms: 700, cloudAiFirms: 750 },
-                     { year: "2024", traditionalFirms: 620, cloudAiFirms: 1100 },
-                     { year: "2025", traditionalFirms: 550, cloudAiFirms: 1500 }
-                   ]} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                     <XAxis dataKey="year" stroke="#94a3b8" />
-                     <YAxis stroke="#94a3b8" />
-                     <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#fff" }} />
-                     <Legend />
-                     <Line type="monotone" name="Traditional Bookkeeping (Thousands)" dataKey="traditionalFirms" stroke="#ef4444" strokeWidth={3} dot={{ r: 5 }} />
-                     <Line type="monotone" name="Cloud & AI Advisory (Thousands)" dataKey="cloudAiFirms" stroke="#10B981" strokeWidth={3} dot={{ r: 5 }} />
-                   </LineChart>
-                 </ResponsiveContainer>
-               </div>
-            </div>
-
-            <div className="glass-panel" style={{ padding: "30px", borderRadius: "16px", marginBottom: "50px", border: "1px solid rgba(255,255,255,0.05)" }}>
-               <h2 style={{ fontSize: "24px", color: "#00B4D8", marginBottom: "30px", fontWeight: 700 }}>Service Tier Profitability Matrix (2020 vs 2025)</h2>
-               <div style={{ height: "400px", width: "100%" }}>
-                 <ResponsiveContainer width="100%" height="100%">
-                   <BarChart data={[
-                     { category: "Basic Bookkeeping", "2020 Margin %": 25, "2025 Margin %": 8 },
-                     { category: "Tax Compliance", "2020 Margin %": 35, "2025 Margin %": 15 },
-                     { category: "Virtual CFO", "2020 Margin %": 15, "2025 Margin %": 45 },
-                     { category: "AI Strategic Advisory", "2020 Margin %": 5, "2025 Margin %": 65 },
-                     { category: "Cross-Border Structuring", "2020 Margin %": 40, "2025 Margin %": 55 }
-                   ]} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
-                     <XAxis dataKey="category" stroke="#94a3b8" />
-                     <YAxis stroke="#94a3b8" />
-                     <Tooltip contentStyle={{ background: "#0f172a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, color: "#fff" }} />
-                     <Legend />
-                     <Bar dataKey="2020 Margin %" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                     <Bar dataKey="2025 Margin %" fill="#10B981" radius={[4, 4, 0, 0]} />
-                   </BarChart>
-                 </ResponsiveContainer>
-               </div>
-            </div>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "50px" }}>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("Explain how to implement ML algorithms for automated cash-flow forecasting for a startup client."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(0,180,216,0.3)", background: "rgba(0,180,216,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(0,180,216,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(0,180,216,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>🧠</div>
-                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Predictive Modeling</h4>
-                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Firms running ML algorithms for automated cash-flow forecasting have captured 60% of all VC-backed startup clients since 2023.</p>
-              </div>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("Provide a step-by-step guide to set up direct pipeline linking from corporate bank APIs to GST portals."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(16,185,129,0.3)", background: "rgba(16,185,129,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(16,185,129,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(16,185,129,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>⚡</div>
-                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Dynamic API Tax Integrations</h4>
-                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Direct pipeline linking from corporate bank APIs to GST portals bypasses human data entry entirely, pushing firm valuation multiples to 8X.</p>
-              </div>
-              <div onClick={() => { setActiveTab("chat"); sendMessage("How can top-tier firms deploy smart contracts for immutable expense tracking?"); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="glass-panel" style={{ padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,183,3,0.3)", background: "rgba(255,183,3,0.05)", cursor: "pointer", transition: "all 0.2s" }} onMouseOver={e => { e.currentTarget.style.background = "rgba(255,183,3,0.15)"; e.currentTarget.style.transform = "translateY(-2px)"; }} onMouseOut={e => { e.currentTarget.style.background = "rgba(255,183,3,0.05)"; e.currentTarget.style.transform = "translateY(0)"; }}>
-                 <div style={{ fontSize: "24px", marginBottom: "10px" }}>🛡️</div>
-                 <h4 style={{ color: "#FFF", margin: "0 0 5px 0", fontSize: "16px", fontWeight: 700 }}>Blockchain Auditing Trails</h4>
-                 <p style={{ color: "#94a3b8", fontSize: "14px", margin: 0, lineHeight: 1.6 }}>Top-tier firms now deploy smart contracts for immutable expense tracking, making conventional sampling-based audits obsolete.</p>
-              </div>
-            </div>
-
-            <div className="glass-panel" style={{ padding: "40px", borderRadius: "16px", background: "linear-gradient(135deg, rgba(0,180,216,0.1), rgba(0,0,0,0.4))", border: "1px solid rgba(0,180,216,0.3)" }}>
-              <h2 style={{ fontSize: "28px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>End-to-End Strategic Conclusion</h2>
-              <p style={{ color: "#e2e8f0", fontSize: "16px", lineHeight: 1.8, marginBottom: "30px" }}>To survive and scale over the next decade, accounting and CA enterprises must eliminate manual data-entry redundancies. Transitioning workflows entirely to cloud-native stacks integrated with real-time Banking APIs and automated direct-tax compliance is no longer a luxury, it is a structural necessity to maintain market relevance.</p>
-              <button onClick={() => { setActiveTab("chat"); sendMessage("Generate an end-to-end Pro Pivot Blueprint to modernize my traditional accounting firm globally."); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ padding: "15px 30px", borderRadius: "12px", background: "#FFB703", color: "#111", border: "none", fontWeight: 900, cursor: "pointer", fontSize: "16px", boxShadow: "0 5px 15px rgba(255,183,3,0.4)", transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "translateY(-2px)"} onMouseOut={e => e.currentTarget.style.transform = "translateY(0)"}>Generate Pro Pivot Blueprint ↗</button>
             </div>
           </div>
         )}
