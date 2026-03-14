@@ -463,6 +463,366 @@ function GlobalFooter({ setActiveTab }) {
   );
 }
 
+function CGTMSEDetailPage({ setActiveTab }) {
+  const S = { /* shorthand styles */
+    section: { marginBottom: "50px" },
+    h2: { fontSize: "26px", fontWeight: 800, color: "#FFF", margin: "0 0 20px 0", display: "flex", alignItems: "center", gap: "12px" },
+    badge: (color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, background: `rgba(${color},0.15)`, border: `1px solid rgba(${color},0.3)`, color: `rgb(${color})` }),
+    card: { background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "14px", padding: "22px 26px" },
+    infoBox: (c) => ({ background: `rgba(${c},0.07)`, border: `1px solid rgba(${c},0.2)`, borderRadius: "12px", padding: "18px 22px" }),
+    link: { color: "#3B82F6", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px", transition: "opacity 0.2s" },
+  };
+
+  const DOCS = [
+    { icon: "🏢", title: "Certificate of Incorporation / Registration", desc: "MSME/Udyam, Shop & Establishment Act, or company incorporation proof.", link: "https://udyamregistration.gov.in", ref: "MSME Registry" },
+    { icon: "📋", title: "Duly filled CGTMSE Application Form", desc: "Available from MLI (Member Lending Institutions) — your bank branch.", link: "https://www.cgtmse.in/Downloads", ref: "CGTMSE Downloads" },
+    { icon: "📊", title: "Last 2–3 Years Financial Statements", desc: "Audited P&L, Balance Sheet, and Cash Flow statements signed by a CA.", link: "https://www.icai.org", ref: "ICAI (CA Portal)" },
+    { icon: "🧾", title: "GST Registration Certificate", desc: "GST certificate from the GST portal confirming your GSTIN number.", link: "https://www.gst.gov.in", ref: "GST Portal" },
+    { icon: "📁", title: "Project Report / Business Plan", desc: "Detailed business plan covering investment outlay, projected revenue, and repayment capacity.", link: "https://www.startupindia.gov.in/content/sih/en/service_providers.html", ref: "Startup India Docs" },
+    { icon: "🪪", title: "KYC Documents of Promoters", desc: "Aadhaar, PAN, passport-size photos of all founders and directors.", link: "https://uidai.gov.in", ref: "UIDAI (Aadhaar)" },
+    { icon: "🏦", title: "Bank Account Statements", desc: "Last 12 months statements for the primary business account.", link: "https://rbi.org.in/scripts/Notification.aspx", ref: "RBI Guidelines" },
+    { icon: "📝", title: "Sanction Letter from Bank (MLI)", desc: "Formal loan sanction letter from your Member Lending Institution (bank).", link: "https://www.cgtmse.in/MLIDetails", ref: "CGTMSE MLI List" },
+    { icon: "🗺️", title: "Land / Premises Proof", desc: "Lease deed, sale deed, or NOC for business premises (for manufacturing units).", link: "https://dolr.gov.in", ref: "Dept. of Land Resources" },
+    { icon: "⚙️", title: "Machinery / Asset Quotations", desc: "Supplier quotations or invoice for capital assets being purchased using the loan.", link: "https://makeinindia.com", ref: "Make in India" },
+  ];
+
+  const STEPS = [
+    { num: "01", title: "Register on Udyam Portal", detail: "Get your free MSME Udyam Registration certificate from udyamregistration.gov.in. This is mandatory as a precondition.", color: "59,130,246" },
+    { num: "02", title: "Approach a Member Lending Institution", detail: "Visit a scheduled commercial bank (SBI, PNB, Bank of Baroda, HDFC, ICICI, etc.) that is an MLI under CGTMSE.", color: "6,182,212" },
+    { num: "03", title: "Submit Loan Application", detail: "File your term loan / working capital loan application with your project report, KYC, financials, and business plan.", color: "16,185,129" },
+    { num: "04", title: "Bank Internal Appraisal", detail: "Your bank/MLI conducts a credit appraisal. If approved, they issue a sanction letter.", color: "245,158,11" },
+    { num: "05", title: "Bank Files CGTMSE Guarantee Request", detail: "The bank then applies to CGTMSE online on your behalf via the CGTMSE portal for guarantee coverage.", color: "168,85,247" },
+    { num: "06", title: "CGTMSE Processing & Approval", detail: "CGTMSE reviews the request and approves the guarantee cover (85% for Micro, 75% for others).", color: "239,68,68" },
+    { num: "07", title: "Loan Disbursement", detail: "Post approval, your bank disburses the sanctioned loan amount directly to your account.", color: "59,130,246" },
+  ];
+
+  const FEES = [
+    { category: "Micro Enterprises (Loan up to ₹5L)", agf: "0.37%", arfNorth: "0.25%", arfOther: "0.37%" },
+    { category: "Small Enterprises (₹5L – ₹50L)", agf: "0.55%", arfNorth: "0.40%", arfOther: "0.55%" },
+    { category: "Small Enterprises (₹50L – ₹2Cr)", agf: "0.60%", arfNorth: "0.55%", arfOther: "0.60%" },
+    { category: "Enterprises (₹2Cr – ₹5Cr)", agf: "1.20%", arfNorth: "1.20%", arfOther: "1.20%" },
+  ];
+
+  const TIMELINE = [
+    { phase: "Udyam Registration", duration: "Same Day", icon: "⚡" },
+    { phase: "Bank Loan Application", duration: "1–3 Days", icon: "📝" },
+    { phase: "Bank Credit Appraisal", duration: "7–21 Days", icon: "🔍" },
+    { phase: "CGTMSE Guarantee Submission", duration: "3–5 Days", icon: "🏛️" },
+    { phase: "CGTMSE Approval", duration: "7–14 Days", icon: "✅" },
+    { phase: "Loan Disbursement", duration: "2–5 Days", icon: "💰" },
+    { phase: "Total End-to-End", duration: "20–45 Days", icon: "🏁" },
+  ];
+
+  const coverageChartData = [
+    { name: "Micro Ent.\n(₹2Cr limit)", coverage: 85, uncovered: 15 },
+    { name: "Small Ent.\n(₹2–5Cr)", coverage: 75, uncovered: 25 },
+    { name: "NE/Hill States\nAll Categories", coverage: 80, uncovered: 20 },
+    { name: "Women/SC/ST\nEntrepreneurs", coverage: 85, uncovered: 15 },
+  ];
+
+  const loanRangeData = [
+    { range: "0–5L", applicants: 42 },
+    { range: "5–25L", applicants: 30 },
+    { range: "25L–1Cr", applicants: 16 },
+    { range: "1–2Cr", applicants: 7 },
+    { range: "2–5Cr", applicants: 5 },
+  ];
+
+  const approvalTrendData = [
+    { year: "2020", guarantees: 420000 },
+    { year: "2021", guarantees: 530000 },
+    { year: "2022", guarantees: 680000 },
+    { year: "2023", guarantees: 810000 },
+    { year: "2024", guarantees: 950000 },
+    { year: "2025", guarantees: 1100000 },
+  ];
+
+  const RELATED = [
+    { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹10L without collateral via Pradhan Mantri Mudra Yojana.", link: "https://www.mudra.org.in" },
+    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "https://www.kviconline.gov.in" },
+    { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans specially for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
+    { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
+    { icon: "🏛️", name: "SIDBI MSME Loans", desc: "Direct loan facility from SIDBI for MSMEs at competitive interest rates.", link: "https://www.sidbi.in" },
+    { icon: "🌐", name: "Udyam Registration", desc: "Free MSME registration required for all government scheme eligibility.", link: "https://udyamregistration.gov.in" },
+  ];
+
+  return (
+    <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "clamp(20px, 4vw, 45px)" }}>
+
+      {/* Back Button */}
+      <button onClick={() => setActiveTab("schemes")} style={{ marginBottom: "30px", padding: "10px 18px", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 600, transition: "all 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"} onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}>
+        ← Back to Schemes
+      </button>
+
+      {/* Hero Banner */}
+      <div style={{ ...S.infoBox("59,130,246"), marginBottom: "40px", display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-start", borderLeft: "5px solid #3B82F6" }}>
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "40px" }}>🏦</span>
+            <div>
+              <h1 style={{ fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 900, color: "#FFF", margin: 0, letterSpacing: "-0.5px" }}>CGTMSE Scheme</h1>
+              <p style={{ color: "#71717A", margin: "4px 0 0 0", fontSize: "14px" }}>Credit Guarantee Fund Trust for Micro & Small Enterprises</p>
+            </div>
+          </div>
+          <p style={{ color: "#A1A1AA", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>
+            A flagship Government of India initiative administered jointly by <strong style={{ color: "#FFF" }}>SIDBI</strong> and the <strong style={{ color: "#FFF" }}>Ministry of MSME</strong>. It enables banks to provide <strong style={{ color: "#3B82F6" }}>collateral-free credit</strong> to eligible micro and small enterprises up to ₹5 Crore by providing a guarantee cover to the lending institution.
+          </p>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "18px" }}>
+            <span style={S.badge("16,185,129")}>✅ Collateral Free</span>
+            <span style={S.badge("59,130,246")}>🏛️ Govt Backed</span>
+            <span style={S.badge("245,158,11")}>💰 Up to ₹5 Cr</span>
+            <span style={S.badge("168,85,247")}>📈 85% Coverage</span>
+          </div>
+        </div>
+        <div style={{ background: "rgba(59,130,246,0.1)", borderRadius: "12px", padding: "20px", border: "1px solid rgba(59,130,246,0.2)", minWidth: "200px", textAlign: "center" }}>
+          <div style={{ fontSize: "42px", fontWeight: 900, color: "#3B82F6" }}>₹5 Cr</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Maximum Loan Amount</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <div style={{ fontSize: "30px", fontWeight: 900, color: "#10B981" }}>85%</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Max Guarantee Coverage</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <a href="https://www.cgtmse.in" target="_blank" rel="noreferrer" style={{ ...S.link, justifyContent: "center", background: "#3B82F6", color: "#FFF", padding: "10px 18px", borderRadius: "8px", fontWeight: 700 }}>Official Portal ↗</a>
+        </div>
+      </div>
+
+      {/* Quick Stats Row */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "16px", marginBottom: "50px" }}>
+        {[
+          { label: "Guarantees (2025)", val: "11 Lakh+", color: "#3B82F6", icon: "🔐" },
+          { label: "Total Corpus", val: "₹7,500 Cr", color: "#10B981", icon: "💼" },
+          { label: "MLI Banks", val: "130+", color: "#06B6D4", icon: "🏦" },
+          { label: "Interest Rate Range", val: "8–13%", color: "#F59E0B", icon: "📊" },
+          { label: "Repayment Tenure", val: "Up to 7 Yrs", color: "#A78BFA", icon: "📅" },
+        ].map((stat, i) => (
+          <div key={i} style={{ ...S.card, textAlign: "center" }}>
+            <div style={{ fontSize: "28px", marginBottom: "8px" }}>{stat.icon}</div>
+            <div style={{ fontSize: "22px", fontWeight: 800, color: stat.color }}>{stat.val}</div>
+            <div style={{ fontSize: "11px", color: "#71717A", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginTop: "4px" }}>{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Required Documents */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(59,130,246,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📄</span> Required Documents</h2>
+        <p style={{ color: "#71717A", marginBottom: "24px", lineHeight: 1.7 }}>Prepare these documents <strong style={{ color: "#FFF" }}>before visiting your bank</strong>. Each document links to its official source for verification.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+          {DOCS.map((doc, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", borderLeft: "3px solid rgba(59,130,246,0.4)" }}>
+              <div style={{ fontSize: "28px", flexShrink: 0 }}>{doc.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "6px" }}>{doc.title}</div>
+                <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{doc.desc}</div>
+                <a href={doc.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px", marginTop: "8px", display: "inline-flex" }} onMouseOver={e => e.currentTarget.style.opacity = 0.7} onMouseOut={e => e.currentTarget.style.opacity = 1}>
+                  📎 {doc.ref} ↗
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Application Process Flowchart */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(16,185,129,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔄</span> Application Process — Step by Step</h2>
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", left: "36px", top: "20px", bottom: "20px", width: "2px", background: "linear-gradient(to bottom, #3B82F6, #10B981)", borderRadius: "2px", display: "block" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "16px" }}>
+            {STEPS.map((step, i) => (
+              <div key={i} style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: `rgba(${step.color},0.15)`, border: `2px solid rgba(${step.color},0.5)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 900, color: `rgb(${step.color})`, fontSize: "14px" }}>{step.num}</div>
+                <div style={{ ...S.card, flex: 1, padding: "16px 20px" }}>
+                  <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "6px" }}>{step.title}</div>
+                  <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{step.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(245,158,11,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📈</span> Visual Data &amp; Analytics</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+
+          {/* Coverage Bar Chart */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#F59E0B", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📊 Guarantee Coverage % by Category</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={coverageChartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="name" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" domain={[0, 100]} tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="coverage" fill="#3B82F6" radius={[5, 5, 0, 0]} name="Coverage %" />
+                <Bar dataKey="uncovered" fill="rgba(239,68,68,0.3)" radius={[5, 5, 0, 0]} name="Uncovered %" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Approval Trend Line Chart */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#10B981", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📈 Annual Guarantees Approved (Cumulative)</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={approvalTrendData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="year" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${(v/100000).toFixed(0)}L`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [v.toLocaleString("en-IN")]} />
+                <Line type="monotone" dataKey="guarantees" stroke="#10B981" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 7 }} name="Guarantees" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Loan Range Distribution */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#A78BFA", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📉 Loan Range Distribution of Applicants (%)</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={loanRangeData} layout="vertical" margin={{ top: 5, right: 30, left: 30, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis type="number" stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <YAxis type="category" dataKey="range" stroke="#71717A" tick={{ fontSize: 11 }} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="applicants" fill="#A78BFA" radius={[0, 5, 5, 0]} name="Applicants %" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Eligibility Checklist Visual */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#06B6D4", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>✅ Eligibility Checklist</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { ok: true, item: "Registered as Micro or Small Enterprise (Udyam)" },
+                { ok: true, item: "Loan amount between ₹10,000 and ₹5 Crore" },
+                { ok: true, item: "Business operational or new (greenfield) project" },
+                { ok: true, item: "No existing CGTMSE covered loan in default" },
+                { ok: true, item: "Viable project / business plan submitted to bank" },
+                { ok: false, item: "Medium or Large enterprises (not eligible)" },
+                { ok: false, item: "Agricultural or retail trading activities (restricted)" },
+                { ok: false, item: "Educational / SHG loans under other guarantees" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <span style={{ fontSize: "18px", flexShrink: 0 }}>{item.ok ? "✅" : "❌"}</span>
+                  <span style={{ color: item.ok ? "#E4E4E7" : "#71717A", fontSize: "13px", textDecoration: item.ok ? "none" : "line-through" }}>{item.item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Fee Structure */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(239,68,68,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>💳</span> Fee Structure (Annual)</h2>
+        <div style={{ ...S.infoBox("245,158,11"), marginBottom: "20px" }}>
+          <strong style={{ color: "#F59E0B" }}>ℹ️ Note:</strong> <span style={{ color: "#A1A1AA" }}>CGTMSE charges Annual Guarantee Fees (AGF) on the guaranteed amount. These are paid by the bank (MLI) and <strong style={{ color: "#FFF" }}>may or may not be passed on to you</strong>. Always clarify with your bank upfront.</span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", minWidth: "600px" }}>
+            <thead>
+              <tr style={{ background: "rgba(59,130,246,0.1)" }}>
+                <th style={{ padding: "14px 18px", textAlign: "left", color: "#3B82F6", fontWeight: 700 }}>Loan Category</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#3B82F6", fontWeight: 700 }}>Annual Guarantee Fee</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#10B981", fontWeight: 700 }}>NE/Hill States Rate</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#F59E0B", fontWeight: 700 }}>Other Regions Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              {FEES.map((fee, i) => (
+                <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <td style={{ padding: "14px 18px", color: "#E4E4E7" }}>{fee.category}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#A78BFA", fontWeight: 700 }}>{fee.agf}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#10B981", fontWeight: 700 }}>{fee.arfNorth}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#F59E0B", fontWeight: 700 }}>{fee.arfOther}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ color: "#71717A", fontSize: "12px", marginTop: "12px" }}>Source: <a href="https://www.cgtmse.in/DownloadFile?fileName=Revised%20Annual%20Guarantee%20Fee%20structure%202023.pdf" target="_blank" rel="noreferrer" style={S.link}>CGTMSE Official Fee Circular 2023 ↗</a></p>
+      </div>
+
+      {/* Approval Timeline */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>⏱️</span> Approval Timeline</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px" }}>
+          {TIMELINE.map((tl, i) => (
+            <div key={i} style={{ ...S.card, textAlign: "center", borderTop: i === TIMELINE.length - 1 ? "3px solid #10B981" : "3px solid rgba(59,130,246,0.3)" }}>
+              <div style={{ fontSize: "28px", marginBottom: "8px" }}>{tl.icon}</div>
+              <div style={{ fontWeight: 700, color: i === TIMELINE.length - 1 ? "#10B981" : "#F59E0B", fontSize: "15px", marginBottom: "5px" }}>{tl.duration}</div>
+              <div style={{ color: "#71717A", fontSize: "11px" }}>{tl.phase}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Official Reference Links */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(6,182,212,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔗</span> Official Government Reference Links</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
+          {[
+            { label: "CGTMSE Official Portal", url: "https://www.cgtmse.in", desc: "Apply, check status, and download forms." },
+            { label: "Udyam MSME Registration", url: "https://udyamregistration.gov.in", desc: "Mandatory first step before applying to any bank." },
+            { label: "MSME Ministry", url: "https://msme.gov.in", desc: "Central ministry overseeing all MSME schemes." },
+            { label: "SIDBI (Co-Trustee)", url: "https://www.sidbi.in", desc: "Small Industries Development Bank  — manages corpus." },
+            { label: "RBI MLI Guidelines", url: "https://www.rbi.org.in", desc: "Reserve Bank of India lending norms applicable to MLIs." },
+            { label: "CGTMSE MLI Bank List", url: "https://www.cgtmse.in/MLIDetails", desc: "Full list of 130+ banks participating in CGTMSE." },
+            { label: "Startup India Portal", url: "https://www.startupindia.gov.in", desc: "Additional benefits for DPIIT-recognized startups." },
+            { label: "Jan Samarth Portal", url: "https://www.jansamarth.in", desc: "Single-window platform for all government credit schemes." },
+          ].map((ref, i) => (
+            <a key={i} href={ref.url} target="_blank" rel="noreferrer" style={{ ...S.card, textDecoration: "none", display: "flex", flexDirection: "column", gap: "6px", cursor: "pointer", transition: "border-color 0.2s" }} onMouseOver={e => e.currentTarget.style.borderColor = "rgba(59,130,246,0.3)"} onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
+              <div style={{ fontWeight: 700, color: "#3B82F6", fontSize: "13px", display: "flex", justifyContent: "space-between" }}>{ref.label}<span>↗</span></div>
+              <div style={{ color: "#71717A", fontSize: "12px" }}>{ref.desc}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Next Steps */}
+      <div style={{ ...S.infoBox("16,185,129"), borderLeft: "5px solid #10B981" }}>
+        <h2 style={{ ...S.h2, marginBottom: "20px" }}>🚀 What To Do Next</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { step: "1", action: "Register on Udyam Portal", link: "https://udyamregistration.gov.in", cta: "Register Free →" },
+            { step: "2", action: "Find your nearest MLI bank from CGTMSE list", link: "https://www.cgtmse.in/MLIDetails", cta: "View Banks →" },
+            { step: "3", action: "Prepare your documents & project report", link: "https://www.msme.gov.in", cta: "MSME Docs Guide →" },
+            { step: "4", action: "Apply via Jan Samarth single-window platform", link: "https://www.jansamarth.in", cta: "Apply Online →" },
+            { step: "5", action: "Track your CGTMSE guarantee approval status", link: "https://www.cgtmse.in", cta: "Track Status →" },
+            { step: "6", action: "Explore related MSME schemes below", link: "#related", cta: "View Related ↓" },
+          ].map((ns, i) => (
+            <a key={i} href={ns.link} target={ns.link.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: "10px", padding: "16px", textDecoration: "none", display: "flex", flexDirection: "column", gap: "8px", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(16,185,129,0.15)"} onMouseOut={e => e.currentTarget.style.background = "rgba(16,185,129,0.08)"}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(16,185,129,0.2)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#10B981", fontWeight: 800, fontSize: "13px" }}>{ns.step}</div>
+              <div style={{ color: "#E4E4E7", fontSize: "13px", lineHeight: 1.5 }}>{ns.action}</div>
+              <div style={{ color: "#10B981", fontSize: "12px", fontWeight: 700 }}>{ns.cta}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Related Schemes */}
+      <div id="related" style={{ ...S.section, marginTop: "50px" }}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🧩</span> Related MSME Schemes to Explore</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
+          {RELATED.map((r, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start" }}>
+              <span style={{ fontSize: "28px" }}>{r.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "5px" }}>{r.name}</div>
+                <div style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, marginBottom: "10px" }}>{r.desc}</div>
+                <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
 export default function IndiaFinBot() {
   const [lang, setLang] = useState("en"); // en, hi, ta, te, ml, kn
   const [theme, setTheme] = useState("dark");
@@ -1318,7 +1678,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
             <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s", marginBottom: "50px" }}>
               {GOVERNMENT_SCHEMES.map((scheme, i) => (
-                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden" }}>
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: scheme.rank === 1 ? "pointer" : "default" }}
+                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); }}>
                   <div style={{ position: "absolute", top: -20, right: -20, fontSize: "80px", opacity: 0.05 }}>{scheme.icon}</div>
                   <div style={{ width: 50, height: 50, borderRadius: 12, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, marginBottom: 15, border: "1px solid rgba(255,255,255,0.05)" }}>
                     {scheme.icon}
@@ -1331,9 +1692,15 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                     <span style={{ color: "#FFF", fontSize: "14px", fontWeight: 600 }}>{scheme.coverage}</span>
                   </div>
 
-                  <a href={scheme.link} target="_blank" rel="noreferrer" style={{ display: "inline-block", background: "linear-gradient(135deg, #00B4D8, #0284c7)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", textDecoration: "none", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
-                    Apply / Research ↗
-                  </a>
+                  {scheme.rank === 1 ? (
+                    <button onClick={(e) => { e.stopPropagation(); setActiveTab("cgtmse"); }} style={{ display: "inline-block", background: "linear-gradient(135deg, #3B82F6, #06B6D4)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
+                      📄 Full Guide & Apply ↗
+                    </button>
+                  ) : (
+                    <a href={scheme.link} target="_blank" rel="noreferrer" style={{ display: "inline-block", background: "linear-gradient(135deg, #00B4D8, #0284c7)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", textDecoration: "none", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
+                      Apply / Research ↗
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
@@ -1345,6 +1712,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
             </div>
           </div>
         )}
+
+        {activeTab === "cgtmse" && <CGTMSEDetailPage setActiveTab={setActiveTab} />}
 
         {activeTab === "privacy" && (
           <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
