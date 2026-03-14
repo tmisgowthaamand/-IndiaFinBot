@@ -1017,11 +1017,11 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
             </div>
           </div>
 
-          <div style={{ display: "flex", background: "rgba(0,0,0,0.3)", borderRadius: "12px", padding: "6px", border: "1px solid rgba(255,255,255,0.05)", gap: "4px", flexWrap: "wrap", justifyContent: "center" }}>
-            <button onClick={() => { setActiveTab("overview"); setSelectedDetailId(null); }} className="nav-tab" style={{ background: activeTab === "overview" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "overview" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabOverview")}</button>
-            <button onClick={() => setActiveTab("schemes")} className="nav-tab" style={{ background: activeTab === "schemes" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "schemes" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "6px" }}>🏛️ {t("tabSchemes") || "Schemes & Pro"}</button>
-            <button onClick={() => setActiveTab("chat")} className="nav-tab" style={{ background: activeTab === "chat" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "chat" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>🤖 {t("tabChat")}</button>
-            <button onClick={() => setActiveTab("inspire")} className="nav-tab" style={{ background: activeTab === "inspire" ? "rgba(0, 180, 216, 0.2)" : "transparent", color: activeTab === "inspire" ? "#00B4D8" : "#94a3b8", padding: "8px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontWeight: 600, fontSize: "14px", whiteSpace: "nowrap" }}>{t("tabInspire")}</button>
+          <div style={{ display: "flex", background: "rgba(15,23,42,0.6)", borderRadius: "16px", padding: "8px", border: "1px solid rgba(255,255,255,0.08)", gap: "8px", flexWrap: "wrap", justifyContent: "center", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.5)" }}>
+            <button onClick={() => { setActiveTab("overview"); setSelectedDetailId(null); }} className="nav-tab fade-in-up" style={{ animationDelay: "0.1s", background: activeTab === "overview" ? "linear-gradient(135deg, rgba(0, 180, 216, 0.3), rgba(0, 180, 216, 0.1))" : "transparent", color: activeTab === "overview" ? "#00B4D8" : "#94a3b8", padding: "10px 24px", borderRadius: "12px", border: "1px solid", borderColor: activeTab === "overview" ? "rgba(0,180,216,0.4)" : "transparent", cursor: "pointer", fontWeight: 700, fontSize: "14px", whiteSpace: "nowrap", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", display: "flex", alignItems: "center", gap: "8px", boxShadow: activeTab === "overview" ? "0 4px 15px rgba(0,180,216,0.2)" : "none" }}>📊 Overview & Scale</button>
+            <button onClick={() => setActiveTab("schemes")} className="nav-tab fade-in-up" style={{ animationDelay: "0.2s", background: activeTab === "schemes" ? "linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(16, 185, 129, 0.1))" : "transparent", color: activeTab === "schemes" ? "#10B981" : "#94a3b8", padding: "10px 24px", borderRadius: "12px", border: "1px solid", borderColor: activeTab === "schemes" ? "rgba(16,185,129,0.4)" : "transparent", cursor: "pointer", fontWeight: 700, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: activeTab === "schemes" ? "0 4px 15px rgba(16,185,129,0.2)" : "none" }}>🏛️ Schemes & Pro</button>
+            <button onClick={() => setActiveTab("chat")} className="nav-tab fade-in-up" style={{ animationDelay: "0.3s", background: activeTab === "chat" ? "linear-gradient(135deg, rgba(255, 107, 53, 0.3), rgba(255, 107, 53, 0.1))" : "transparent", color: activeTab === "chat" ? "#FF6B35" : "#94a3b8", padding: "10px 24px", borderRadius: "12px", border: "1px solid", borderColor: activeTab === "chat" ? "rgba(255,107,53,0.4)" : "transparent", cursor: "pointer", fontWeight: 700, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: activeTab === "chat" ? "0 4px 15px rgba(255,107,53,0.2)" : "none" }}>🤖 AI Smart Analysis</button>
+            <button onClick={() => setActiveTab("inspire")} className="nav-tab fade-in-up" style={{ animationDelay: "0.4s", background: activeTab === "inspire" ? "linear-gradient(135deg, rgba(255, 183, 3, 0.3), rgba(255, 183, 3, 0.1))" : "transparent", color: activeTab === "inspire" ? "#FFB703" : "#94a3b8", padding: "10px 24px", borderRadius: "12px", border: "1px solid", borderColor: activeTab === "inspire" ? "rgba(255,183,3,0.4)" : "transparent", cursor: "pointer", fontWeight: 700, fontSize: "14px", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: "8px", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", boxShadow: activeTab === "inspire" ? "0 4px 15px rgba(255,183,3,0.2)" : "none" }}>🌟 Leaders & Market</button>
           </div>
 
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
@@ -1176,13 +1176,13 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
           <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
 
             {!selectedDetailId ? (
-              <>
-                <h1 style={{ fontSize: "38px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800, letterSpacing: "-1px" }}>{t("welcomeTitle")}</h1>
-                <p style={{ fontSize: "18px", color: "#94a3b8", margin: "0 0 40px 0", maxWidth: "800px", lineHeight: 1.6 }}>{t("welcomeDesc")}</p>
+              <div className="fade-in-up">
+                <h1 style={{ fontSize: "42px", margin: "0 0 15px 0", color: "#FFF", fontWeight: 900, letterSpacing: "-1.5px" }} className="gradient-text">{t("welcomeTitle")}</h1>
+                <p style={{ fontSize: "18px", color: "#94a3b8", margin: "0 0 45px 0", maxWidth: "800px", lineHeight: 1.7, fontWeight: 500 }}>{t("welcomeDesc")}</p>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "30px" }}>
+                <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s" }}>
                   {OVERVIEW_CARDS.map((card, i) => (
-                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel" style={{ borderRadius: "16px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.05)" }}>
+                    <div key={i} onClick={() => setSelectedDetailId(card.id)} className="service-card glass-panel float-hover fade-in-up" style={{ animationDelay: `${0.1 * i}s`, borderRadius: "20px", overflow: "hidden", display: "flex", flexDirection: "column", border: "1px solid rgba(255,255,255,0.08)" }}>
                       <div style={{ height: "200px", backgroundImage: `url(${card.img})`, backgroundSize: "cover", backgroundPosition: "center", position: "relative" }}>
                         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, #0f172a 0%, transparent 100%)" }}></div>
                       </div>
@@ -1209,7 +1209,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                 <TaxComplianceCalendar theme={theme} />
 
                 <QuickToolsGrid theme={theme} sendMessage={sendMessage} t={t} />
-              </>
+              </div>
             ) : (
               renderInteractiveDashboard(OVERVIEW_CARDS.find(c => c.id === selectedDetailId))
             )}
@@ -1218,14 +1218,15 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "inspire" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
-            <h1 style={{ fontSize: "34px", margin: "0 0 30px 0", color: "#FFF", fontWeight: 800 }}>{t("inspireTitle")}</h1>
+          <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "35px" }}>
+            <h1 style={{ fontSize: "40px", margin: "0 0 35px 0", color: "#FFF", fontWeight: 900, letterSpacing: "-1px" }} className="gradient-text">{t("inspireTitle")}</h1>
 
-            <h2 style={{ fontSize: "22px", color: "#FFB703", margin: "0 0 20px 0" }}>{t("leadersTitle")}</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "25px", marginBottom: "40px" }}>
+            <h2 style={{ fontSize: "26px", color: "#FFF", margin: "0 0 25px 0", fontWeight: 800 }}>🌟 <span style={{ color: "#FFB703" }}>{t("leadersTitle")}</span></h2>
+            <div className="grid-cards" style={{ marginBottom: "50px" }}>
               {SECTOR_LEADERS.map((leader, i) => (
-                <div key={i} className="glass-panel" style={{ borderRadius: "16px", padding: "20px", border: "1px solid rgba(255,107,53,0.3)" }}>
-                  <img src={leader.image} alt={leader.name} style={{ width: "80px", height: "80px", borderRadius: "50%", objectFit: "cover", marginBottom: "15px", border: "2px solid #FF6B35" }} />
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "25px", border: "1px solid rgba(255,183,3,0.3)", position: "relative", overflow: "hidden" }}>
+                  <div style={{ position: "absolute", top: -30, right: -30, width: 100, height: 100, background: "rgba(255,183,3,0.1)", borderRadius: "50%", filter: "blur(20px)" }}></div>
+                  <img src={leader.image} alt={leader.name} style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover", marginBottom: "20px", border: "3px solid #FFB703", boxShadow: "0 10px 20px rgba(0,0,0,0.5)" }} />
                   <h3 style={{ margin: "0 0 5px 0", fontSize: "20px", color: "#FFF" }}>{leader.name}</h3>
                   <p style={{ margin: "0 0 15px 0", color: "#9BF6FF", fontSize: "13px", fontWeight: 600 }}>{leader.company} | {leader.role}</p>
                   <p style={{ margin: 0, fontStyle: "italic", color: "#cbd5e1", fontSize: "14px", lineHeight: 1.5 }}>"{leader.quote}"</p>
@@ -1315,13 +1316,13 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
         {/* Dynamic Govt Schemes Tab Component */}
         {activeTab === "schemes" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "30px" }}>
-            <h1 style={{ fontSize: "34px", margin: "0 0 10px 0", color: "#FFF", fontWeight: 800 }}>🏛️ Government Schemes & Pro Research</h1>
-            <p style={{ color: "#94a3b8", fontSize: "16px", marginBottom: "40px", maxWidth: "800px", lineHeight: 1.6 }}>Explore end-to-end verified India compensation frameworks, deep research limits, and exact startup subsidy allowances. Match your profile against top-tier MSME programs to unlock direct capital.</p>
+          <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "35px" }}>
+            <h1 style={{ fontSize: "40px", margin: "0 0 15px 0", color: "#FFF", fontWeight: 900, letterSpacing: "-1px" }} className="gradient-text">🏛️ Government Schemes & Pro</h1>
+            <p style={{ color: "#94a3b8", fontSize: "18px", marginBottom: "45px", maxWidth: "800px", lineHeight: 1.7, fontWeight: 500 }}>Explore end-to-end verified India compensation frameworks, deep research limits, and exact startup subsidy allowances. Match your profile against top-tier MSME programs to unlock direct capital.</p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "25px", marginBottom: "40px" }}>
+            <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s", marginBottom: "50px" }}>
               {GOVERNMENT_SCHEMES.map((scheme, i) => (
-                <div key={i} className="glass-panel" style={{ borderRadius: "16px", padding: "25px", border: "1px solid rgba(0,180,216,0.2)", position: "relative", overflow: "hidden" }}>
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(0,180,216,0.3)", position: "relative", overflow: "hidden" }}>
                   <div style={{ position: "absolute", top: -20, right: -20, fontSize: "80px", opacity: 0.1 }}>{scheme.icon}</div>
                   <div style={{ width: 50, height: 50, borderRadius: 12, background: "rgba(0,180,216,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, marginBottom: 15, border: "1px solid rgba(0,180,216,0.3)" }}>
                     {scheme.icon}
@@ -1350,7 +1351,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "privacy" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
             <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(16,185,129,0.1)", color: "#10B981", border: "1px solid #10B981", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#10B981"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(16,185,129,0.1)"; e.currentTarget.style.color="#10B981"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Privacy Policy</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -1371,7 +1372,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "terms" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
             <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(0,180,216,0.1)", color: "#00B4D8", border: "1px solid #00B4D8", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#00B4D8"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(0,180,216,0.1)"; e.currentTarget.style.color="#00B4D8"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Terms of Service</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -1388,7 +1389,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "help" && (
-          <div className="content-area glass-panel custom-scrollbar" style={{ borderRadius: "20px", padding: "40px" }}>
+          <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
             <button onClick={() => setActiveTab("overview")} style={{ marginBottom: "30px", padding: "12px 20px", background: "rgba(255,107,53,0.1)", color: "#FF6B35", border: "1px solid #FF6B35", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 700, transition: "all 0.2s" }} onMouseOver={e => {e.currentTarget.style.background="#FF6B35"; e.currentTarget.style.color="#FFF"}} onMouseOut={e => {e.currentTarget.style.background="rgba(255,107,53,0.1)"; e.currentTarget.style.color="#FF6B35"}}>← Back to Home</button>
             <h1 style={{ fontSize: "38px", color: "#FFF", marginBottom: "20px", fontWeight: 800 }}>Help Center & FAQ</h1>
             <div style={{ color: "#94a3b8", lineHeight: 1.8, fontSize: "16px", display: "flex", flexDirection: "column", gap: "20px" }}>
@@ -1410,7 +1411,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "chat" && (
-          <div className="content-area glass-panel" style={{ display: "flex", flexDirection: "column", borderRadius: "20px", overflow: "hidden", position: "relative" }}>
+          <div className="content-area glass-panel fade-in-up" style={{ display: "flex", flexDirection: "column", borderRadius: "20px", overflow: "hidden", position: "relative" }}>
             <div className="chat-messages-container custom-scrollbar" style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 18, padding: "30px" }}>
               {messages.map((msg, idx) => (
                 <div key={idx} style={{ display: "flex", justifyContent: msg.role === "user" ? "flex-end" : "flex-start", width: "100%" }}>

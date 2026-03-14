@@ -143,7 +143,8 @@ body {
    MEDIA QUERIES FOR SEAMLESS DEVICE SCREEN ALIGNMENT
 -------------------------------------------------------------------------------- */
 @media (min-width: 1601px) {
-  .main-container { max-width: 1800px; }
+  .main-container { max-width: 1800px; gap: 30px; }
+  .grid-cards { grid-template-columns: repeat(4, 1fr) !important; }
 }
 
 @media (max-width: 1200px) {
@@ -166,6 +167,7 @@ body {
     width: 100% !important;
     height: auto !important;
     overflow-y: visible !important;
+    margin-bottom: 20px;
   }
   
   .content-area {
@@ -174,6 +176,11 @@ body {
     height: auto !important;
     min-height: 500px;
     overflow-y: visible !important;
+  }
+  
+  .nav-header {
+    justify-content: center !important;
+    gap: 15px;
   }
   
   .nav-tab {
@@ -190,4 +197,71 @@ body {
   h1 { font-size: 26px !important; }
   h2 { font-size: 20px !important; }
   h3 { font-size: 18px !important; }
+  
+  .grid-cards {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* --------------------------------------------------------------------------------
+   STUNNING ANIMATIONS & VISUAL ENHANCEMENTS
+-------------------------------------------------------------------------------- */
+.fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #00B4D8, #10B981, #FFB703);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% auto;
+  animation: shine 4s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.float-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.float-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
 }
