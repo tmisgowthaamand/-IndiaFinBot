@@ -61,15 +61,17 @@ app.post('/api/chat', async (req, res) => {
 
         const models = [
             "gemini-2.0-flash-exp",
-            "gemini-exp-1206", 
+            "gemini-exp-1206",
             "gemini-2.0-flash-thinking-exp-1219",
             "gemini-exp-1121",
             "gemini-2.0-flash-thinking-exp",
-            "gemini-2.0-flash",
-            "gemini-1.5-pro-latest",
-            "gemini-1.5-flash-latest",
+            "gemini-1.5-pro-002",
+            "gemini-1.5-flash-002",
+            "gemini-1.5-pro-001",
+            "gemini-1.5-flash-001",
             "gemini-1.5-pro",
-            "gemini-1.5-flash"
+            "gemini-1.5-flash",
+            "gemini-pro"
         ];
         let data = null;
         let lastError = null;
