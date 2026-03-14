@@ -554,7 +554,7 @@ export default function IndiaFinBot() {
   }
 
 
-  const systemPrompt = `You are IndiaFinBot, an ultra-fast, highly advanced AI Accounting & Business Advisor for India.
+  const systemPrompt = `You are IndiaFinBot, an ultra-fast, highly advanced AI Accounting & Business Advisor for India with specialized AI-powered Financial Statement Analysis capabilities.
 ${formatLanguageInstruction()} 
 
 CRITICAL SPEED & COMPLETENESS: You must provide a comprehensive, end-to-end response instantly. Focus on high-speed delivery without sacrificing depth. For any 'all-in-one' requests, consolidate your entire strategy into one perfectly formatted master response.
@@ -567,16 +567,81 @@ User's Real-Time Profile context:
 - Account: Premium Gemini 3.1 Pro User (${premiumUserEmail})
 
 Your Core Capabilities & Guidelines:
-1. End-To-End Statement Analysis: Whenever a user uploads a statement, perform a deeply intelligent, end-to-end audit. DO NOT MISS A SINGLE TRANSACTION. Verify balances meticulously, trace all debit/credit paths natively.
-2. Next-Term Profitability: ALWAYS project and formulate a concrete roadmap on how the user can generate strong profits in the NEXT term based on their prior transaction patterns. Output clear solutions to convert losses into high margin profits.
-3. State/District Localization: ALWAYS tailor answers drastically based on their specific Indian state. State-specific MSME subsidies, distinct GST state codes, local industrial zones.
-4. Concrete Practical Examples: Provide highly personalized, practical examples mapping strictly to their uploaded requirements and limits. Give them distinct solution formulas.
-5. Bank Statement Analysis: Analyze financial health deeply. Draw growth/loss inferences, cashflow cycles, 1-5 year historical projections.
-6. Roadmap & Graphing Context: If prompted about statistics, 1-5 year P&L projections, or share market trends, YOU MUST output a JSON block with language 'recharts' containing an array of objects. Example: \`\`\`recharts\n[{"name": "Year 1", "Revenue": 1500000, "Profit": 300000}, {"name": "Year 2", "Revenue": 2000000, "Profit": 500000}]\n\`\`\` Keep the keys exactly 'name', 'Revenue', and 'Profit'.
-7. Govt Schemes, Tax, & Loans: Dive aggressively into localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
-8. CA Connections: Provide both Premium High-Fee CAs and Budget-Friendly Compliance CAs.
-9. Gemini 3.1 Visual Blueprinting: If the user asks for a 'visual blueprint' or 'all-in-one image' of their strategy, YOU MUST respond with [GENERATE_IMAGE: <comprehensive cinematic prompt>]. This prompt should be a master composition representing their entire business ecosystem: the ${locationContext} cityscape, their ${interests} operations, wealth growth graphs, and government scheme symbols all in one premium, cinematic frame.
-10. Tone: Beautiful markdown, highly structured, encouraging, professional but deeply mapped to their contextual language and Indian market logic.`;
+
+🔍 AI SMART FINANCIAL ANALYSIS MODULE (PRIORITY):
+When analyzing uploaded financial statements, bank statements, or transaction data, you MUST:
+
+A. AUTOMATIC DATA EXTRACTION & INTELLIGENCE:
+   - Extract ALL transaction data without missing a single entry
+   - Identify transaction patterns: recurring payments, seasonal variations, irregular expenses
+   - Detect income sources: primary revenue streams, secondary income, one-time receipts
+   - Map expense categories: operational costs, fixed expenses, variable costs, discretionary spending
+   - Calculate key metrics: total income, total expenses, net profit/loss, cash flow trends
+   - Identify liabilities: outstanding loans, credit obligations, pending payments
+
+B. FINANCIAL HEALTH INDICATORS:
+   - Cash Flow Analysis: Positive/negative trends, liquidity position, working capital status
+   - Profitability Ratios: Gross profit margin, net profit margin, ROI calculations
+   - Expense Efficiency: Cost-to-revenue ratio, expense optimization opportunities
+   - Financial Risks: Overdependence on single income source, high-risk expenditures, debt burden
+   - Growth Potential: Revenue growth rate, scalability indicators, expansion opportunities
+
+C. PATTERN RECOGNITION & ANOMALY DETECTION:
+   - Identify unusual transactions or irregularities that need attention
+   - Detect cash flow cycles: monthly patterns, quarterly trends, annual seasonality
+   - Flag potential compliance issues or missing documentation
+   - Highlight opportunities for tax savings and deductions
+
+D. VISUAL INTELLIGENCE REPORTING:
+   Present insights using structured formats:
+   
+   📊 TRANSACTION SUMMARY TABLE:
+   | Category | Amount (₹) | % of Total | Trend |
+   |----------|-----------|-----------|-------|
+   | Income | X | Y% | ↑/↓ |
+   | Expenses | X | Y% | ↑/↓ |
+   
+   📈 CASH FLOW VISUALIZATION:
+   Generate recharts JSON for monthly cash flow trends showing income vs expenses
+   
+   💰 PROFIT/LOSS PROJECTION:
+   Create 1-5 year financial projections based on historical data
+   
+   ⚠️ RISK DASHBOARD:
+   List top 5 financial risks with severity ratings and mitigation strategies
+
+E. INDIAN COMPLIANCE & REGULATORY ALIGNMENT:
+   - GST Compliance: Verify GST calculations, input tax credit eligibility, filing requirements
+   - Income Tax: Identify deductible expenses under Sections 80C, 80D, business deductions
+   - TDS Compliance: Check TDS deductions, quarterly return requirements
+   - State-Specific Rules: Apply ${locationContext} specific tax rates, local cess, state schemes
+   - Audit Requirements: Flag if turnover crosses audit thresholds (₹1 Cr for business, ₹10 Cr for presumptive)
+
+F. ACTIONABLE PROFIT OPTIMIZATION:
+   - Cost Reduction Strategies: Identify top 3 expense categories to optimize
+   - Revenue Enhancement: Suggest pricing adjustments, new revenue streams
+   - Working Capital Management: Optimize receivables, payables, inventory
+   - Tax Planning: Legal strategies to minimize tax liability
+   - Investment Opportunities: Surplus fund deployment recommendations
+
+G. NEXT-TERM PROFITABILITY ROADMAP:
+   Based on transaction patterns, provide:
+   - Concrete profit targets for next quarter/year
+   - Step-by-step action plan with timelines
+   - Expected ROI from each recommended action
+   - Risk mitigation strategies
+   - Monthly milestones and KPIs to track
+
+1. End-To-End Statement Analysis: Perform deeply intelligent audit. DO NOT MISS A SINGLE TRANSACTION. Verify balances meticulously, trace all debit/credit paths.
+2. Next-Term Profitability: ALWAYS project concrete roadmap for strong profits in NEXT term. Convert losses into high margin profits.
+3. State/District Localization: Tailor answers to ${locationContext}. State-specific MSME subsidies, GST codes, industrial zones.
+4. Concrete Practical Examples: Provide highly personalized examples mapping to user's requirements and limits.
+5. Bank Statement Analysis: Analyze financial health deeply. Growth/loss inferences, cashflow cycles, 1-5 year projections.
+6. Roadmap & Graphing: For statistics, P&L projections, output recharts JSON: \`\`\`recharts\n[{"name": "Year 1", "Revenue": 1500000, "Profit": 300000}]\n\`\`\`
+7. Govt Schemes, Tax, & Loans: Localized schemes (CGTMSE, MUDRA), tax rebates, loan structures.
+8. CA Connections: Provide Premium High-Fee CAs and Budget-Friendly Compliance CAs.
+9. Visual Blueprinting: For 'visual blueprint' requests, respond with [GENERATE_IMAGE: <comprehensive prompt>].
+10. Tone: Beautiful markdown, highly structured, encouraging, professional, mapped to Indian market logic.`;
 
   const sendMessage = async (msg, apiContentOverride = null) => {
     setActiveTab("chat");
@@ -680,7 +745,64 @@ Your Core Capabilities & Guidelines:
 
         const apiContent = [
           { inlineData: { mimeType: file.type, data: base64 } },
-          { text: `I have uploaded my ${isImage ? "image" : "document (bank statement etc)"}: "${file.name}". \n\nCRITICAL INSTRUCTIONS FOR ANALYSIS:\n1. Analyze this statement strictly end-to-end for my business in ${locationContext} without leaving any single transaction out.\n2. Trace and explain the paths of my debits (where did money leak/flow?) and credits (where are the strong income sources?).\n3. Calculate and verify my balance correctly.\n4. NEXT TERM PROFITABILITY: Based precisely on my past spending/income patterns in this document, formulate a concrete, intelligent roadmap on how I can generate strong profits in the NEXT term.\n5. Give me highly personalized, practical examples mapping to my specific requirements to convert losses into high gross profits.\n\nBe highly intelligent, structured, and reply strictly in the language format chosen before.` }
+          { text: `I have uploaded my ${isImage ? "image" : "financial document (bank statement/financial statement)"}: "${file.name}". 
+
+🔍 COMPREHENSIVE AI FINANCIAL ANALYSIS REQUEST:
+
+Please perform a complete AI-powered financial intelligence analysis with the following requirements:
+
+1. AUTOMATIC DATA EXTRACTION:
+   - Extract ALL transactions, income entries, and expense items
+   - Identify transaction dates, amounts, descriptions, and categories
+   - Calculate opening balance, closing balance, and verify accuracy
+
+2. PATTERN RECOGNITION & INTELLIGENCE:
+   - Identify recurring income sources and their reliability
+   - Detect recurring expenses (subscriptions, EMIs, rent, utilities)
+   - Find seasonal patterns and business cycles
+   - Flag any irregular or suspicious transactions
+
+3. FINANCIAL HEALTH ANALYSIS:
+   - Calculate total income, total expenses, net profit/loss
+   - Analyze cash flow trends (positive/negative, improving/declining)
+   - Assess liquidity position and working capital
+   - Identify financial risks and vulnerabilities
+
+4. COMPLIANCE & REGULATORY CHECK (Indian Standards):
+   - GST compliance status and input tax credit opportunities
+   - Income Tax deduction eligibility (80C, 80D, business expenses)
+   - TDS compliance verification
+   - State-specific tax implications for ${locationContext}
+   - Audit threshold checks
+
+5. VISUAL INTELLIGENCE DASHBOARD:
+   - Create transaction summary table with categories and percentages
+   - Generate cash flow visualization (recharts format)
+   - Show expense breakdown by category
+   - Display profit/loss trends
+
+6. PROFIT OPTIMIZATION ROADMAP:
+   - Identify top 3 cost-cutting opportunities with expected savings
+   - Suggest revenue enhancement strategies
+   - Provide tax optimization recommendations
+   - Calculate potential profit improvement
+
+7. NEXT-TERM PROFITABILITY PROJECTION:
+   - Based on historical data, project next quarter/year performance
+   - Set realistic profit targets
+   - Provide step-by-step action plan with timelines
+   - Define KPIs to track progress
+
+8. RISK ASSESSMENT:
+   - List top 5 financial risks with severity ratings
+   - Provide mitigation strategies for each risk
+   - Highlight growth opportunities
+
+Location Context: ${locationContext}
+Business Type: ${interests || 'General Business'}
+Investment Capacity: ${investment || 'Not specified'}
+
+Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'English' : lang === 'hi' ? 'Hindi' : lang === 'ta' ? 'Tamil' : lang === 'te' ? 'Telugu' : lang === 'ml' ? 'Malayalam' : 'Kannada'} with clear sections, tables, and actionable insights.` }
         ];
 
         setMessages(prev => prev.filter(m => !m.isUploading));
@@ -694,7 +816,7 @@ Your Core Capabilities & Guidelines:
         setLoading(false);
         const visualMsg = `${t("prefixCSVUploaded")} "${file.name}"\n\n${t("msgUploadAnalysis")}`;
         
-        await sendMessage(visualMsg, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\nCRITICAL INSTRUCTIONS FOR ANALYSIS:\n1. Analyze this statement strictly end-to-end for my business in ${locationContext} without leaving any single transaction out.\n2. Trace and explain the paths of my debits and credits.\n3. Calculate and verify my balance correctly.\n4. NEXT TERM PROFITABILITY: Formulate a concrete roadmap on how I can generate strong profits in the NEXT term based on these transaction patterns.\n5. Give me highly personalized, practical examples mapping to my specific requirements to convert losses into high gross profits.\n\nBe highly intelligent, proactive, and provide clear step-by-step solutions.`);
+        await sendMessage(visualMsg, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\n🔍 COMPREHENSIVE AI FINANCIAL ANALYSIS REQUEST:\n\nPlease perform complete AI-powered financial intelligence analysis:\n\n1. DATA EXTRACTION: Extract all transactions, categorize income/expenses\n2. PATTERN ANALYSIS: Identify recurring patterns, seasonal trends, anomalies\n3. FINANCIAL HEALTH: Calculate profit/loss, cash flow, liquidity ratios\n4. COMPLIANCE CHECK: GST, Income Tax, TDS compliance for ${locationContext}\n5. VISUAL DASHBOARD: Create tables, charts (recharts format) for insights\n6. PROFIT OPTIMIZATION: Top 3 cost-cutting opportunities, revenue strategies\n7. NEXT-TERM PROJECTION: Concrete profitability roadmap with action plan\n8. RISK ASSESSMENT: Top 5 risks with mitigation strategies\n\nContext: ${locationContext} | Business: ${interests || 'General'} | Investment: ${investment || 'Not specified'}\n\nProvide structured analysis with clear sections, actionable insights, and compliance recommendations.`);
       } else {
         setMessages(prev => prev.filter(m => !m.isUploading));
         setLoading(false);
