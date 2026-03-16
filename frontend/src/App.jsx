@@ -539,7 +539,7 @@ function CGTMSEDetailPage({ setActiveTab }) {
 
   const RELATED = [
     { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹20L without collateral via Pradhan Mantri Mudra Yojana.", link: "#", onClick: () => setActiveTab("pmmy") },
-    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "https://www.kviconline.gov.in" },
+    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "#", onClick: () => setActiveTab("pmegp") },
     { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans specially for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
     { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
     { icon: "🏛️", name: "SIDBI MSME Loans", desc: "Direct loan facility from SIDBI for MSMEs at competitive interest rates.", link: "https://www.sidbi.in" },
@@ -928,7 +928,7 @@ function PMMYDetailPage({ setActiveTab }) {
   /* ── Related Schemes ── */
   const RELATED = [
     { icon: "🏦", name: "CGTMSE Scheme", desc: "Collateral-free credit guarantee up to ₹5 Crore for micro & small enterprises.", link: "#", onClick: () => setActiveTab("cgtmse") },
-    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "https://www.kviconline.gov.in" },
+    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "#", onClick: () => setActiveTab("pmegp") },
     { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans specially for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
     { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
     { icon: "🏛️", name: "SIDBI MSME Loans", desc: "Direct loan facility from SIDBI for MSMEs at competitive interest rates.", link: "https://www.sidbi.in" },
@@ -1276,6 +1276,483 @@ function PMMYDetailPage({ setActiveTab }) {
             { step: "4", action: "Visit nearest bank branch or apply online via JanSamarth", link: "https://www.jansamarth.in", cta: "Apply Online →" },
             { step: "5", action: "Compare interest rates across SBI, PNB, HDFC and other banks", link: "https://www.psbloansin59minutes.com", cta: "Compare Banks →" },
             { step: "6", action: "Explore CGTMSE and other MSME support schemes", link: "#related", cta: "View Related ↓" },
+          ].map((ns, i) => (
+            <a key={i} href={ns.link} target={ns.link.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: "10px", padding: "16px", textDecoration: "none", display: "flex", flexDirection: "column", gap: "8px", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(16,185,129,0.15)"} onMouseOut={e => e.currentTarget.style.background = "rgba(16,185,129,0.08)"}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(16,185,129,0.2)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#10B981", fontWeight: 800, fontSize: "13px" }}>{ns.step}</div>
+              <div style={{ color: "#E4E4E7", fontSize: "13px", lineHeight: 1.5 }}>{ns.action}</div>
+              <div style={{ color: "#10B981", fontSize: "12px", fontWeight: 700 }}>{ns.cta}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Related Schemes */}
+      <div id="related" style={{ ...S.section, marginTop: "50px" }}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🧩</span> Related MSME Schemes to Explore</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
+          {RELATED.map((r, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", cursor: r.onClick ? "pointer" : "default" }} onClick={r.onClick || undefined}>
+              <span style={{ fontSize: "28px" }}>{r.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "5px" }}>{r.name}</div>
+                <div style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, marginBottom: "10px" }}>{r.desc}</div>
+                {r.onClick ? (
+                  <button onClick={r.onClick} style={{ ...S.link, fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>View Full Guide ↗</button>
+                ) : (
+                  <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+function PMEGPDetailPage({ setActiveTab }) {
+  const S = {
+    section: { marginBottom: "50px" },
+    h2: { fontSize: "26px", fontWeight: 800, color: "#FFF", margin: "0 0 20px 0", display: "flex", alignItems: "center", gap: "12px" },
+    badge: (color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, background: `rgba(${color},0.15)`, border: `1px solid rgba(${color},0.3)`, color: `rgb(${color})` }),
+    card: { background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "14px", padding: "22px 26px" },
+    infoBox: (c) => ({ background: `rgba(${c},0.07)`, border: `1px solid rgba(${c},0.2)`, borderRadius: "12px", padding: "18px 22px" }),
+    link: { color: "#22C55E", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px", transition: "opacity 0.2s" },
+  };
+
+  /* ── Subsidy Slab Data ── */
+  const SUBSIDY_SLABS = [
+    { category: "General Category", location: "Urban", subsidy: "15%", ownContrib: "10%", bankFinance: "75%", color: "59,130,246" },
+    { category: "General Category", location: "Rural", subsidy: "25%", ownContrib: "10%", bankFinance: "65%", color: "6,182,212" },
+    { category: "Special Category*", location: "Urban", subsidy: "25%", ownContrib: "5%", bankFinance: "70%", color: "168,85,247" },
+    { category: "Special Category*", location: "Rural", subsidy: "35%", ownContrib: "5%", bankFinance: "60%", color: "16,185,129" },
+  ];
+
+  /* ── Required Documents ── */
+  const DOCS = [
+    { icon: "🪪", title: "Aadhaar Card & PAN Card", desc: "Self-attested copies of Aadhaar and PAN. Aadhaar is mandatory for online registration and verification.", link: "https://uidai.gov.in", ref: "UIDAI (Aadhaar)" },
+    { icon: "📸", title: "Passport-Size Photographs", desc: "Two recent passport-sized colour photographs of the applicant.", link: "#", ref: "Standard Requirement" },
+    { icon: "🎓", title: "Educational Qualification Certificate", desc: "Minimum 8th pass for projects above ₹10L (manufacturing) or ₹5L (service). No requirement below these limits.", link: "#", ref: "As Per Guidelines" },
+    { icon: "📋", title: "Detailed Project Report (DPR)", desc: "A comprehensive business plan covering project cost breakdown, machinery, raw material, income projections, and repayment capacity.", link: "https://www.kviconline.gov.in", ref: "KVIC Portal" },
+    { icon: "📊", title: "Caste / Community Certificate", desc: "For SC/ST/OBC/Minority applicants to avail higher subsidy rates under special category benefits.", link: "https://services.india.gov.in", ref: "National Services Portal" },
+    { icon: "🏠", title: "Address Proof", desc: "Ration Card, Voter ID, Electricity Bill, or any valid government-issued address document.", link: "#", ref: "Standard Requirement" },
+    { icon: "🏪", title: "Premises Proof (Rent/Ownership)", desc: "Rent agreement, lease deed, or ownership document for the proposed business premises.", link: "#", ref: "Bank Requirement" },
+    { icon: "⚙️", title: "Machinery & Equipment Quotations", desc: "Supplier quotations or proforma invoices for all machinery and equipment included in the project cost.", link: "https://makeinindia.com", ref: "Make in India" },
+    { icon: "🏦", title: "Bank Account Details", desc: "Cancelled cheque or bank passbook copy for the bank account where the loan will be credited.", link: "#", ref: "Bank Requirement" },
+    { icon: "🌐", title: "Udyam Registration Certificate", desc: "Mandatory MSME registration must be completed before loan approval. Free of cost on the Udyam portal.", link: "https://udyamregistration.gov.in", ref: "Udyam Registration" },
+    { icon: "🏘️", title: "Rural Area Certificate (if applicable)", desc: "Certificate from local authority confirming the project is located in a rural area for higher subsidy eligibility.", link: "#", ref: "Local Authority" },
+    { icon: "📜", title: "EDP Training Certificate (if completed)", desc: "Certificate from Entrepreneurship Development Programme. EDP training is mandatory and arranged post-approval.", link: "https://www.kviconline.gov.in", ref: "KVIC EDP" },
+  ];
+
+  /* ── Application Process Steps ── */
+  const STEPS = [
+    { num: "01", title: "Visit the PMEGP e-Portal", detail: "Go to the official KVIC PMEGP e-Portal at kviconline.gov.in and click on 'Online Application Form for Individual' or 'Non-Individual'.", color: "22,163,74" },
+    { num: "02", title: "Register with Aadhaar Verification", detail: "Validate your Aadhaar details online. A User ID and Password will be sent via SMS to your registered mobile number for login.", color: "59,130,246" },
+    { num: "03", title: "Fill the Online Application Form", detail: "Enter personal details, business/project information, preferred loan category (manufacturing/service), and choose your financing bank branch.", color: "6,182,212" },
+    { num: "04", title: "Upload Required Documents", detail: "Upload scanned copies of Aadhaar, PAN, photos, educational certificates, DPR, caste certificate (if applicable), and quotations.", color: "16,185,129" },
+    { num: "05", title: "Submit & Get Application ID", detail: "Review all details carefully and submit. An Application ID is generated for tracking. The application is forwarded to KVIC/KVIB/DIC.", color: "245,158,11" },
+    { num: "06", title: "DLTFC Interview & Scrutiny", detail: "The District Level Task Force Committee (DLTFC) shortlists and interviews applicants. Your project viability is assessed.", color: "168,85,247" },
+    { num: "07", title: "DIC/KVIB Verification & Forwarding", detail: "The DIC or KVIC/KVIB office verifies application details and forwards the approved application to your chosen bank branch.", color: "239,68,68" },
+    { num: "08", title: "Bank Loan Sanction", detail: "The bank processes, appraises, and sanctions the loan. The margin money subsidy request is initiated by the bank.", color: "59,130,246" },
+    { num: "09", title: "Complete EDP Training", detail: "Attend the mandatory Entrepreneurship Development Programme (EDP) training for 10-15 days, arranged by KVIC/KVIB/DIC after preliminary approval.", color: "22,163,74" },
+    { num: "10", title: "Subsidy Release & Disbursement", detail: "The government margin money subsidy is deposited in a TDR (Term Deposit Receipt) linked to your loan for 3 years lock-in. Loan amount is disbursed to your account.", color: "245,158,11" },
+  ];
+
+  /* ── Approval Timeline ── */
+  const TIMELINE = [
+    { phase: "Online Application", duration: "1–2 Days", icon: "📋" },
+    { phase: "DLTFC Review", duration: "15–30 Days", icon: "🔍" },
+    { phase: "DIC/KVIB Verification", duration: "7–15 Days", icon: "🏛️" },
+    { phase: "Bank Appraisal", duration: "15–30 Days", icon: "🏦" },
+    { phase: "Loan Sanction", duration: "7–14 Days", icon: "✅" },
+    { phase: "EDP Training", duration: "10–15 Days", icon: "🎓" },
+    { phase: "Subsidy Release", duration: "15–30 Days", icon: "💰" },
+    { phase: "Total End-to-End", duration: "2–5 Months", icon: "🏁" },
+  ];
+
+  /* ── Chart Data ── */
+  const subsidyChartData = [
+    { name: "Gen Urban", subsidy: 15, own: 10, bank: 75 },
+    { name: "Gen Rural", subsidy: 25, own: 10, bank: 65 },
+    { name: "Special Urban", subsidy: 25, own: 5, bank: 70 },
+    { name: "Special Rural", subsidy: 35, own: 5, bank: 60 },
+  ];
+
+  const yearlyData = [
+    { year: "2015-16", units: 40828, margin: 1437 },
+    { year: "2016-17", units: 44754, margin: 1638 },
+    { year: "2017-18", units: 52214, margin: 1894 },
+    { year: "2018-19", units: 73427, margin: 2510 },
+    { year: "2019-20", units: 67536, margin: 2350 },
+    { year: "2020-21", units: 75109, margin: 2588 },
+    { year: "2021-22", units: 79265, margin: 2790 },
+    { year: "2022-23", units: 96291, margin: 3498 },
+    { year: "2023-24", units: 102500, margin: 3850 },
+    { year: "2024-25", units: 110000, margin: 4200 },
+  ];
+
+  const sectorData = [
+    { sector: "Food Processing", pct: 22 },
+    { sector: "Textile & Garments", pct: 15 },
+    { sector: "Mineral Based", pct: 12 },
+    { sector: "Agro Based", pct: 11 },
+    { sector: "Service & Trading", pct: 18 },
+    { sector: "Engineering", pct: 10 },
+    { sector: "Others", pct: 12 },
+  ];
+
+  const projectCostData = [
+    { name: "Manufacturing", maxCost: 50 },
+    { name: "Service/Business", maxCost: 20 },
+    { name: "Mfg Upgradation", maxCost: 100 },
+    { name: "Svc Upgradation", maxCost: 25 },
+  ];
+
+  /* ── Related Schemes ── */
+  const RELATED = [
+    { icon: "🏦", name: "CGTMSE Scheme", desc: "Collateral-free credit guarantee up to ₹5 Crore for micro & small enterprises.", link: "#", onClick: () => setActiveTab("cgtmse") },
+    { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹20L without collateral via Pradhan Mantri Mudra Yojana.", link: "#", onClick: () => setActiveTab("pmmy") },
+    { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
+    { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
+    { icon: "🏛️", name: "SIDBI MSME Loans", desc: "Direct loan facility from SIDBI for MSMEs at competitive interest rates.", link: "https://www.sidbi.in" },
+    { icon: "🌐", name: "Udyam Registration", desc: "Free MSME registration required for all government scheme eligibility.", link: "https://udyamregistration.gov.in" },
+  ];
+
+  return (
+    <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "clamp(20px, 4vw, 45px)" }}>
+
+      {/* Back Button */}
+      <button onClick={() => setActiveTab("schemes")} style={{ marginBottom: "30px", padding: "10px 18px", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 600, transition: "all 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"} onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}>
+        ← Back to Schemes
+      </button>
+
+      {/* Hero Banner */}
+      <div style={{ ...S.infoBox("22,163,74"), marginBottom: "40px", display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-start", borderLeft: "5px solid #16A34A" }}>
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "40px" }}>🏭</span>
+            <div>
+              <h1 style={{ fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 900, color: "#FFF", margin: 0, letterSpacing: "-0.5px" }}>PMEGP Scheme</h1>
+              <p style={{ color: "#71717A", margin: "4px 0 0 0", fontSize: "14px" }}>Prime Minister's Employment Generation Programme</p>
+            </div>
+          </div>
+          <p style={{ color: "#A1A1AA", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>
+            A flagship <strong style={{ color: "#FFF" }}>credit-linked subsidy scheme</strong> by the Ministry of MSME, Government of India, aimed at <strong style={{ color: "#22C55E" }}>generating employment</strong> through new micro-enterprises in non-farm sectors. Administered by <strong style={{ color: "#FFF" }}>KVIC</strong> (Khadi & Village Industries Commission) at the national level and through <strong style={{ color: "#FFF" }}>KVIBs</strong> and <strong style={{ color: "#FFF" }}>DICs</strong> at the state level. Approved for continuation from 2021-22 to 2025-26.
+          </p>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "18px" }}>
+            <span style={S.badge("22,163,74")}>✅ Govt Subsidy</span>
+            <span style={S.badge("59,130,246")}>🏛️ KVIC Administered</span>
+            <span style={S.badge("245,158,11")}>💰 Up to 35% Subsidy</span>
+            <span style={S.badge("168,85,247")}>🏭 Mfg: ₹50L | Svc: ₹20L</span>
+          </div>
+        </div>
+        <div style={{ background: "rgba(22,163,74,0.1)", borderRadius: "12px", padding: "20px", border: "1px solid rgba(22,163,74,0.2)", minWidth: "200px", textAlign: "center" }}>
+          <div style={{ fontSize: "42px", fontWeight: 900, color: "#22C55E" }}>35%</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Max Subsidy (Special Rural)</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <div style={{ fontSize: "30px", fontWeight: 900, color: "#F59E0B" }}>₹50L</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Max Project (Manufacturing)</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <a href="https://www.kviconline.gov.in" target="_blank" rel="noreferrer" style={{ ...S.link, justifyContent: "center", background: "#16A34A", color: "#FFF", padding: "10px 18px", borderRadius: "8px", fontWeight: 700 }}>KVIC Official Portal ↗</a>
+        </div>
+      </div>
+
+      {/* Quick Stats Row */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "16px", marginBottom: "50px" }}>
+        {[
+          { label: "Units Assisted (2024)", val: "1.1 Lakh+", color: "#22C55E", icon: "🏭" },
+          { label: "Employment Generated", val: "8 Per Unit", color: "#06B6D4", icon: "👷" },
+          { label: "Mfg. Project Limit", val: "₹50 Lakh", color: "#F59E0B", icon: "⚙️" },
+          { label: "Service Project Limit", val: "₹20 Lakh", color: "#3B82F6", icon: "🛎️" },
+          { label: "Subsidy Lock-in", val: "3 Years", color: "#A78BFA", icon: "🔒" },
+        ].map((stat, i) => (
+          <div key={i} style={{ ...S.card, textAlign: "center" }}>
+            <div style={{ fontSize: "28px", marginBottom: "8px" }}>{stat.icon}</div>
+            <div style={{ fontSize: "22px", fontWeight: 800, color: stat.color }}>{stat.val}</div>
+            <div style={{ fontSize: "11px", color: "#71717A", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginTop: "4px" }}>{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Subsidy Structure */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(22,163,74,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>💰</span> Subsidy Structure — Margin Money</h2>
+        <p style={{ color: "#71717A", marginBottom: "16px", lineHeight: 1.7 }}>PMEGP provides a <strong style={{ color: "#FFF" }}>margin money subsidy</strong> that directly reduces your loan repayment burden. The subsidy percentage depends on your <strong style={{ color: "#22C55E" }}>category</strong> and whether the project is in an <strong style={{ color: "#22C55E" }}>urban or rural</strong> area.</p>
+        <div style={{ ...S.infoBox("168,85,247"), marginBottom: "24px" }}>
+          <strong style={{ color: "#A78BFA" }}>* Special Categories:</strong> <span style={{ color: "#A1A1AA" }}>SC, ST, OBC, Minorities, Women, Ex-Servicemen, Differently-abled, Transgender, NER/Hill/Border/Aspirational District applicants.</span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", minWidth: "600px" }}>
+            <thead>
+              <tr style={{ background: "rgba(22,163,74,0.1)" }}>
+                <th style={{ padding: "14px 18px", textAlign: "left", color: "#22C55E", fontWeight: 700 }}>Beneficiary Category</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#22C55E", fontWeight: 700 }}>Area</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#F59E0B", fontWeight: 700 }}>Govt Subsidy</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#3B82F6", fontWeight: 700 }}>Own Contribution</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#A78BFA", fontWeight: 700 }}>Bank Finance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {SUBSIDY_SLABS.map((slab, i) => (
+                <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <td style={{ padding: "14px 18px", color: "#E4E4E7", fontWeight: 600 }}>{slab.category}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: `rgb(${slab.color})`, fontWeight: 700 }}>{slab.location}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#F59E0B", fontWeight: 800, fontSize: "16px" }}>{slab.subsidy}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#3B82F6", fontWeight: 700 }}>{slab.ownContrib}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#A78BFA", fontWeight: 700 }}>{slab.bankFinance}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ color: "#71717A", fontSize: "12px", marginTop: "12px" }}>Source: <a href="https://www.kviconline.gov.in" target="_blank" rel="noreferrer" style={S.link}>KVIC Official Guidelines ↗</a> | <a href="https://msme.gov.in" target="_blank" rel="noreferrer" style={S.link}>Ministry of MSME ↗</a></p>
+
+        {/* Project Cost Limits Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px", marginTop: "24px" }}>
+          {[
+            { type: "Manufacturing Unit", limit: "₹50 Lakh", icon: "⚙️", color: "245,158,11", desc: "Setting up new manufacturing micro-enterprises including food processing, textiles, engineering products, etc." },
+            { type: "Service / Business Unit", limit: "₹20 Lakh", icon: "🛎️", color: "59,130,246", desc: "Service-based enterprises including salon, repair shops, consultancy, healthcare services, IT services, etc." },
+            { type: "Upgradation (Mfg)", limit: "₹1 Crore", icon: "📈", color: "168,85,247", desc: "Existing PMEGP units expanding/modernizing. Subsidy: 15% (General) / 20% (Special). Own contribution: 10%." },
+            { type: "Upgradation (Service)", limit: "₹25 Lakh", icon: "🔄", color: "22,163,74", desc: "Existing service units under PMEGP eligible for second loan for expansion or technology upgradation." },
+          ].map((item, i) => (
+            <div key={i} style={{ ...S.card, borderLeft: `3px solid rgb(${item.color})` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+                <span style={{ fontSize: "28px" }}>{item.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 700, color: `rgb(${item.color})`, fontSize: "14px" }}>{item.type}</div>
+                  <div style={{ fontWeight: 800, color: "#FFF", fontSize: "20px" }}>{item.limit}</div>
+                </div>
+              </div>
+              <p style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Required Documents */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(59,130,246,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📄</span> Required Documents</h2>
+        <p style={{ color: "#71717A", marginBottom: "24px", lineHeight: 1.7 }}>Prepare these documents <strong style={{ color: "#FFF" }}>before applying online</strong>. Exact requirements may vary by implementing agency (KVIC, KVIB, or DIC). Each links to its official source.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+          {DOCS.map((doc, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", borderLeft: "3px solid rgba(22,163,74,0.4)" }}>
+              <div style={{ fontSize: "28px", flexShrink: 0 }}>{doc.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "6px" }}>{doc.title}</div>
+                <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{doc.desc}</div>
+                {doc.link !== "#" && (
+                  <a href={doc.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px", marginTop: "8px", display: "inline-flex" }} onMouseOver={e => e.currentTarget.style.opacity = 0.7} onMouseOut={e => e.currentTarget.style.opacity = 1}>
+                    {"📎 " + doc.ref + " ↗"}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Application Process */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(16,185,129,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔄</span> Application Process — Step by Step</h2>
+        <div style={{ ...S.infoBox("6,182,212"), marginBottom: "24px" }}>
+          <strong style={{ color: "#06B6D4" }}>💡 Important:</strong> <span style={{ color: "#A1A1AA" }}>PMEGP applications are submitted <strong style={{ color: "#FFF" }}>online only</strong> through the KVIC PMEGP e-Portal. After online submission, the process involves DLTFC interview, DIC/KVIB verification, bank appraisal, and mandatory <strong style={{ color: "#FFF" }}>EDP training</strong> (10-15 days). The margin money is held in a <strong style={{ color: "#FFF" }}>3-year lock-in TDR</strong>.</span>
+        </div>
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", left: "36px", top: "20px", bottom: "20px", width: "2px", background: "linear-gradient(to bottom, #16A34A, #06B6D4)", borderRadius: "2px", display: "block" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "16px" }}>
+            {STEPS.map((step, i) => (
+              <div key={i} style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: `rgba(${step.color},0.15)`, border: `2px solid rgba(${step.color},0.5)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 900, color: `rgb(${step.color})`, fontSize: "14px" }}>{step.num}</div>
+                <div style={{ ...S.card, flex: 1, padding: "16px 20px" }}>
+                  <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "6px" }}>{step.title}</div>
+                  <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{step.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Where to Apply */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🏛️</span> Implementing Agencies — Where to Apply</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { icon: "🇮🇳", title: "KVIC (National Nodal Agency)", desc: "Khadi and Village Industries Commission — central implementing body coordinating PMEGP nationwide.", color: "22,163,74", link: "https://www.kviconline.gov.in" },
+            { icon: "🏢", title: "State KVIC Directorates", desc: "State-level KVIC offices manage district-level coordination and beneficiary selection.", color: "59,130,246" },
+            { icon: "🏘️", title: "State KVIBs", desc: "State Khadi and Village Industries Boards implement the scheme at the state/district level.", color: "245,158,11" },
+            { icon: "🏦", title: "District Industries Centres (DICs)", desc: "DICs handle implementation at the district level, especially for urban area projects.", color: "168,85,247" },
+            { icon: "🏧", title: "Participating Banks", desc: "27+ nationalized banks, private banks, RRBs, and cooperative banks disburse PMEGP loans.", color: "6,182,212" },
+            { icon: "📱", title: "PMEGP e-Portal (Online)", desc: "All applications submitted online through KVIC's PMEGP e-Portal. Track status in real-time.", color: "239,68,68", link: "https://www.kviconline.gov.in/pmegpeportal/" },
+          ].map((ch, i) => (
+            <div key={i} style={{ ...S.card, borderLeft: `3px solid rgb(${ch.color})` }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>{ch.icon}</div>
+              <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "8px" }}>{ch.title}</div>
+              <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6, marginBottom: ch.link ? "10px" : 0 }}>{ch.desc}</div>
+              {ch.link && <a href={ch.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Visit Portal ↗</a>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(245,158,11,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📈</span> Visual Data & Analytics</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+
+          {/* Subsidy Breakdown Bar Chart */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#22C55E", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📊 Subsidy % Breakdown by Category & Area</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={subsidyChartData} margin={{ top: 5, right: 10, left: -15, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="name" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} domain={[0, 100]} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Legend wrapperStyle={{ fontSize: "11px" }} />
+                <Bar dataKey="subsidy" fill="#22C55E" radius={[3, 3, 0, 0]} name="Govt Subsidy" stackId="a" />
+                <Bar dataKey="own" fill="#3B82F6" radius={[0, 0, 0, 0]} name="Own Contribution" stackId="a" />
+                <Bar dataKey="bank" fill="#A78BFA" radius={[3, 3, 0, 0]} name="Bank Finance" stackId="a" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Yearly Units Trend */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#10B981", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📈 Units Assisted Per Year (Growth Trend)</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <LineChart data={yearlyData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="year" stroke="#71717A" tick={{ fontSize: 9 }} angle={-20} textAnchor="end" />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${(v / 1000).toFixed(0)}K`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [v.toLocaleString("en-IN")]} />
+                <Line type="monotone" dataKey="units" stroke="#10B981" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 7 }} name="Units Assisted" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Sector Distribution */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#F59E0B", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>🏭 Sector-wise Project Distribution (%)</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={sectorData} layout="vertical" margin={{ top: 5, right: 30, left: 50, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis type="number" stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <YAxis type="category" dataKey="sector" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="pct" fill="#F59E0B" radius={[0, 5, 5, 0]} name="Share %" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Project Cost Limits */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#3B82F6", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📊 Max Project Cost Limits (₹ Lakh)</h3>
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart data={projectCostData} margin={{ top: 5, right: 10, left: -15, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="name" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `₹${v}L`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`₹${v} Lakh`]} />
+                <Bar dataKey="maxCost" fill="#3B82F6" radius={[5, 5, 0, 0]} name="Max Project Cost" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Eligibility Checklist */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#06B6D4", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>✅ Eligibility Checklist</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { ok: true, item: "Indian citizen aged 18 years or above" },
+                { ok: true, item: "8th pass for projects >₹10L (mfg) or >₹5L (service)" },
+                { ok: true, item: "New project only — no existing govt subsidy beneficiaries" },
+                { ok: true, item: "One person per family (self + spouse) is eligible" },
+                { ok: true, item: "No income ceiling — open to all income groups" },
+                { ok: true, item: "SHGs, Trusts, Societies, Co-operatives also eligible" },
+                { ok: false, item: "Existing units or units under other govt subsidy (excluded)" },
+                { ok: false, item: "Pure trading activities without capital setup (not eligible)" },
+                { ok: false, item: "Cost of land cannot be included in project cost" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <span style={{ fontSize: "18px", flexShrink: 0 }}>{item.ok ? "✅" : "❌"}</span>
+                  <span style={{ color: item.ok ? "#E4E4E7" : "#71717A", fontSize: "13px", textDecoration: item.ok ? "none" : "line-through" }}>{item.item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* EDP Training Info */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#22C55E", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>🎓 EDP Training & Lock-in</h3>
+            <p style={{ color: "#A1A1AA", fontSize: "13px", lineHeight: 1.7, margin: "0 0 16px 0" }}>Every PMEGP beneficiary must complete a mandatory <strong style={{ color: "#FFF" }}>Entrepreneurship Development Programme (EDP)</strong> training arranged by KVIC/KVIB/DIC after preliminary approval.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {[
+                "EDP training duration: 10–15 days (residential or non-residential)",
+                "Training cost borne by the government (free for beneficiary)",
+                "Covers: business planning, accounts, marketing, compliance",
+                "Margin money subsidy held in TDR for 3 years lock-in",
+                "After 3 years, TDR subsidy adjusted against outstanding loan",
+                "If unit fails within lock-in, subsidy may be recoverable",
+              ].map((f, i) => (
+                <div key={i} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  <span style={{ color: "#22C55E", fontSize: "14px" }}>▸</span>
+                  <span style={{ color: "#E4E4E7", fontSize: "13px" }}>{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Approval Timeline */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>⏱️</span> Approval Timeline</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px" }}>
+          {TIMELINE.map((tl, i) => (
+            <div key={i} style={{ ...S.card, textAlign: "center", borderTop: i === TIMELINE.length - 1 ? "3px solid #10B981" : "3px solid rgba(22,163,74,0.3)" }}>
+              <div style={{ fontSize: "28px", marginBottom: "8px" }}>{tl.icon}</div>
+              <div style={{ fontWeight: 700, color: i === TIMELINE.length - 1 ? "#10B981" : "#F59E0B", fontSize: "15px", marginBottom: "5px" }}>{tl.duration}</div>
+              <div style={{ color: "#71717A", fontSize: "11px" }}>{tl.phase}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Official Reference Links */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(6,182,212,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔗</span> Official Government Reference Links</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
+          {[
+            { label: "KVIC PMEGP e-Portal", url: "https://www.kviconline.gov.in/pmegpeportal/", desc: "Official online application portal for PMEGP. Apply, track status, and download forms." },
+            { label: "KVIC Official Website", url: "https://www.kviconline.gov.in", desc: "Khadi & Village Industries Commission — national nodal agency for PMEGP." },
+            { label: "Ministry of MSME", url: "https://msme.gov.in", desc: "Central ministry overseeing PMEGP and all MSME schemes and policies." },
+            { label: "MyScheme.gov.in", url: "https://www.myscheme.gov.in", desc: "Government portal for all central schemes including PMEGP eligibility checker." },
+            { label: "JanSamarth Portal", url: "https://www.jansamarth.in", desc: "Single-window online platform for all government credit-linked subsidy schemes." },
+            { label: "Udyam MSME Registration", url: "https://udyamregistration.gov.in", desc: "Mandatory MSME registration before PMEGP loan approval. Free of cost." },
+            { label: "SIDBI (Refinance)", url: "https://www.sidbi.in", desc: "Small Industries Development Bank provides refinance facility to PMEGP lending banks." },
+            { label: "PMEGP Guidelines PDF", url: "https://msme.gov.in/sites/default/files/PMEGP-guideline.pdf", desc: "Official PMEGP scheme guidelines document from Ministry of MSME." },
+          ].map((ref, i) => (
+            <a key={i} href={ref.url} target="_blank" rel="noreferrer" style={{ ...S.card, textDecoration: "none", display: "flex", flexDirection: "column", gap: "6px", cursor: "pointer", transition: "border-color 0.2s" }} onMouseOver={e => e.currentTarget.style.borderColor = "rgba(22,163,74,0.3)"} onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
+              <div style={{ fontWeight: 700, color: "#22C55E", fontSize: "13px", display: "flex", justifyContent: "space-between" }}>{ref.label}<span>↗</span></div>
+              <div style={{ color: "#71717A", fontSize: "12px" }}>{ref.desc}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Next Steps */}
+      <div style={{ ...S.infoBox("16,185,129"), borderLeft: "5px solid #10B981" }}>
+        <h2 style={{ ...S.h2, marginBottom: "20px" }}>🚀 What To Do Next</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { step: "1", action: "Check eligibility — age 18+, 8th pass for larger projects, new enterprise only", link: "https://www.myscheme.gov.in", cta: "Check Eligibility →" },
+            { step: "2", action: "Complete Udyam Registration (mandatory before loan approval)", link: "https://udyamregistration.gov.in", cta: "Register Free →" },
+            { step: "3", action: "Prepare your Detailed Project Report (DPR) with cost breakdown", link: "https://www.kviconline.gov.in", cta: "DPR Templates →" },
+            { step: "4", action: "Apply online through the KVIC PMEGP e-Portal", link: "https://www.kviconline.gov.in/pmegpeportal/", cta: "Apply Now →" },
+            { step: "5", action: "Track your application status using your Application ID", link: "https://www.kviconline.gov.in/pmegpeportal/", cta: "Track Status →" },
+            { step: "6", action: "Explore CGTMSE, MUDRA, and other MSME support schemes", link: "#related", cta: "View Related ↓" },
           ].map((ns, i) => (
             <a key={i} href={ns.link} target={ns.link.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: "10px", padding: "16px", textDecoration: "none", display: "flex", flexDirection: "column", gap: "8px", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(16,185,129,0.15)"} onMouseOut={e => e.currentTarget.style.background = "rgba(16,185,129,0.08)"}>
               <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(16,185,129,0.2)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#10B981", fontWeight: 800, fontSize: "13px" }}>{ns.step}</div>
@@ -2166,8 +2643,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
             <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s", marginBottom: "50px" }}>
               {GOVERNMENT_SCHEMES.map((scheme, i) => (
-                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: (scheme.rank === 1 || scheme.rank === 2) ? "pointer" : "default" }}
-                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); if (scheme.rank === 2) setActiveTab("pmmy"); }}>
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: [1,2,3].includes(scheme.rank) ? "pointer" : "default" }}
+                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); if (scheme.rank === 2) setActiveTab("pmmy"); if (scheme.rank === 3) setActiveTab("pmegp"); }}>
                   <div style={{ position: "absolute", top: -20, right: -20, fontSize: "80px", opacity: 0.05 }}>{scheme.icon}</div>
                   <div style={{ width: 50, height: 50, borderRadius: 12, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, marginBottom: 15, border: "1px solid rgba(255,255,255,0.05)" }}>
                     {scheme.icon}
@@ -2180,8 +2657,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                     <span style={{ color: "#FFF", fontSize: "14px", fontWeight: 600 }}>{scheme.coverage}</span>
                   </div>
 
-                  {(scheme.rank === 1 || scheme.rank === 2) ? (
-                    <button onClick={(e) => { e.stopPropagation(); setActiveTab(scheme.rank === 1 ? "cgtmse" : "pmmy"); }} style={{ display: "inline-block", background: scheme.rank === 1 ? "linear-gradient(135deg, #3B82F6, #06B6D4)" : "linear-gradient(135deg, #F59E0B, #EF4444)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
+                  {[1,2,3].includes(scheme.rank) ? (
+                    <button onClick={(e) => { e.stopPropagation(); setActiveTab(scheme.rank === 1 ? "cgtmse" : scheme.rank === 2 ? "pmmy" : "pmegp"); }} style={{ display: "inline-block", background: scheme.rank === 1 ? "linear-gradient(135deg, #3B82F6, #06B6D4)" : scheme.rank === 2 ? "linear-gradient(135deg, #F59E0B, #EF4444)" : "linear-gradient(135deg, #16A34A, #06B6D4)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
                       📄 Full Guide & Apply ↗
                     </button>
                   ) : (
@@ -2203,6 +2680,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
         {activeTab === "cgtmse" && <CGTMSEDetailPage setActiveTab={setActiveTab} />}
         {activeTab === "pmmy" && <PMMYDetailPage setActiveTab={setActiveTab} />}
+        {activeTab === "pmegp" && <PMEGPDetailPage setActiveTab={setActiveTab} />}
 
         {activeTab === "privacy" && (
           <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
