@@ -1788,6 +1788,467 @@ function PMEGPDetailPage({ setActiveTab }) {
   );
 }
 
+function PLIDetailPage({ setActiveTab }) {
+  const S = {
+    section: { marginBottom: "50px" },
+    h2: { fontSize: "26px", fontWeight: 800, color: "#FFF", margin: "0 0 20px 0", display: "flex", alignItems: "center", gap: "12px" },
+    badge: (color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, background: `rgba(${color},0.15)`, border: `1px solid rgba(${color},0.3)`, color: `rgb(${color})` }),
+    card: { background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "14px", padding: "22px 26px" },
+    infoBox: (c) => ({ background: `rgba(${c},0.07)`, border: `1px solid rgba(${c},0.2)`, borderRadius: "12px", padding: "18px 22px" }),
+    link: { color: "#F59E0B", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px", transition: "opacity 0.2s" },
+  };
+
+  /* ── 14 PLI Sectors ── */
+  const SECTORS = [
+    { name: "Mobile & Electronics", ministry: "MeitY", outlay: "₹40,951 Cr", incentive: "4%–6%", icon: "📱", color: "59,130,246" },
+    { name: "Pharma & Bulk Drugs", ministry: "DoP", outlay: "₹15,000 Cr", incentive: "3%–10%", icon: "💊", color: "16,185,129" },
+    { name: "Medical Devices", ministry: "DoP", outlay: "₹3,420 Cr", incentive: "5%–8%", icon: "🩺", color: "6,182,212" },
+    { name: "Auto & Auto Components", ministry: "DHI", outlay: "₹25,938 Cr", incentive: "4%–7%", icon: "🚗", color: "245,158,11" },
+    { name: "IT Hardware", ministry: "MeitY", outlay: "₹17,000 Cr", incentive: "4%–5%", icon: "💻", color: "168,85,247" },
+    { name: "Telecom & Networking", ministry: "DoT", outlay: "₹12,195 Cr", incentive: "4%–7%", icon: "📡", color: "239,68,68" },
+    { name: "Textile Products", ministry: "MoT", outlay: "₹10,683 Cr", incentive: "3%–11%", icon: "🧵", color: "236,72,153" },
+    { name: "Food Processing", ministry: "MoFPI", outlay: "₹10,900 Cr", incentive: "4%–10%", icon: "🍲", color: "34,197,94" },
+    { name: "White Goods (AC/LED)", ministry: "DPIIT", outlay: "₹6,238 Cr", incentive: "4%–6%", icon: "❄️", color: "96,165,250" },
+    { name: "Specialty Steel", ministry: "MoS", outlay: "₹6,322 Cr", incentive: "4%–12%", icon: "🔩", color: "148,163,184" },
+    { name: "ACC Battery Storage", ministry: "DHI", outlay: "₹18,100 Cr", incentive: "Subsidy-based", icon: "🔋", color: "74,222,128" },
+    { name: "Solar PV Modules", ministry: "MNRE", outlay: "₹24,000 Cr", incentive: "Subsidy-based", icon: "☀️", color: "250,204,21" },
+    { name: "Drones & Components", ministry: "MoCA", outlay: "₹120 Cr", incentive: "20%", icon: "🛸", color: "129,140,248" },
+    { name: "Advanced Chemistry Cell", ministry: "DHI", outlay: "₹18,100 Cr", incentive: "Capacity-linked", icon: "⚗️", color: "45,212,191" },
+  ];
+
+  /* ── Required Documents ── */
+  const DOCS = [
+    { icon: "🏢", title: "Certificate of Incorporation", desc: "Proof that the company is registered in India under the Companies Act, 2013 or LLP Act, 2008.", link: "https://www.mca.gov.in", ref: "MCA Portal" },
+    { icon: "📋", title: "PAN & GST Registration", desc: "Valid PAN card of the company and active GST registration certificate (GSTIN) for manufacturing operations.", link: "https://www.gst.gov.in", ref: "GST Portal" },
+    { icon: "📊", title: "Audited Financial Statements", desc: "Last 3 years audited P&L and Balance Sheet showing global/domestic revenue meeting sector-specific thresholds.", link: "#", ref: "CA Certified" },
+    { icon: "📝", title: "Business Plan & Investment Proposal", desc: "Detailed plan showing projected incremental investment in plant, machinery, R&D, and manufacturing capacity.", link: "#", ref: "Company Format" },
+    { icon: "🏭", title: "Manufacturing Licence / IEM", desc: "Industrial Entrepreneur Memorandum (IEM) or relevant manufacturing licence for the product category.", link: "https://dpiit.gov.in", ref: "DPIIT Portal" },
+    { icon: "📄", title: "Memorandum & Articles of Association", desc: "MOA/AOA showing the manufacturing activity as part of the company's authorized business objects.", link: "https://www.mca.gov.in", ref: "MCA Portal" },
+    { icon: "🔧", title: "Production & Capacity Details", desc: "Current installed capacity, product mix, production volumes from base year (FY 2019-20), and expansion plans.", link: "#", ref: "Self-Declaration" },
+    { icon: "🌐", title: "Udyam / MSME Registration (if applicable)", desc: "For MSME applicants — valid Udyam registration certificate. Free registration on official portal.", link: "https://udyamregistration.gov.in", ref: "Udyam Portal" },
+    { icon: "📈", title: "Incremental Sales Projection", desc: "Year-wise projected sales growth over base year (FY 2019-20) to demonstrate eligibility for incentive claims.", link: "#", ref: "Company Format" },
+    { icon: "✅", title: "Board Resolution", desc: "Company board resolution authorizing the application under the specific PLI sector scheme.", link: "#", ref: "Company Board" },
+    { icon: "🏦", title: "Bank Account & IFSC Details", desc: "Company current account details for incentive disbursement. Must be a scheduled commercial bank.", link: "#", ref: "Bank Requirement" },
+    { icon: "📜", title: "Sector-Specific Compliance Certificates", desc: "BIS certification, pollution clearance, factory licence, FSSAI (food), drug licence (pharma), etc., as applicable.", link: "https://www.bis.gov.in", ref: "BIS Portal" },
+  ];
+
+  /* ── Application Process ── */
+  const STEPS = [
+    { num: "01", title: "Identify Your PLI Sector", detail: "Determine which of the 14 PLI sectors your manufacturing activity falls under. Each sector has its own scheme guidelines, nodal ministry, and incentive structure.", color: "245,158,11" },
+    { num: "02", title: "Check Sector-Specific Eligibility", detail: "Verify minimum global/domestic revenue thresholds, investment commitments, and product category requirements for your chosen sector.", color: "59,130,246" },
+    { num: "03", title: "Register on the PLI Portal", detail: "Create an account on the designated online portal of the respective nodal ministry. Complete company profile with all statutory details.", color: "6,182,212" },
+    { num: "04", title: "Submit Application with Documents", detail: "Fill the online application form with company details, investment plan, production data, and upload all required documents within the application window.", color: "16,185,129" },
+    { num: "05", title: "Application Review by Nodal Ministry", detail: "The nodal ministry/DPIIT reviews applications for eligibility, scrutinizes documents, and may request additional clarification.", color: "168,85,247" },
+    { num: "06", title: "Approval & Letter of Intent", detail: "Approved applicants receive a Letter of Intent (LOI) confirming their selection. The LOI specifies investment commitments and timelines.", color: "239,68,68" },
+    { num: "07", title: "Execute Investment & Manufacturing", detail: "Make the committed incremental investment in plant, machinery, and technology. Commence or scale-up manufacturing operations in India.", color: "245,158,11" },
+    { num: "08", title: "Achieve Incremental Sales Targets", detail: "Meet year-wise incremental sales thresholds over the base year (FY 2019-20) as defined in the scheme guidelines.", color: "59,130,246" },
+    { num: "09", title: "File Incentive Claim Annually", detail: "Submit audited production, sales, and investment data through the portal each year. Claims are verified by the ministry and independent auditors.", color: "22,163,74" },
+    { num: "10", title: "Incentive Disbursement", detail: "After verification, the government disburses the incentive (4-6% of incremental sales) directly to the company's bank account.", color: "245,158,11" },
+  ];
+
+  /* ── Approval Timeline ── */
+  const TIMELINE = [
+    { phase: "Application Window", duration: "30–90 Days", icon: "📋" },
+    { phase: "Eligibility Screening", duration: "30–60 Days", icon: "🔍" },
+    { phase: "LOI Issuance", duration: "15–30 Days", icon: "✉️" },
+    { phase: "Investment Period", duration: "1–3 Years", icon: "🏭" },
+    { phase: "Annual Claim Filing", duration: "60–90 Days", icon: "📊" },
+    { phase: "Verification & Audit", duration: "30–60 Days", icon: "✅" },
+    { phase: "Incentive Disbursement", duration: "30–45 Days", icon: "💰" },
+    { phase: "Scheme Duration", duration: "4–6 Years", icon: "🏁" },
+  ];
+
+  /* ── Chart Data ── */
+  const budgetData = [
+    { name: "Mobile/Elec", budget: 40951 },
+    { name: "Auto", budget: 25938 },
+    { name: "Solar PV", budget: 24000 },
+    { name: "ACC Battery", budget: 18100 },
+    { name: "IT HW", budget: 17000 },
+    { name: "Pharma", budget: 15000 },
+    { name: "Telecom", budget: 12195 },
+    { name: "Textiles", budget: 10683 },
+    { name: "Food", budget: 10900 },
+    { name: "Steel", budget: 6322 },
+    { name: "White Goods", budget: 6238 },
+    { name: "Medical", budget: 3420 },
+    { name: "Drones", budget: 120 },
+  ];
+
+  const investmentTrend = [
+    { year: "2020-21", investment: 5200, sales: 42000, jobs: 120000 },
+    { year: "2021-22", investment: 18500, sales: 185000, jobs: 310000 },
+    { year: "2022-23", investment: 47000, sales: 550000, jobs: 590000 },
+    { year: "2023-24", investment: 115000, sales: 1090000, jobs: 850000 },
+    { year: "2024-25", investment: 176000, sales: 1650000, jobs: 1200000 },
+  ];
+
+  const incentiveData = [
+    { sector: "Drones", pct: 20 },
+    { sector: "Specialty Steel", pct: 12 },
+    { sector: "Textiles", pct: 11 },
+    { sector: "Food Processing", pct: 10 },
+    { sector: "Pharma", pct: 10 },
+    { sector: "Medical Devices", pct: 8 },
+    { sector: "Auto Components", pct: 7 },
+    { sector: "Telecom", pct: 7 },
+    { sector: "Mobile/Electronics", pct: 6 },
+    { sector: "White Goods", pct: 6 },
+    { sector: "IT Hardware", pct: 5 },
+  ];
+
+  /* ── Related Schemes ── */
+  const RELATED = [
+    { icon: "🏦", name: "CGTMSE Scheme", desc: "Collateral-free credit guarantee up to ₹5 Crore for micro & small enterprises.", link: "#", onClick: () => setActiveTab("cgtmse") },
+    { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹20L without collateral via Pradhan Mantri Mudra Yojana.", link: "#", onClick: () => setActiveTab("pmmy") },
+    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for new micro-enterprises via KVIC.", link: "#", onClick: () => setActiveTab("pmegp") },
+    { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
+    { icon: "🌍", name: "Make in India", desc: "Government initiative to encourage manufacturing and investment in India.", link: "https://www.makeinindia.com" },
+    { icon: "🌐", name: "Udyam Registration", desc: "Free MSME registration required for all government scheme eligibility.", link: "https://udyamregistration.gov.in" },
+  ];
+
+  return (
+    <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "clamp(20px, 4vw, 45px)" }}>
+
+      {/* Back Button */}
+      <button onClick={() => setActiveTab("schemes")} style={{ marginBottom: "30px", padding: "10px 18px", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 600, transition: "all 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"} onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}>
+        ← Back to Schemes
+      </button>
+
+      {/* Hero Banner */}
+      <div style={{ ...S.infoBox("245,158,11"), marginBottom: "40px", display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-start", borderLeft: "5px solid #F59E0B" }}>
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "40px" }}>⚙️</span>
+            <div>
+              <h1 style={{ fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 900, color: "#FFF", margin: 0, letterSpacing: "-0.5px" }}>PLI Scheme</h1>
+              <p style={{ color: "#71717A", margin: "4px 0 0 0", fontSize: "14px" }}>Production Linked Incentive — Atmanirbhar Bharat</p>
+            </div>
+          </div>
+          <p style={{ color: "#A1A1AA", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>
+            A flagship <strong style={{ color: "#FFF" }}>incentive-based manufacturing scheme</strong> launched in 2020 under <strong style={{ color: "#F59E0B" }}>Atmanirbhar Bharat</strong>. The PLI scheme offers <strong style={{ color: "#FFF" }}>4%–6% financial incentives on incremental sales</strong> of goods manufactured in India across <strong style={{ color: "#F59E0B" }}>14 key sectors</strong>. Total outlay of <strong style={{ color: "#FFF" }}>₹1.97 Lakh Crore</strong> aimed at boosting domestic manufacturing, reducing imports, attracting investment, and creating large-scale employment.
+          </p>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "18px" }}>
+            <span style={S.badge("245,158,11")}>⚙️ 14 Sectors</span>
+            <span style={S.badge("59,130,246")}>💰 ₹1.97L Cr Outlay</span>
+            <span style={S.badge("16,185,129")}>📈 4–6% Incentive</span>
+            <span style={S.badge("168,85,247")}>🏭 Make in India</span>
+          </div>
+        </div>
+        <div style={{ background: "rgba(245,158,11,0.1)", borderRadius: "12px", padding: "20px", border: "1px solid rgba(245,158,11,0.2)", minWidth: "200px", textAlign: "center" }}>
+          <div style={{ fontSize: "42px", fontWeight: 900, color: "#F59E0B" }}>₹1.97L Cr</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Total Budget Outlay</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <div style={{ fontSize: "30px", fontWeight: 900, color: "#22C55E" }}>14</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Manufacturing Sectors</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <a href="https://www.makeinindia.com" target="_blank" rel="noreferrer" style={{ ...S.link, justifyContent: "center", background: "#F59E0B", color: "#111", padding: "10px 18px", borderRadius: "8px", fontWeight: 700 }}>Make in India Portal ↗</a>
+        </div>
+      </div>
+
+      {/* Quick Stats Row */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(155px, 1fr))", gap: "16px", marginBottom: "50px" }}>
+        {[
+          { label: "Total Investment", val: "₹1.76L Cr", color: "#F59E0B", icon: "💸" },
+          { label: "Jobs Created", val: "12 Lakh+", color: "#22C55E", icon: "👷" },
+          { label: "Sales by PLI Cos", val: "₹16.5L Cr", color: "#3B82F6", icon: "📈" },
+          { label: "Approved Applicants", val: "806+", color: "#A78BFA", icon: "✅" },
+          { label: "Scheme Duration", val: "4–6 Years", color: "#06B6D4", icon: "📅" },
+        ].map((stat, i) => (
+          <div key={i} style={{ ...S.card, textAlign: "center" }}>
+            <div style={{ fontSize: "28px", marginBottom: "8px" }}>{stat.icon}</div>
+            <div style={{ fontSize: "22px", fontWeight: 800, color: stat.color }}>{stat.val}</div>
+            <div style={{ fontSize: "11px", color: "#71717A", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginTop: "4px" }}>{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* 14 Sectors Grid */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(245,158,11,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🏭</span> 14 PLI Sectors — Incentive Overview</h2>
+        <p style={{ color: "#71717A", marginBottom: "20px", lineHeight: 1.7 }}>Each sector has its own nodal ministry, budget allocation, and incentive structure. The incentive is calculated on <strong style={{ color: "#FFF" }}>incremental sales</strong> over the base year (FY 2019-20).</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(225px, 1fr))", gap: "14px" }}>
+          {SECTORS.map((s, i) => (
+            <div key={i} style={{ ...S.card, borderLeft: `3px solid rgb(${s.color})`, display: "flex", gap: "12px", alignItems: "flex-start" }}>
+              <span style={{ fontSize: "28px", flexShrink: 0 }}>{s.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "4px" }}>{s.name}</div>
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "6px" }}>
+                  <span style={{ fontSize: "11px", color: `rgb(${s.color})`, fontWeight: 700 }}>{s.outlay}</span>
+                  <span style={{ fontSize: "11px", color: "#71717A" }}>•</span>
+                  <span style={{ fontSize: "11px", color: "#E4E4E7", fontWeight: 600 }}>{s.incentive}</span>
+                </div>
+                <div style={{ fontSize: "11px", color: "#71717A" }}>Ministry: {s.ministry}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Incentive Structure Explanation */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(59,130,246,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>💰</span> Incentive Structure — How It Works</h2>
+        <div style={{ ...S.infoBox("245,158,11"), marginBottom: "24px" }}>
+          <strong style={{ color: "#F59E0B" }}>Core Principle:</strong> <span style={{ color: "#A1A1AA" }}>PLI incentives are paid as a <strong style={{ color: "#FFF" }}>percentage of incremental sales</strong> (typically 4–6%) over the base year FY 2019-20. Companies must first invest, achieve sales targets, and then file annual claims. The incentive encourages <strong style={{ color: "#FFF" }}>large-scale manufacturing in India</strong> and reduces import dependency.</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { title: "Base Year", val: "FY 2019-20", icon: "📅", color: "59,130,246", desc: "All incremental sales and investment are measured against FY 2019-20 as the reference baseline year." },
+            { title: "Incentive Rate", val: "4% – 6%", icon: "💰", color: "245,158,11", desc: "Standard incentive on net incremental sales. Rate varies by sector and may increase on higher value addition." },
+            { title: "Duration", val: "4 – 6 Years", icon: "⏱️", color: "168,85,247", desc: "Incentive payout period from the year of meeting threshold. Specific duration varies by sector scheme." },
+            { title: "Key Requirement", val: "Invest + Sell", icon: "🎯", color: "16,185,129", desc: "Must meet BOTH incremental investment threshold AND incremental sales target each year to claim incentives." },
+          ].map((item, i) => (
+            <div key={i} style={{ ...S.card, borderTop: `3px solid rgb(${item.color})` }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+                <span style={{ fontSize: "28px" }}>{item.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 700, color: `rgb(${item.color})`, fontSize: "13px" }}>{item.title}</div>
+                  <div style={{ fontWeight: 800, color: "#FFF", fontSize: "20px" }}>{item.val}</div>
+                </div>
+              </div>
+              <p style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Required Documents */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(6,182,212,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📄</span> Required Documents</h2>
+        <p style={{ color: "#71717A", marginBottom: "24px", lineHeight: 1.7 }}>Prepare these documents <strong style={{ color: "#FFF" }}>before applying online</strong>. Requirements vary by sector — check specific sector guidelines from the nodal ministry.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+          {DOCS.map((doc, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", borderLeft: "3px solid rgba(245,158,11,0.4)" }}>
+              <div style={{ fontSize: "28px", flexShrink: 0 }}>{doc.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "6px" }}>{doc.title}</div>
+                <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{doc.desc}</div>
+                {doc.link !== "#" && (
+                  <a href={doc.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px", marginTop: "8px", display: "inline-flex" }} onMouseOver={e => e.currentTarget.style.opacity = 0.7} onMouseOut={e => e.currentTarget.style.opacity = 1}>
+                    {"📎 " + doc.ref + " ↗"}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Eligibility Criteria */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(16,185,129,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>✅</span> Eligibility Criteria</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
+          <div style={S.card}>
+            <h3 style={{ color: "#22C55E", margin: "0 0 16px 0", fontSize: "16px", fontWeight: 700 }}>✅ Who Can Apply</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                "Company registered in India (Companies Act / LLP Act)",
+                "Manufacturing goods in one of the 14 PLI sectors",
+                "Meets sector-specific minimum global/domestic revenue threshold",
+                "Commits to incremental investment in plant, machinery, R&D",
+                "Can achieve year-wise incremental sales targets over base year",
+                "Investments made on or after April 1, 2020 are eligible",
+                "MSMEs eligible under specific sector guidelines",
+                "Joint ventures and subsidiaries of global firms are eligible",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <span style={{ fontSize: "16px", flexShrink: 0 }}>✅</span>
+                  <span style={{ color: "#E4E4E7", fontSize: "13px" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={S.card}>
+            <h3 style={{ color: "#EF4444", margin: "0 0 16px 0", fontSize: "16px", fontWeight: 700 }}>❌ Not Eligible</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+              {[
+                "Trading or import-only companies (no manufacturing in India)",
+                "Companies not meeting minimum revenue thresholds",
+                "Units not making incremental investment over base year",
+                "Products not covered under the 14 notified sectors",
+                "Companies under insolvency or NCLT proceedings",
+                "Failure to meet sales target — no incentive for that year",
+                "Non-compliance with domestic value addition norms",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <span style={{ fontSize: "16px", flexShrink: 0 }}>❌</span>
+                  <span style={{ color: "#71717A", fontSize: "13px", textDecoration: "line-through" }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Application Process */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔄</span> Application Process — Step by Step</h2>
+        <div style={{ ...S.infoBox("6,182,212"), marginBottom: "24px" }}>
+          <strong style={{ color: "#06B6D4" }}>💡 Key Points:</strong> <span style={{ color: "#A1A1AA" }}>Each PLI sector has its own <strong style={{ color: "#FFF" }}>dedicated online portal</strong> managed by the nodal ministry. Applications are accepted during <strong style={{ color: "#FFF" }}>specific windows</strong>. After approval, companies must invest, manufacture, and achieve incremental sales targets before claiming incentives. Claims are <strong style={{ color: "#FFF" }}>verified annually</strong> by the ministry and independent auditors.</span>
+        </div>
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", left: "36px", top: "20px", bottom: "20px", width: "2px", background: "linear-gradient(to bottom, #F59E0B, #3B82F6)", borderRadius: "2px" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "16px" }}>
+            {STEPS.map((step, i) => (
+              <div key={i} style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: `rgba(${step.color},0.15)`, border: `2px solid rgba(${step.color},0.5)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 900, color: `rgb(${step.color})`, fontSize: "14px" }}>{step.num}</div>
+                <div style={{ ...S.card, flex: 1, padding: "16px 20px" }}>
+                  <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "6px" }}>{step.title}</div>
+                  <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{step.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(59,130,246,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📈</span> Visual Data & Analytics</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+
+          {/* Sector Budget Allocation */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#F59E0B", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📊 Sector-wise Budget Outlay (₹ Crore)</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={budgetData} layout="vertical" margin={{ top: 5, right: 30, left: 70, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis type="number" stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} />
+                <YAxis type="category" dataKey="name" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`]} />
+                <Bar dataKey="budget" fill="#F59E0B" radius={[0, 5, 5, 0]} name="Budget (₹ Cr)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Investment & Sales Trend */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#3B82F6", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📈 Investment & Sales Growth (₹ Crore)</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={investmentTrend} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="year" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 9 }} tickFormatter={v => v >= 100000 ? `${(v/100000).toFixed(1)}L` : v >= 1000 ? `${(v/1000).toFixed(0)}K` : v} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`]} />
+                <Legend wrapperStyle={{ fontSize: "11px" }} />
+                <Line type="monotone" dataKey="investment" stroke="#F59E0B" strokeWidth={3} dot={{ r: 4 }} name="Committed Investment" />
+                <Line type="monotone" dataKey="sales" stroke="#3B82F6" strokeWidth={3} dot={{ r: 4 }} name="Total Sales" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Max Incentive % by Sector */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#22C55E", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>💰 Maximum Incentive Rate by Sector (%)</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={incentiveData} layout="vertical" margin={{ top: 5, right: 30, left: 70, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis type="number" stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <YAxis type="category" dataKey="sector" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="pct" fill="#22C55E" radius={[0, 5, 5, 0]} name="Max Incentive %" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Jobs Created Trend */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#A78BFA", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>👷 Employment Generated (Cumulative)</h3>
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={investmentTrend} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="year" stroke="#71717A" tick={{ fontSize: 10 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${(v/100000).toFixed(1)}L`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [v.toLocaleString("en-IN") + " jobs"]} />
+                <Bar dataKey="jobs" fill="#A78BFA" radius={[5, 5, 0, 0]} name="Jobs Created" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      {/* Approval Timeline */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>⏱️</span> Approval & Disbursement Timeline</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px" }}>
+          {TIMELINE.map((tl, i) => (
+            <div key={i} style={{ ...S.card, textAlign: "center", borderTop: i === TIMELINE.length - 1 ? "3px solid #F59E0B" : "3px solid rgba(245,158,11,0.3)" }}>
+              <div style={{ fontSize: "28px", marginBottom: "8px" }}>{tl.icon}</div>
+              <div style={{ fontWeight: 700, color: i === TIMELINE.length - 1 ? "#F59E0B" : "#3B82F6", fontSize: "15px", marginBottom: "5px" }}>{tl.duration}</div>
+              <div style={{ color: "#71717A", fontSize: "11px" }}>{tl.phase}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Official Reference Links */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(6,182,212,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔗</span> Official Government Reference Links</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
+          {[
+            { label: "Make in India Portal", url: "https://www.makeinindia.com", desc: "Government's official manufacturing and investment promotion portal covering PLI sectors." },
+            { label: "DPIIT (Industry & Trade)", url: "https://dpiit.gov.in", desc: "Department for Promotion of Industry — notifies PLI guidelines and monitors implementation." },
+            { label: "MeitY (Electronics PLI)", url: "https://www.meity.gov.in", desc: "Ministry of Electronics & IT — manages PLI for Mobile, Electronics, and IT Hardware." },
+            { label: "PIB — PLI Updates", url: "https://pib.gov.in", desc: "Press Information Bureau — official press releases and updates on PLI scheme progress." },
+            { label: "MyScheme.gov.in", url: "https://www.myscheme.gov.in", desc: "Central scheme portal with sector-wise PLI eligibility checker and guidelines." },
+            { label: "Ministry of MSME", url: "https://msme.gov.in", desc: "For MSME-specific incentive programmes complementing PLI initiatives." },
+            { label: "Invest India", url: "https://www.investindia.gov.in", desc: "India's national investment promotion agency — guidance on PLI applications." },
+            { label: "NITI Aayog — PLI Report", url: "https://www.niti.gov.in", desc: "Policy think tank reports on PLI scheme impact, recommendations, and future roadmap." },
+          ].map((ref, i) => (
+            <a key={i} href={ref.url} target="_blank" rel="noreferrer" style={{ ...S.card, textDecoration: "none", display: "flex", flexDirection: "column", gap: "6px", cursor: "pointer", transition: "border-color 0.2s" }} onMouseOver={e => e.currentTarget.style.borderColor = "rgba(245,158,11,0.3)"} onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
+              <div style={{ fontWeight: 700, color: "#F59E0B", fontSize: "13px", display: "flex", justifyContent: "space-between" }}>{ref.label}<span>↗</span></div>
+              <div style={{ color: "#71717A", fontSize: "12px" }}>{ref.desc}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Next Steps */}
+      <div style={{ ...S.infoBox("245,158,11"), borderLeft: "5px solid #F59E0B" }}>
+        <h2 style={{ ...S.h2, marginBottom: "20px" }}>🚀 What To Do Next</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { step: "1", action: "Identify which of the 14 PLI sectors matches your manufacturing activity", link: "https://www.makeinindia.com", cta: "Explore Sectors →" },
+            { step: "2", action: "Check sector-specific eligibility — revenue thresholds and investment requirements", link: "https://www.myscheme.gov.in", cta: "Check Eligibility →" },
+            { step: "3", action: "Prepare your business plan, investment proposal, and all required documents", link: "https://dpiit.gov.in", cta: "View Guidelines →" },
+            { step: "4", action: "Apply through the sector-specific nodal ministry PLI portal during the application window", link: "https://www.makeinindia.com", cta: "Apply Online →" },
+            { step: "5", action: "Track your application status and stay updated on deadlines", link: "https://pib.gov.in", cta: "Track Updates →" },
+            { step: "6", action: "Explore complementary schemes — CGTMSE, MUDRA, PMEGP for additional support", link: "#related", cta: "Related Schemes ↓" },
+          ].map((ns, i) => (
+            <a key={i} href={ns.link} target={ns.link.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.15)", borderRadius: "10px", padding: "16px", textDecoration: "none", display: "flex", flexDirection: "column", gap: "8px", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(245,158,11,0.15)"} onMouseOut={e => e.currentTarget.style.background = "rgba(245,158,11,0.08)"}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(245,158,11,0.2)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#F59E0B", fontWeight: 800, fontSize: "13px" }}>{ns.step}</div>
+              <div style={{ color: "#E4E4E7", fontSize: "13px", lineHeight: 1.5 }}>{ns.action}</div>
+              <div style={{ color: "#F59E0B", fontSize: "12px", fontWeight: 700 }}>{ns.cta}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Related Schemes */}
+      <div id="related" style={{ ...S.section, marginTop: "50px" }}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🧩</span> Related MSME & Manufacturing Schemes</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
+          {RELATED.map((r, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", cursor: r.onClick ? "pointer" : "default" }} onClick={r.onClick || undefined}>
+              <span style={{ fontSize: "28px" }}>{r.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "5px" }}>{r.name}</div>
+                <div style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, marginBottom: "10px" }}>{r.desc}</div>
+                {r.onClick ? (
+                  <button onClick={r.onClick} style={{ ...S.link, fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>View Full Guide ↗</button>
+                ) : (
+                  <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
 export default function IndiaFinBot() {
   const [lang, setLang] = useState("en"); // en, hi, ta, te, ml, kn
   const [theme, setTheme] = useState("dark");
@@ -2643,8 +3104,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
             <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s", marginBottom: "50px" }}>
               {GOVERNMENT_SCHEMES.map((scheme, i) => (
-                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: [1,2,3].includes(scheme.rank) ? "pointer" : "default" }}
-                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); if (scheme.rank === 2) setActiveTab("pmmy"); if (scheme.rank === 3) setActiveTab("pmegp"); }}>
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: [1,2,3,4].includes(scheme.rank) ? "pointer" : "default" }}
+                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); if (scheme.rank === 2) setActiveTab("pmmy"); if (scheme.rank === 3) setActiveTab("pmegp"); if (scheme.rank === 4) setActiveTab("pli"); }}>
                   <div style={{ position: "absolute", top: -20, right: -20, fontSize: "80px", opacity: 0.05 }}>{scheme.icon}</div>
                   <div style={{ width: 50, height: 50, borderRadius: 12, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, marginBottom: 15, border: "1px solid rgba(255,255,255,0.05)" }}>
                     {scheme.icon}
@@ -2657,8 +3118,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                     <span style={{ color: "#FFF", fontSize: "14px", fontWeight: 600 }}>{scheme.coverage}</span>
                   </div>
 
-                  {[1,2,3].includes(scheme.rank) ? (
-                    <button onClick={(e) => { e.stopPropagation(); setActiveTab(scheme.rank === 1 ? "cgtmse" : scheme.rank === 2 ? "pmmy" : "pmegp"); }} style={{ display: "inline-block", background: scheme.rank === 1 ? "linear-gradient(135deg, #3B82F6, #06B6D4)" : scheme.rank === 2 ? "linear-gradient(135deg, #F59E0B, #EF4444)" : "linear-gradient(135deg, #16A34A, #06B6D4)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
+                  {[1,2,3,4].includes(scheme.rank) ? (
+                    <button onClick={(e) => { e.stopPropagation(); const tabMap = {1:"cgtmse",2:"pmmy",3:"pmegp",4:"pli"}; setActiveTab(tabMap[scheme.rank]); }} style={{ display: "inline-block", background: scheme.rank === 1 ? "linear-gradient(135deg, #3B82F6, #06B6D4)" : scheme.rank === 2 ? "linear-gradient(135deg, #F59E0B, #EF4444)" : scheme.rank === 3 ? "linear-gradient(135deg, #16A34A, #06B6D4)" : "linear-gradient(135deg, #A855F7, #F59E0B)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
                       📄 Full Guide & Apply ↗
                     </button>
                   ) : (
@@ -2681,6 +3142,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         {activeTab === "cgtmse" && <CGTMSEDetailPage setActiveTab={setActiveTab} />}
         {activeTab === "pmmy" && <PMMYDetailPage setActiveTab={setActiveTab} />}
         {activeTab === "pmegp" && <PMEGPDetailPage setActiveTab={setActiveTab} />}
+        {activeTab === "pli" && <PLIDetailPage setActiveTab={setActiveTab} />}
 
         {activeTab === "privacy" && (
           <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
