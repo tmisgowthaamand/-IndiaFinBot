@@ -538,7 +538,7 @@ function CGTMSEDetailPage({ setActiveTab }) {
   ];
 
   const RELATED = [
-    { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹10L without collateral via Pradhan Mantri Mudra Yojana.", link: "https://www.mudra.org.in" },
+    { icon: "🪙", name: "PMMY / MUDRA Loan", desc: "Micro loans up to ₹20L without collateral via Pradhan Mantri Mudra Yojana.", link: "#", onClick: () => setActiveTab("pmmy") },
     { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "https://www.kviconline.gov.in" },
     { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans specially for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
     { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
@@ -807,12 +807,500 @@ function CGTMSEDetailPage({ setActiveTab }) {
         <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🧩</span> Related MSME Schemes to Explore</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
           {RELATED.map((r, i) => (
-            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start" }}>
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", cursor: r.onClick ? "pointer" : "default" }} onClick={r.onClick || undefined}>
               <span style={{ fontSize: "28px" }}>{r.icon}</span>
               <div>
                 <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "5px" }}>{r.name}</div>
                 <div style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, marginBottom: "10px" }}>{r.desc}</div>
-                <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+                {r.onClick ? (
+                  <button onClick={r.onClick} style={{ ...S.link, fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>View Full Guide ↗</button>
+                ) : (
+                  <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+}
+
+function PMMYDetailPage({ setActiveTab }) {
+  const S = {
+    section: { marginBottom: "50px" },
+    h2: { fontSize: "26px", fontWeight: 800, color: "#FFF", margin: "0 0 20px 0", display: "flex", alignItems: "center", gap: "12px" },
+    badge: (color) => ({ display: "inline-block", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, background: `rgba(${color},0.15)`, border: `1px solid rgba(${color},0.3)`, color: `rgb(${color})` }),
+    card: { background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "14px", padding: "22px 26px" },
+    infoBox: (c) => ({ background: `rgba(${c},0.07)`, border: `1px solid rgba(${c},0.2)`, borderRadius: "12px", padding: "18px 22px" }),
+    link: { color: "#F59E0B", fontWeight: 600, textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px", transition: "opacity 0.2s" },
+  };
+
+  /* ── Loan Slab Data ── */
+  const SLABS = [
+    { name: "Shishu", range: "Up to ₹50,000", color: "16,185,129", icon: "🌱", purpose: "For new entrepreneurs & first-time business starters. Covers basic startup funding, working capital, and initial equipment costs.", interest: "9% – 12% p.a.", tenure: "Up to 5 Years", collateral: "Not Required", eligibility: "Any Indian citizen aged 18–65 starting or running a small non-farm enterprise." },
+    { name: "Kishore", range: "₹50,001 – ₹5 Lakh", color: "59,130,246", icon: "🚀", purpose: "For businesses looking to expand. Covers equipment purchases, inventory buildup, and operational scaling.", interest: "10% – 14% p.a.", tenure: "Up to 5 Years", collateral: "Not Required", eligibility: "Existing micro-enterprise with business proof and 6+ months bank statements." },
+    { name: "Tarun", range: "₹5,00,001 – ₹10 Lakh", color: "168,85,247", icon: "🏢", purpose: "For established micro-enterprises needing significant expansion, capital investments, and technology upgrades.", interest: "11% – 16% p.a.", tenure: "Up to 7 Years", collateral: "Not Required", eligibility: "Well-established business with audited financials and a clear expansion plan." },
+    { name: "Tarun Plus", range: "₹10 Lakh – ₹20 Lakh", color: "239,68,68", icon: "⭐", purpose: "New category (Budget 2024-25) for entrepreneurs who have successfully availed and repaid a Tarun loan.", interest: "11% – 18% p.a.", tenure: "Up to 7 Years", collateral: "Not Required", eligibility: "Must have successfully repaid a previous Tarun category MUDRA loan." },
+  ];
+
+  /* ── Required Documents ── */
+  const DOCS = [
+    { icon: "🪪", title: "Identity Proof (Aadhaar / PAN)", desc: "Self-attested Aadhaar Card, PAN Card, Voter ID, Driving License, or Passport of the applicant.", link: "https://uidai.gov.in", ref: "UIDAI (Aadhaar)" },
+    { icon: "🏠", title: "Address Proof", desc: "Recent utility bills (not older than 2 months), Aadhaar, Passport, Voter ID, or latest bank statement.", link: "https://uidai.gov.in", ref: "UIDAI Portal" },
+    { icon: "📝", title: "Duly Filled MUDRA Loan Application Form", desc: "Available at any participating bank branch or download from the MUDRA portal.", link: "https://www.mudra.org.in", ref: "MUDRA Official" },
+    { icon: "📸", title: "Two Passport-Size Photographs", desc: "Recent passport-sized colour photographs of the applicant.", link: "#", ref: "Standard Requirement" },
+    { icon: "🏪", title: "Business Registration / Proof", desc: "Shop & Establishment Certificate, GST Registration, Partnership Deed, or Udyam Registration.", link: "https://udyamregistration.gov.in", ref: "Udyam Registration" },
+    { icon: "📋", title: "Business Plan / Project Report", desc: "A detailed plan covering total investment, projected revenue, repayment capacity, and business viability.", link: "https://www.startupindia.gov.in", ref: "Startup India" },
+    { icon: "🏦", title: "Bank Statements (6–12 Months)", desc: "Last 6 to 12 months bank account statements for the primary business account.", link: "https://rbi.org.in", ref: "RBI Guidelines" },
+    { icon: "🧾", title: "Income Tax Returns (ITR)", desc: "Past 1–2 years ITR (especially for Kishore and Tarun categories).", link: "https://www.incometax.gov.in", ref: "Income Tax Portal" },
+    { icon: "⚙️", title: "Quotations for Machinery / Equipment", desc: "Supplier quotations or proforma invoices for assets to be purchased (for Kishore & Tarun loans).", link: "https://makeinindia.com", ref: "Make in India" },
+    { icon: "📊", title: "Caste / Community Certificate (if applicable)", desc: "For SC/ST/OBC applicants to avail any additional benefits or priority processing.", link: "https://services.india.gov.in", ref: "National Services Portal" },
+  ];
+
+  /* ── Application Process Steps ── */
+  const STEPS = [
+    { num: "01", title: "Determine Your Loan Category", detail: "Identify whether you need Shishu (up to ₹50K), Kishore (up to ₹5L), Tarun (up to ₹10L), or Tarun Plus (up to ₹20L) based on your business stage and funding requirements.", color: "245,158,11" },
+    { num: "02", title: "Choose a Lending Institution", detail: "Select any participating bank — SBI, PNB, HDFC, ICICI, or any Regional Rural Bank, Small Finance Bank, NBFC, or MFI that offers MUDRA loans.", color: "59,130,246" },
+    { num: "03", title: "Prepare Your Documents", detail: "Gather identity proof, address proof, business registration, bank statements, project report, and quotations as applicable to your loan category.", color: "6,182,212" },
+    { num: "04", title: "Submit Loan Application", detail: "Visit the bank branch in person OR apply online via the official JanSamarth portal (jansamarth.in) or Udyamimitra portal (udyamimitra.in).", color: "16,185,129" },
+    { num: "05", title: "Bank Verification & Credit Appraisal", detail: "The bank verifies your documents, reviews your business plan, checks your credit history (CIBIL), and conducts a field inspection if required.", color: "168,85,247" },
+    { num: "06", title: "Loan Sanction & Agreement", detail: "If approved, the bank issues a sanction letter detailing the loan amount, interest rate, tenure, and repayment schedule. You sign the loan agreement.", color: "239,68,68" },
+    { num: "07", title: "Loan Disbursement", detail: "The sanctioned amount is disbursed directly to your bank account. For Shishu loans, disbursement can happen within 7–10 working days.", color: "59,130,246" },
+    { num: "08", title: "Receive MUDRA Card (Optional)", detail: "A MUDRA Card (RuPay debit card) may be issued for Shishu loans, allowing you to manage working capital expenses directly.", color: "245,158,11" },
+  ];
+
+  /* ── Fee Structure ── */
+  const FEES = [
+    { category: "Shishu (Up to ₹50,000)", processing: "Nil / Waived", interest: "9% – 12% p.a.", prepayment: "No Penalty" },
+    { category: "Kishore (₹50,001 – ₹5L)", processing: "0.50% of Loan Amount", interest: "10% – 14% p.a.", prepayment: "No Penalty" },
+    { category: "Tarun (₹5L – ₹10L)", processing: "0.50% – 1% of Loan Amount", interest: "11% – 16% p.a.", prepayment: "2% of Outstanding (varies)" },
+    { category: "Tarun Plus (₹10L – ₹20L)", processing: "0.50% – 1% of Loan Amount", interest: "11% – 18% p.a.", prepayment: "2% of Outstanding (varies)" },
+  ];
+
+  /* ── Approval Timeline ── */
+  const TIMELINE = [
+    { phase: "Document Preparation", duration: "1–3 Days", icon: "📋" },
+    { phase: "Application Submission", duration: "Same Day", icon: "📝" },
+    { phase: "Bank Verification", duration: "3–7 Days", icon: "🔍" },
+    { phase: "Credit Appraisal", duration: "5–14 Days", icon: "🏦" },
+    { phase: "Loan Sanction", duration: "2–5 Days", icon: "✅" },
+    { phase: "Disbursement", duration: "3–7 Days", icon: "💰" },
+    { phase: "Total (Shishu)", duration: "7–14 Days", icon: "⚡" },
+    { phase: "Total (Kishore/Tarun)", duration: "14–30 Days", icon: "🏁" },
+  ];
+
+  /* ── Chart Data ── */
+  const slabChartData = [
+    { name: "Shishu", maxLoan: 0.5, color: "#10B981" },
+    { name: "Kishore", maxLoan: 5, color: "#3B82F6" },
+    { name: "Tarun", maxLoan: 10, color: "#A78BFA" },
+    { name: "Tarun Plus", maxLoan: 20, color: "#EF4444" },
+  ];
+
+  const disbursementTrendData = [
+    { year: "2015-16", amount: 132955 },
+    { year: "2016-17", amount: 175312 },
+    { year: "2017-18", amount: 253677 },
+    { year: "2018-19", amount: 321723 },
+    { year: "2019-20", amount: 337495 },
+    { year: "2020-21", amount: 321759 },
+    { year: "2021-22", amount: 339110 },
+    { year: "2022-23", amount: 414880 },
+    { year: "2023-24", amount: 505126 },
+    { year: "2024-25", amount: 545000 },
+  ];
+
+  const categoryDistributionData = [
+    { name: "Shishu", percentage: 68, accounts: "88%" },
+    { name: "Kishore", percentage: 22, accounts: "9%" },
+    { name: "Tarun", percentage: 10, accounts: "3%" },
+  ];
+
+  const sectorWiseData = [
+    { sector: "Trading", pct: 42 },
+    { sector: "Services", pct: 28 },
+    { sector: "Manufacturing", pct: 18 },
+    { sector: "Allied Agri", pct: 12 },
+  ];
+
+  /* ── Related Schemes ── */
+  const RELATED = [
+    { icon: "🏦", name: "CGTMSE Scheme", desc: "Collateral-free credit guarantee up to ₹5 Crore for micro & small enterprises.", link: "#", onClick: () => setActiveTab("cgtmse") },
+    { icon: "🏭", name: "PMEGP Subsidy", desc: "15–35% project cost subsidy for setting up new micro-businesses.", link: "https://www.kviconline.gov.in" },
+    { icon: "👩‍💼", name: "Stand-Up India", desc: "₹10L to ₹1Cr loans specially for SC/ST/Women led greenfield enterprises.", link: "https://www.standupmitra.in" },
+    { icon: "📜", name: "TReDS Platform", desc: "Quick vendor discounting of MSME receivables from large corporate buyers.", link: "https://m1xchange.com" },
+    { icon: "🏛️", name: "SIDBI MSME Loans", desc: "Direct loan facility from SIDBI for MSMEs at competitive interest rates.", link: "https://www.sidbi.in" },
+    { icon: "🌐", name: "Udyam Registration", desc: "Free MSME registration required for all government scheme eligibility.", link: "https://udyamregistration.gov.in" },
+  ];
+
+  return (
+    <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "clamp(20px, 4vw, 45px)" }}>
+
+      {/* Back Button */}
+      <button onClick={() => setActiveTab("schemes")} style={{ marginBottom: "30px", padding: "10px 18px", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", cursor: "pointer", display: "flex", gap: "8px", alignItems: "center", fontWeight: 600, transition: "all 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(255,255,255,0.1)"} onMouseOut={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}>
+        ← Back to Schemes
+      </button>
+
+      {/* Hero Banner */}
+      <div style={{ ...S.infoBox("245,158,11"), marginBottom: "40px", display: "flex", flexWrap: "wrap", gap: "20px", alignItems: "flex-start", borderLeft: "5px solid #F59E0B" }}>
+        <div style={{ flex: 1, minWidth: "260px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "40px" }}>🪙</span>
+            <div>
+              <h1 style={{ fontSize: "clamp(22px, 4vw, 36px)", fontWeight: 900, color: "#FFF", margin: 0, letterSpacing: "-0.5px" }}>PMMY — MUDRA Loans</h1>
+              <p style={{ color: "#71717A", margin: "4px 0 0 0", fontSize: "14px" }}>Pradhan Mantri MUDRA Yojana — Micro Units Development & Refinance Agency</p>
+            </div>
+          </div>
+          <p style={{ color: "#A1A1AA", lineHeight: 1.8, fontSize: "15px", margin: 0 }}>
+            Launched in <strong style={{ color: "#FFF" }}>April 2015</strong> by the Government of India, PMMY provides <strong style={{ color: "#F59E0B" }}>collateral-free micro-credit</strong> up to ₹20 Lakh to non-corporate, non-farm small and micro enterprises. MUDRA is a subsidiary of <strong style={{ color: "#FFF" }}>SIDBI</strong> and operates under the <strong style={{ color: "#FFF" }}>Ministry of Finance</strong>. Loans are disbursed through commercial banks, RRBs, small finance banks, MFIs, and NBFCs across India.
+          </p>
+          <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "18px" }}>
+            <span style={S.badge("16,185,129")}>✅ No Collateral</span>
+            <span style={S.badge("245,158,11")}>🏛️ Govt of India Scheme</span>
+            <span style={S.badge("59,130,246")}>💰 Up to ₹20 Lakh</span>
+            <span style={S.badge("168,85,247")}>📊 4 Loan Slabs</span>
+          </div>
+        </div>
+        <div style={{ background: "rgba(245,158,11,0.1)", borderRadius: "12px", padding: "20px", border: "1px solid rgba(245,158,11,0.2)", minWidth: "200px", textAlign: "center" }}>
+          <div style={{ fontSize: "42px", fontWeight: 900, color: "#F59E0B" }}>₹20L</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Maximum Loan (Tarun Plus)</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <div style={{ fontSize: "30px", fontWeight: 900, color: "#10B981" }}>0%</div>
+          <div style={{ color: "#71717A", fontSize: "12px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "1px" }}>Collateral Required</div>
+          <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", margin: "15px 0" }} />
+          <a href="https://www.mudra.org.in" target="_blank" rel="noreferrer" style={{ ...S.link, justifyContent: "center", background: "#F59E0B", color: "#111", padding: "10px 18px", borderRadius: "8px", fontWeight: 700 }}>Official MUDRA Portal ↗</a>
+        </div>
+      </div>
+
+      {/* Quick Stats Row */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: "16px", marginBottom: "50px" }}>
+        {[
+          { label: "Total Disbursed (2024)", val: "₹5.45 Lakh Cr", color: "#F59E0B", icon: "💰" },
+          { label: "Accounts Sanctioned", val: "47 Cr+", color: "#10B981", icon: "📊" },
+          { label: "Lending Institutions", val: "27 Banks+", color: "#06B6D4", icon: "🏦" },
+          { label: "Loan Categories", val: "4 Slabs", color: "#A78BFA", icon: "📋" },
+          { label: "Repayment Tenure", val: "Up to 7 Yrs", color: "#3B82F6", icon: "📅" },
+        ].map((stat, i) => (
+          <div key={i} style={{ ...S.card, textAlign: "center" }}>
+            <div style={{ fontSize: "28px", marginBottom: "8px" }}>{stat.icon}</div>
+            <div style={{ fontSize: "22px", fontWeight: 800, color: stat.color }}>{stat.val}</div>
+            <div style={{ fontSize: "11px", color: "#71717A", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.8px", marginTop: "4px" }}>{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Loan Slab Comparison */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(245,158,11,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📊</span> Loan Categories — Shishu, Kishore, Tarun & Tarun Plus</h2>
+        <p style={{ color: "#71717A", marginBottom: "24px", lineHeight: 1.7 }}>PMMY categorizes loans based on the <strong style={{ color: "#FFF" }}>stage of business growth</strong> and funding requirements. Each category has different limits, interest rates, and documentation needs.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "18px" }}>
+          {SLABS.map((slab, i) => (
+            <div key={i} style={{ ...S.card, borderTop: `4px solid rgb(${slab.color})`, position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: -10, right: -10, fontSize: "60px", opacity: 0.06 }}>{slab.icon}</div>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+                <span style={{ fontSize: "32px" }}>{slab.icon}</span>
+                <div>
+                  <div style={{ fontWeight: 800, color: `rgb(${slab.color})`, fontSize: "20px" }}>{slab.name}</div>
+                  <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px" }}>{slab.range}</div>
+                </div>
+              </div>
+              <p style={{ color: "#A1A1AA", fontSize: "13px", lineHeight: 1.7, margin: "0 0 16px 0" }}>{slab.purpose}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                {[
+                  { label: "Interest Rate", value: slab.interest },
+                  { label: "Max Tenure", value: slab.tenure },
+                  { label: "Collateral", value: slab.collateral },
+                ].map((item, j) => (
+                  <div key={j} style={{ display: "flex", justifyContent: "space-between", padding: "8px 12px", background: "rgba(0,0,0,0.25)", borderRadius: "8px" }}>
+                    <span style={{ color: "#71717A", fontSize: "12px", fontWeight: 600 }}>{item.label}</span>
+                    <span style={{ color: "#E4E4E7", fontSize: "12px", fontWeight: 700 }}>{item.value}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ marginTop: "14px", padding: "10px 14px", background: `rgba(${slab.color},0.08)`, borderRadius: "8px", border: `1px solid rgba(${slab.color},0.15)` }}>
+                <span style={{ color: `rgb(${slab.color})`, fontSize: "11px", fontWeight: 700, textTransform: "uppercase" }}>Who is Eligible?</span>
+                <p style={{ color: "#A1A1AA", fontSize: "12px", lineHeight: 1.6, margin: "6px 0 0 0" }}>{slab.eligibility}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Required Documents */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(59,130,246,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📄</span> Required Documents</h2>
+        <p style={{ color: "#71717A", marginBottom: "24px", lineHeight: 1.7 }}>Prepare these documents <strong style={{ color: "#FFF" }}>before visiting your bank</strong>. Document requirements may vary slightly by lending institution. Each links to its official verification source.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "14px" }}>
+          {DOCS.map((doc, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", borderLeft: "3px solid rgba(245,158,11,0.4)" }}>
+              <div style={{ fontSize: "28px", flexShrink: 0 }}>{doc.icon}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "6px" }}>{doc.title}</div>
+                <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{doc.desc}</div>
+                {doc.link !== "#" && (
+                  <a href={doc.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px", marginTop: "8px", display: "inline-flex" }} onMouseOver={e => e.currentTarget.style.opacity = 0.7} onMouseOut={e => e.currentTarget.style.opacity = 1}>
+                    {"📎 " + doc.ref + " ↗"}
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Application Process Flowchart */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(16,185,129,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔄</span> Application Process — Step by Step</h2>
+        <div style={{ ...S.infoBox("6,182,212"), marginBottom: "24px" }}>
+          <strong style={{ color: "#06B6D4" }}>💡 Tip:</strong> <span style={{ color: "#A1A1AA" }}>You can apply both <strong style={{ color: "#FFF" }}>online</strong> (via JanSamarth / Udyamimitra portal) and <strong style={{ color: "#FFF" }}>offline</strong> (by visiting any participating bank branch). Online applications for Shishu loans can be approved within 7–8 working days.</span>
+        </div>
+        <div style={{ position: "relative" }}>
+          <div style={{ position: "absolute", left: "36px", top: "20px", bottom: "20px", width: "2px", background: "linear-gradient(to bottom, #F59E0B, #10B981)", borderRadius: "2px", display: "block" }} />
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", paddingLeft: "16px" }}>
+            {STEPS.map((step, i) => (
+              <div key={i} style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
+                <div style={{ width: "44px", height: "44px", borderRadius: "50%", background: `rgba(${step.color},0.15)`, border: `2px solid rgba(${step.color},0.5)`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontWeight: 900, color: `rgb(${step.color})`, fontSize: "14px" }}>{step.num}</div>
+                <div style={{ ...S.card, flex: 1, padding: "16px 20px" }}>
+                  <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "6px" }}>{step.title}</div>
+                  <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{step.detail}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Where to Apply */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🏦</span> Where to Apply — Lending Channels</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { icon: "🏛️", title: "Public Sector Banks", desc: "SBI, PNB, Bank of Baroda, Canara Bank, Union Bank, Bank of India, Indian Bank, and more.", color: "16,185,129" },
+            { icon: "🏢", title: "Private Sector Banks", desc: "HDFC, ICICI, Axis, Kotak Mahindra, Yes Bank, IndusInd, IDFC First Bank, etc.", color: "59,130,246" },
+            { icon: "🌾", title: "Regional Rural Banks (RRBs)", desc: "Local RRBs across all states provide MUDRA loans for grassroot-level businesses.", color: "245,158,11" },
+            { icon: "💳", title: "Small Finance Banks", desc: "AU Small Finance, Equitas, Ujjivan, Jana, and other SFBs offering micro-credit.", color: "168,85,247" },
+            { icon: "🤝", title: "Micro Finance Institutions", desc: "MFIs like Bandhan, Bharat Financial, SKS Microfinance approved by MUDRA.", color: "6,182,212" },
+            { icon: "📱", title: "Online Portals", desc: "Apply via JanSamarth (jansamarth.in), Udyamimitra (udyamimitra.in), or PSB Loans in 59 Minutes.", color: "239,68,68" },
+          ].map((ch, i) => (
+            <div key={i} style={{ ...S.card, borderLeft: `3px solid rgb(${ch.color})` }}>
+              <div style={{ fontSize: "28px", marginBottom: "10px" }}>{ch.icon}</div>
+              <div style={{ fontWeight: 700, color: "#FFF", fontSize: "15px", marginBottom: "8px" }}>{ch.title}</div>
+              <div style={{ color: "#71717A", fontSize: "13px", lineHeight: 1.6 }}>{ch.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(245,158,11,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>📈</span> Visual Data & Analytics</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
+
+          {/* Loan Slab Comparison Bar Chart */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#F59E0B", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📊 Maximum Loan Amount by Category (₹ Lakh)</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={slabChartData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="name" stroke="#71717A" tick={{ fontSize: 11 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `₹${v}L`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`₹${v} Lakh`]} />
+                <Bar dataKey="maxLoan" fill="#F59E0B" radius={[5, 5, 0, 0]} name="Max Loan" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Annual Disbursement Trend Line Chart */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#10B981", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📈 Annual Disbursement Trend (₹ Crore)</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={disbursementTrendData} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="year" stroke="#71717A" tick={{ fontSize: 9 }} angle={-20} textAnchor="end" />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${(v / 1000).toFixed(0)}K`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`₹${v.toLocaleString("en-IN")} Cr`]} />
+                <Line type="monotone" dataKey="amount" stroke="#10B981" strokeWidth={3} dot={{ r: 4 }} activeDot={{ r: 7 }} name="Disbursed (Cr)" />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Category Distribution Bar */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#A78BFA", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>📉 Loan Distribution by Category (% of Amount)</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={categoryDistributionData} layout="vertical" margin={{ top: 5, right: 30, left: 30, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis type="number" stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <YAxis type="category" dataKey="name" stroke="#71717A" tick={{ fontSize: 11 }} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="percentage" fill="#A78BFA" radius={[0, 5, 5, 0]} name="% of Amount" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Sector-wise Distribution */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#06B6D4", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>🏭 Sector-wise Loan Distribution</h3>
+            <ResponsiveContainer width="100%" height={220}>
+              <BarChart data={sectorWiseData} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                <XAxis dataKey="sector" stroke="#71717A" tick={{ fontSize: 11 }} />
+                <YAxis stroke="#71717A" tick={{ fontSize: 10 }} tickFormatter={v => `${v}%`} />
+                <Tooltip contentStyle={{ background: "#111216", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px" }} formatter={v => [`${v}%`]} />
+                <Bar dataKey="pct" fill="#06B6D4" radius={[5, 5, 0, 0]} name="Distribution %" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Eligibility Checklist */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#06B6D4", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>✅ Eligibility Checklist</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { ok: true, item: "Indian citizen aged 18–65 years" },
+                { ok: true, item: "Non-farm income-generating activity (manufacturing, trading, services)" },
+                { ok: true, item: "Valid Aadhaar, PAN, and business registration" },
+                { ok: true, item: "No default on any previous bank loans" },
+                { ok: true, item: "Viable business plan with repayment capacity" },
+                { ok: true, item: "Individual, proprietor, partnership, or private company" },
+                { ok: false, item: "Direct agricultural farming activities (excluded)" },
+                { ok: false, item: "Corporate entities with turnover above ₹5 Cr (not eligible)" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                  <span style={{ fontSize: "18px", flexShrink: 0 }}>{item.ok ? "✅" : "❌"}</span>
+                  <span style={{ color: item.ok ? "#E4E4E7" : "#71717A", fontSize: "13px", textDecoration: item.ok ? "none" : "line-through" }}>{item.item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* MUDRA Card Info */}
+          <div style={{ ...S.card }}>
+            <h3 style={{ color: "#F59E0B", margin: "0 0 20px 0", fontSize: "16px", fontWeight: 700 }}>💳 MUDRA Card (RuPay)</h3>
+            <p style={{ color: "#A1A1AA", fontSize: "13px", lineHeight: 1.7, margin: "0 0 16px 0" }}>A MUDRA Card is a <strong style={{ color: "#FFF" }}>RuPay debit card</strong> issued to Shishu loan borrowers. It allows direct access to working capital for day-to-day business expenses.</p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              {[
+                "Works like a regular debit card at POS & ATMs",
+                "Pre-loaded working capital limit from your loan",
+                "Track expenses digitally for better accounting",
+                "Available at all major PSU and private banks",
+                "No additional charges for card issuance",
+              ].map((f, i) => (
+                <div key={i} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  <span style={{ color: "#F59E0B", fontSize: "14px" }}>▸</span>
+                  <span style={{ color: "#E4E4E7", fontSize: "13px" }}>{f}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Fee Structure */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(239,68,68,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>💳</span> Fee Structure & Interest Rates</h2>
+        <div style={{ ...S.infoBox("245,158,11"), marginBottom: "20px" }}>
+          <strong style={{ color: "#F59E0B" }}>ℹ️ Note:</strong> <span style={{ color: "#A1A1AA" }}>Interest rates under MUDRA are <strong style={{ color: "#FFF" }}>not fixed by the government</strong> — they vary by lending institution, borrower profile, CIBIL score, and loan category. Shishu loans typically have <strong style={{ color: "#FFF" }}>zero processing fees</strong>. Always compare rates across multiple banks before applying.</span>
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", minWidth: "600px" }}>
+            <thead>
+              <tr style={{ background: "rgba(245,158,11,0.1)" }}>
+                <th style={{ padding: "14px 18px", textAlign: "left", color: "#F59E0B", fontWeight: 700 }}>Loan Category</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#F59E0B", fontWeight: 700 }}>Processing Fee</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#10B981", fontWeight: 700 }}>Interest Rate (p.a.)</th>
+                <th style={{ padding: "14px 18px", textAlign: "center", color: "#3B82F6", fontWeight: 700 }}>Prepayment Penalty</th>
+              </tr>
+            </thead>
+            <tbody>
+              {FEES.map((fee, i) => (
+                <tr key={i} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                  <td style={{ padding: "14px 18px", color: "#E4E4E7" }}>{fee.category}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#A78BFA", fontWeight: 700 }}>{fee.processing}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#10B981", fontWeight: 700 }}>{fee.interest}</td>
+                  <td style={{ padding: "14px 18px", textAlign: "center", color: "#3B82F6", fontWeight: 700 }}>{fee.prepayment}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ color: "#71717A", fontSize: "12px", marginTop: "12px" }}>Source: <a href="https://www.mudra.org.in" target="_blank" rel="noreferrer" style={S.link}>MUDRA Official Portal ↗</a> | <a href="https://rbi.org.in" target="_blank" rel="noreferrer" style={S.link}>RBI Lending Rate Guidelines ↗</a></p>
+      </div>
+
+      {/* Approval Timeline */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>⏱️</span> Approval Timeline</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "12px" }}>
+          {TIMELINE.map((tl, i) => (
+            <div key={i} style={{ ...S.card, textAlign: "center", borderTop: i >= TIMELINE.length - 2 ? "3px solid #10B981" : "3px solid rgba(245,158,11,0.3)" }}>
+              <div style={{ fontSize: "28px", marginBottom: "8px" }}>{tl.icon}</div>
+              <div style={{ fontWeight: 700, color: i >= TIMELINE.length - 2 ? "#10B981" : "#F59E0B", fontSize: "15px", marginBottom: "5px" }}>{tl.duration}</div>
+              <div style={{ color: "#71717A", fontSize: "11px" }}>{tl.phase}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Official Reference Links */}
+      <div style={S.section}>
+        <h2 style={S.h2}><span style={{ background: "rgba(6,182,212,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🔗</span> Official Government Reference Links</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
+          {[
+            { label: "MUDRA Official Portal", url: "https://www.mudra.org.in", desc: "Official PMMY website with scheme details, FAQs, and downloads." },
+            { label: "JanSamarth Portal", url: "https://www.jansamarth.in", desc: "Single-window online application platform for all government credit schemes." },
+            { label: "Udyamimitra Portal", url: "https://www.udyamimitra.in", desc: "Online portal for handholding support to MSMEs applying for credit." },
+            { label: "Udyam MSME Registration", url: "https://udyamregistration.gov.in", desc: "Free MSME registration — often required for MUDRA loan eligibility." },
+            { label: "MSME Ministry", url: "https://msme.gov.in", desc: "Central ministry overseeing all MSME schemes and policies." },
+            { label: "PSB Loans in 59 Minutes", url: "https://www.psbloansin59minutes.com", desc: "In-principle loan approval in under 59 minutes from PSU banks." },
+            { label: "SIDBI (Parent Body)", url: "https://www.sidbi.in", desc: "Small Industries Development Bank — parent organization of MUDRA." },
+            { label: "RBI Lending Norms", url: "https://www.rbi.org.in", desc: "Reserve Bank of India guidelines on lending rates and priority sector lending." },
+          ].map((ref, i) => (
+            <a key={i} href={ref.url} target="_blank" rel="noreferrer" style={{ ...S.card, textDecoration: "none", display: "flex", flexDirection: "column", gap: "6px", cursor: "pointer", transition: "border-color 0.2s" }} onMouseOver={e => e.currentTarget.style.borderColor = "rgba(245,158,11,0.3)"} onMouseOut={e => e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"}>
+              <div style={{ fontWeight: 700, color: "#F59E0B", fontSize: "13px", display: "flex", justifyContent: "space-between" }}>{ref.label}<span>↗</span></div>
+              <div style={{ color: "#71717A", fontSize: "12px" }}>{ref.desc}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Next Steps */}
+      <div style={{ ...S.infoBox("16,185,129"), borderLeft: "5px solid #10B981" }}>
+        <h2 style={{ ...S.h2, marginBottom: "20px" }}>🚀 What To Do Next</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "16px" }}>
+          {[
+            { step: "1", action: "Check your eligibility — Indian citizen, non-farm business, age 18–65", link: "https://www.mudra.org.in", cta: "Check Eligibility →" },
+            { step: "2", action: "Register on Udyam Portal for MSME certification", link: "https://udyamregistration.gov.in", cta: "Register Free →" },
+            { step: "3", action: "Download MUDRA loan application form from official portal", link: "https://www.mudra.org.in", cta: "Download Form →" },
+            { step: "4", action: "Visit nearest bank branch or apply online via JanSamarth", link: "https://www.jansamarth.in", cta: "Apply Online →" },
+            { step: "5", action: "Compare interest rates across SBI, PNB, HDFC and other banks", link: "https://www.psbloansin59minutes.com", cta: "Compare Banks →" },
+            { step: "6", action: "Explore CGTMSE and other MSME support schemes", link: "#related", cta: "View Related ↓" },
+          ].map((ns, i) => (
+            <a key={i} href={ns.link} target={ns.link.startsWith("http") ? "_blank" : "_self"} rel="noreferrer" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: "10px", padding: "16px", textDecoration: "none", display: "flex", flexDirection: "column", gap: "8px", transition: "background 0.2s" }} onMouseOver={e => e.currentTarget.style.background = "rgba(16,185,129,0.15)"} onMouseOut={e => e.currentTarget.style.background = "rgba(16,185,129,0.08)"}>
+              <div style={{ width: "28px", height: "28px", borderRadius: "50%", background: "rgba(16,185,129,0.2)", display: "inline-flex", alignItems: "center", justifyContent: "center", color: "#10B981", fontWeight: 800, fontSize: "13px" }}>{ns.step}</div>
+              <div style={{ color: "#E4E4E7", fontSize: "13px", lineHeight: 1.5 }}>{ns.action}</div>
+              <div style={{ color: "#10B981", fontSize: "12px", fontWeight: 700 }}>{ns.cta}</div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Related Schemes */}
+      <div id="related" style={{ ...S.section, marginTop: "50px" }}>
+        <h2 style={S.h2}><span style={{ background: "rgba(168,85,247,0.2)", padding: "8px 12px", borderRadius: "10px", fontSize: "20px" }}>🧩</span> Related MSME Schemes to Explore</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "14px" }}>
+          {RELATED.map((r, i) => (
+            <div key={i} style={{ ...S.card, display: "flex", gap: "14px", alignItems: "flex-start", cursor: r.onClick ? "pointer" : "default" }} onClick={r.onClick || undefined}>
+              <span style={{ fontSize: "28px" }}>{r.icon}</span>
+              <div>
+                <div style={{ fontWeight: 700, color: "#FFF", fontSize: "14px", marginBottom: "5px" }}>{r.name}</div>
+                <div style={{ color: "#71717A", fontSize: "12px", lineHeight: 1.6, marginBottom: "10px" }}>{r.desc}</div>
+                {r.onClick ? (
+                  <button onClick={r.onClick} style={{ ...S.link, fontSize: "12px", background: "none", border: "none", cursor: "pointer", padding: 0 }}>View Full Guide ↗</button>
+                ) : (
+                  <a href={r.link} target="_blank" rel="noreferrer" style={{ ...S.link, fontSize: "12px" }}>Learn More ↗</a>
+                )}
               </div>
             </div>
           ))}
@@ -1678,8 +2166,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
 
             <div className="grid-cards fade-in-up" style={{ animationDelay: "0.2s", marginBottom: "50px" }}>
               {GOVERNMENT_SCHEMES.map((scheme, i) => (
-                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: scheme.rank === 1 ? "pointer" : "default" }}
-                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); }}>
+                <div key={i} className="glass-panel float-hover fade-in-up" style={{ animationDelay: `${i*0.1}s`, borderRadius: "20px", padding: "30px", border: "1px solid rgba(255,255,255,0.05)", position: "relative", overflow: "hidden", cursor: (scheme.rank === 1 || scheme.rank === 2) ? "pointer" : "default" }}
+                  onClick={() => { if (scheme.rank === 1) setActiveTab("cgtmse"); if (scheme.rank === 2) setActiveTab("pmmy"); }}>
                   <div style={{ position: "absolute", top: -20, right: -20, fontSize: "80px", opacity: 0.05 }}>{scheme.icon}</div>
                   <div style={{ width: 50, height: 50, borderRadius: 12, background: "rgba(255,255,255,0.03)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, marginBottom: 15, border: "1px solid rgba(255,255,255,0.05)" }}>
                     {scheme.icon}
@@ -1692,8 +2180,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                     <span style={{ color: "#FFF", fontSize: "14px", fontWeight: 600 }}>{scheme.coverage}</span>
                   </div>
 
-                  {scheme.rank === 1 ? (
-                    <button onClick={(e) => { e.stopPropagation(); setActiveTab("cgtmse"); }} style={{ display: "inline-block", background: "linear-gradient(135deg, #3B82F6, #06B6D4)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
+                  {(scheme.rank === 1 || scheme.rank === 2) ? (
+                    <button onClick={(e) => { e.stopPropagation(); setActiveTab(scheme.rank === 1 ? "cgtmse" : "pmmy"); }} style={{ display: "inline-block", background: scheme.rank === 1 ? "linear-gradient(135deg, #3B82F6, #06B6D4)" : "linear-gradient(135deg, #F59E0B, #EF4444)", color: "#FFF", padding: "10px 20px", borderRadius: "8px", border: "none", cursor: "pointer", fontSize: "14px", fontWeight: 700, transition: "transform 0.2s" }} onMouseOver={e => e.currentTarget.style.transform = "scale(1.05)"} onMouseOut={e => e.currentTarget.style.transform = "scale(1)"}>
                       📄 Full Guide & Apply ↗
                     </button>
                   ) : (
@@ -1714,6 +2202,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         )}
 
         {activeTab === "cgtmse" && <CGTMSEDetailPage setActiveTab={setActiveTab} />}
+        {activeTab === "pmmy" && <PMMYDetailPage setActiveTab={setActiveTab} />}
 
         {activeTab === "privacy" && (
           <div className="content-area glass-panel custom-scrollbar fade-in-up" style={{ borderRadius: "20px", padding: "40px" }}>
