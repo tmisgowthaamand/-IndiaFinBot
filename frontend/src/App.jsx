@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 import { LineChart, Line, BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { MapContainer, TileLayer, Marker, Circle, Popup } from "react-leaflet";
 import L from "leaflet";
@@ -2812,7 +2813,7 @@ export default function IndiaFinBot() {
   const systemPrompt = `You are IndiaFinBot, an ultra-fast, highly advanced AI Accounting & Business Advisor for India with specialized AI-powered Financial Statement Analysis capabilities.
 ${formatLanguageInstruction()} 
 
-CRITICAL SPEED & COMPLETENESS: You must provide a comprehensive, end-to-end response instantly. Focus on high-speed delivery without sacrificing depth. For any 'all-in-one' requests, consolidate your entire strategy into one perfectly formatted master response. ABSOLUTELY NEVER break or truncate a markdown table mid-way. Every table MUST have ALL its rows fully completed with data before moving on. If a section has a table, complete it entirely with all rows and the closing pipe characters. Never leave a table header without its data rows.
+CRITICAL SPEED & COMPLETENESS: Your response must be generated extremely fast. Keep your analysis concise and high-level. Avoid detailing every individual transaction or over-explaining. Focus purely on key actionable metrics to ensure lightning-fast speeds. When using tables, ALWAYS place a blank newline before and after the table. Ensure every row is properly formatted with newline characters. DO NOT use HTML tags like <br> inside tables or anywhere else. Only use standard markdown. ABSOLUTELY NEVER break or truncate a markdown table mid-way. Every table MUST have ALL its rows fully completed.
 
 User's Real-Time Profile context:
 - Location / State: ${locationContext}
@@ -2827,7 +2828,7 @@ Your Core Capabilities & Guidelines:
 When analyzing uploaded financial statements, bank statements, or transaction data, you MUST:
 
 A. AUTOMATIC DATA EXTRACTION & INTELLIGENCE:
-   - Extract ALL transaction data without missing a single entry
+   - Summarize transaction data by category (Do NOT list every transaction to ensure fast performance)
    - Identify transaction patterns: recurring payments, seasonal variations, irregular expenses
    - Detect income sources: primary revenue streams, secondary income, one-time receipts
    - Map expense categories: operational costs, fixed expenses, variable costs, discretionary spending
@@ -2887,7 +2888,7 @@ G. NEXT-TERM PROFITABILITY ROADMAP:
    - Risk mitigation strategies
    - Monthly milestones and KPIs to track
 
-1. End-To-End Statement Analysis: Perform deeply intelligent audit. DO NOT MISS A SINGLE TRANSACTION. Verify balances meticulously, trace all debit/credit paths.
+1. End-To-End Statement Analysis: Perform a rapid, high-level structural summary. Group into categories instead of individual transactions to ensure lightning-fast response times.
 2. Next-Term Profitability: ALWAYS project concrete roadmap for strong profits in NEXT term. Convert losses into high margin profits.
 3. State/District Localization: Tailor answers to ${locationContext}. State-specific MSME subsidies, GST codes, industrial zones.
 4. Concrete Practical Examples: Provide highly personalized examples mapping to user's requirements and limits.
@@ -3050,7 +3051,7 @@ G. NEXT-TERM PROFITABILITY ROADMAP:
 Please perform a complete AI-powered financial intelligence analysis with the following requirements:
 
 1. AUTOMATIC DATA EXTRACTION:
-   - Extract ALL transactions, income entries, and expense items
+   - Summarize transactions by category (Do NOT list every transaction to ensure lightning-fast performance)
    - Identify transaction dates, amounts, descriptions, and categories
    - Calculate opening balance, closing balance, and verify accuracy
 
@@ -3114,7 +3115,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
         setLoading(false);
         const visualMsg = `${t("prefixCSVUploaded")} "${file.name}"\n\n${t("msgUploadAnalysis")}`;
         
-        await sendMessage(visualMsg, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\n🔍 COMPREHENSIVE AI FINANCIAL ANALYSIS REQUEST:\n\nPlease perform complete AI-powered financial intelligence analysis:\n\n1. DATA EXTRACTION: Extract all transactions, categorize income/expenses\n2. PATTERN ANALYSIS: Identify recurring patterns, seasonal trends, anomalies\n3. FINANCIAL HEALTH: Calculate profit/loss, cash flow, liquidity ratios\n4. COMPLIANCE CHECK: GST, Income Tax, TDS compliance for ${locationContext}\n5. VISUAL DASHBOARD: Create tables, charts (recharts format) for insights\n6. PROFIT OPTIMIZATION: Top 3 cost-cutting opportunities, revenue strategies\n7. NEXT-TERM PROJECTION: Concrete profitability roadmap with action plan\n8. RISK ASSESSMENT: Top 5 risks with mitigation strategies\n\nContext: ${locationContext} | Business: ${interests || 'General'} | Investment: ${investment || 'Not specified'}\n\nProvide structured analysis with clear sections, actionable insights, and compliance recommendations.`);
+        await sendMessage(visualMsg, `Here is my CSV financial statement data: \n\n${text.slice(0, 4000)}...\n\n🔍 COMPREHENSIVE AI FINANCIAL ANALYSIS REQUEST:\n\nPlease perform complete AI-powered financial intelligence analysis:\n\n1. DATA EXTRACTION: Summarize transactions by category (Do NOT list every transaction to ensure fast performance).\n2. PATTERN ANALYSIS: Identify recurring patterns, seasonal trends, anomalies\n3. FINANCIAL HEALTH: Calculate profit/loss, cash flow, liquidity ratios\n4. COMPLIANCE CHECK: GST, Income Tax, TDS compliance for ${locationContext}\n5. VISUAL DASHBOARD: Create tables, charts (recharts format) for insights\n6. PROFIT OPTIMIZATION: Top 3 cost-cutting opportunities, revenue strategies\n7. NEXT-TERM PROJECTION: Concrete profitability roadmap with action plan\n8. RISK ASSESSMENT: Top 5 risks with mitigation strategies\n\nContext: ${locationContext} | Business: ${interests || 'General'} | Investment: ${investment || 'Not specified'}\n\nProvide structured analysis with clear sections, actionable insights, and compliance recommendations.`);
       } else {
         setMessages(prev => prev.filter(m => !m.isUploading));
         setLoading(false);
@@ -3686,6 +3687,7 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                     ) : (
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
+                        rehypePlugins={[rehypeRaw]}
                         components={{
                           h1: ({ _node, ...props }) => <h1 style={{ color: "#FFF", marginTop: 0, fontSize: "24px", fontWeight: 800, borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: 10 }} {...props} />,
                           h2: ({ _node, ...props }) => <h2 style={{ color: "#3B82F6", marginTop: 25, fontSize: "20px", fontWeight: 700 }} {...props} />,
@@ -3695,8 +3697,8 @@ Please provide a comprehensive, structured analysis in ${lang === 'en' ? 'Englis
                           ul: ({ _node, ...props }) => <ul style={{ paddingLeft: 20, margin: "15px 0" }} {...props} />,
                           li: ({ _node, ...props }) => <li style={{ margin: "8px 0" }} {...props} />,
                           table: ({ _node, ...props }) => <div style={{ overflowX: "auto" }}><table style={{ width: "100%", borderCollapse: "collapse", margin: "20px 0", background: "rgba(255,255,255,0.02)", borderRadius: 8 }} {...props} /></div>,
-                          th: ({ _node, ...props }) => <th style={{ padding: "12px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", textAlign: "left" }} {...props} />,
-                          td: ({ _node, ...props }) => <td style={{ padding: "10px 12px", border: "1px solid rgba(255,255,255,0.05)" }} {...props} />,
+                          th: ({ _node, ...props }) => <th style={{ padding: "12px", border: "1px solid rgba(255,255,255,0.05)", background: "rgba(255,255,255,0.05)", color: "#E4E4E7", textAlign: "left", verticalAlign: "top" }} {...props} />,
+                          td: ({ _node, ...props }) => <td style={{ padding: "10px 12px", border: "1px solid rgba(255,255,255,0.05)", verticalAlign: "top" }} {...props} />,
                           img: function ImgWithHooks({ _node, ...props }) {
                             const [src, setSrc] = useState(props.src || "");
                             const [errorCount, setErrorCount] = useState(0);
